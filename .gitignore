@@ -1,0 +1,13 @@
+.DS_Store
+Icon?
+._*
+Thumbs.db
+*.swp
+*.swo
+*~
+.DS_Store?
+.AppleDouble
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
