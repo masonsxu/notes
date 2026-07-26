@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="zh-CN" data-resolution="landscape">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CIMICode · 进阶应用与团队落地</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+  :root{
+    --bg0:#070b16; --bg1:#0d1326; --bg2:#111a33;
+    --panel:rgba(255,255,255,.045); --panel2:rgba(255,255,255,.07);
+    --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.16);
+    --ink:#eef3fb; --ink2:#aeb9cc; --ink3:#7c889e;
+    --c1:#22d3ee; --c2:#0891b2;
+  }
+  @font-face { font-family:'PingFang SC'; src:local('PingFang SC'), local('.PingFangSC-Regular'); font-display:swap; }
+  @font-face { font-family:'Noto Sans SC'; src:local('Noto Sans SC'); font-display:swap; }
+  @font-face { font-family:'Microsoft YaHei'; src:local('Microsoft YaHei'); font-display:swap; }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;width:1920px;height:1080px;overflow:hidden;
+    background:radial-gradient(120% 90% at 78% 8%, var(--bg2) 0%, var(--bg1) 38%, var(--bg0) 100%);
+    font-family:"PingFang SC","Noto Sans SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+    color:var(--ink); -webkit-font-smoothing:antialiased;}
+  #stage{position:relative;width:1920px;height:1080px;overflow:hidden;}
+  /* faint grid + glow */
+  #stage::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+    background-size:80px 80px;mask-image:radial-gradient(80% 70% at 50% 40%,#000 30%,transparent 100%);}
+  #stage::after{content:"";position:absolute;width:1100px;height:1100px;right:-260px;top:-420px;
+    background:radial-gradient(circle, color-mix(in srgb,var(--c1) 22%,transparent) 0%, transparent 62%);
+    filter:blur(8px);pointer-events:none;opacity:.5;}
+
+  /* persistent brand + progress */
+  #brand{position:absolute;top:46px;left:72px;display:flex;align-items:center;gap:14px;z-index:40;
+    opacity:0;}
+  #brand .logo{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-weight:800;
+    font-size:19px;color:#06121a;background:linear-gradient(135deg,var(--c1),var(--c2));
+    box-shadow:0 6px 20px color-mix(in srgb,var(--c1) 40%,transparent);}
+  #brand .wm{font-size:23px;font-weight:700;letter-spacing:.5px;}
+  #brand .wm b{color:var(--c1);}
+  #brand .wm .sep{color:var(--ink3);margin:0 8px;font-weight:400;}
+  #progress{position:absolute;left:0;bottom:0;height:6px;width:100%;z-index:45;
+    background:rgba(255,255,255,.06);}
+  #progress .fill{height:100%;width:100%;transform-origin:left center;transform:scaleX(0);
+    background:linear-gradient(90deg,var(--c1),var(--c2) 70%,color-mix(in srgb,var(--c1) 60%, #818cf8));}
+  #section-rail{position:absolute;right:72px;top:52px;z-index:40;display:flex;gap:7px;opacity:0;}
+  #section-rail .dot{width:9px;height:9px;border-radius:3px;background:rgba(255,255,255,.16);
+    transition:none;}
+  #section-rail .dot.on{background:var(--c1);box-shadow:0 0 10px color-mix(in srgb,var(--c1) 70%,transparent);}
+
+  /* scenes */
+  .scene{position:absolute;inset:0;display:flex;opacity:0;z-index:10;padding:118px 96px 152px;}
+  .scene-inner{width:100%;margin:auto 0;display:flex;flex-direction:column;gap:26px;}
+  .scene-head{display:flex;align-items:center;justify-content:space-between;}
+  .chip{display:inline-flex;align-items:center;gap:11px;padding:8px 16px 8px 9px;border-radius:999px;
+    background:color-mix(in srgb,var(--c1) 12%,transparent);border:1px solid color-mix(in srgb,var(--c1) 40%,transparent);}
+  .chip b{display:grid;place-items:center;min-width:34px;height:30px;padding:0 8px;border-radius:8px;
+    font-size:16px;color:#02060c;background:linear-gradient(135deg,var(--c1),var(--c2));font-weight:800;}
+  .chip-label{font-size:19px;font-weight:600;color:var(--ink);letter-spacing:.5px;}
+  .chip-plain{padding-left:16px;}
+  .counter{font-size:21px;font-weight:600;color:var(--ink2);font-variant-numeric:tabular-nums;}
+  .counter i{font-style:normal;color:#8d98ae;margin:0 6px;font-weight:400;}
+  .scene-title{font-size:62px;line-height:1.16;font-weight:800;margin:0;letter-spacing:-.5px;
+    max-width:1500px;}
+  .scene-title em{font-style:normal;background:linear-gradient(120deg,var(--c1),color-mix(in srgb,var(--c1) 55%,#a78bfa));
+    -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .scene-body{flex:1;min-height:0;}
+
+  .takeaway{display:flex;align-items:center;gap:18px;padding:20px 26px;border-radius:16px;
+    background:linear-gradient(90deg,color-mix(in srgb,var(--c1) 14%,transparent),transparent 80%);
+    border-left:4px solid var(--c1);}
+  .tk-tag{font-size:15px;font-weight:800;letter-spacing:2px;color:var(--c1);
+    padding:5px 11px;border:1px solid color-mix(in srgb,var(--c1) 45%,transparent);border-radius:7px;flex:none;}
+  .tk-text{font-size:26px;font-weight:500;color:var(--ink);line-height:1.45;}
+
+  /* ---- title slide ---- */
+  .layout-title{display:flex;flex-direction:column;gap:0;}
+  .kvline{font-size:24px;font-weight:600;color:var(--c1);letter-spacing:2px;margin-bottom:26px;}
+  .big-title{font-size:104px;line-height:1.1;font-weight:900;margin:0;letter-spacing:-1px;
+    max-width:1400px;}
+  .big-sub{font-size:46px;font-weight:500;color:var(--ink2);margin:30px 0 0;}
+  .meta{font-size:25px;color:var(--ink3);margin-top:64px;letter-spacing:.5px;}
+  .footnote{font-size:21px;color:var(--ink3);margin-top:14px;opacity:.85;}
+
+  /* ---- agenda ---- */
+  .agenda{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+  .ag-h{font-size:23px;font-weight:700;color:var(--c1);margin-bottom:18px;letter-spacing:.5px;}
+  .acards{display:flex;flex-direction:column;gap:14px;}
+  .acard{display:flex;align-items:center;gap:22px;padding:22px 26px;border-radius:16px;
+    background:var(--panel);border:1px solid var(--line);}
+  .acard-num{font-size:60px;font-weight:900;line-height:1;color:var(--c);min-width:96px;}
+  .acard-t{font-size:30px;font-weight:700;}
+  .acard-d{font-size:21px;color:var(--ink2);margin-top:5px;line-height:1.4;}
+  .rsteps{display:flex;flex-direction:column;gap:11px;}
+  .rs{display:flex;align-items:center;gap:18px;padding:15px 22px;border-radius:13px;
+    background:var(--panel);border:1px solid var(--line);}
+  .rs-n{display:grid;place-items:center;width:40px;height:40px;border-radius:11px;flex:none;
+    font-size:21px;font-weight:800;color:#06121a;background:var(--c);}
+  .rs-t{font-size:25px;font-weight:600;}
+
+  /* ---- models ---- */
+  .mcards{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
+  .mcard{display:flex;flex-direction:column;gap:10px;padding:28px 24px;border-radius:18px;
+    background:var(--panel);border:1px solid var(--line);position:relative;overflow:hidden;}
+  .mcard-pri{background:linear-gradient(160deg,color-mix(in srgb,var(--c1) 22%,transparent),var(--panel));
+    border-color:color-mix(in srgb,var(--c1) 55%,transparent);box-shadow:0 18px 50px color-mix(in srgb,var(--c1) 18%,transparent);}
+  .mcard-tag{align-self:flex-start;font-size:17px;font-weight:800;padding:6px 14px;border-radius:8px;
+    color:#06121a;background:linear-gradient(135deg,var(--c1),var(--c2));}
+  .mcard-pri .mcard-tag{background:linear-gradient(135deg,#fde68a,#f59e0b);}
+  .mcard-name{font-size:31px;font-weight:800;margin-top:4px;}
+  .mcard-cost{font-size:20px;font-weight:700;color:var(--c1);}
+  .mcard-pri .mcard-cost{color:#f59e0b;}
+  .mcard-desc{font-size:19px;color:var(--ink2);line-height:1.5;margin-top:auto;}
+
+  /* ---- forms ---- */
+  .forms{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:8px;}
+  .fcard{padding:26px;border-radius:18px;background:var(--panel);border:1px solid var(--line);
+    border-top:3px solid var(--c1);}
+  .fcard-n{font-size:30px;font-weight:800;}
+  .fcard-w{font-size:20px;color:var(--c1);font-weight:600;margin-top:8px;}
+  .fcard-u{font-size:20px;color:var(--ink2);margin-top:16px;line-height:1.5;}
+
+  .code-block{font-family:"SF Mono","JetBrains Mono",ui-monospace,monospace;border-radius:14px;
+    background:#05080f;border:1px solid var(--line2);padding:22px 28px;overflow:hidden;}
+  .code-block code{font-size:24px;color:#7ee0ff;line-height:1.7;white-space:pre-wrap;display:block;}
+  .code-lines{display:flex;flex-direction:column;gap:2px;}
+  .code-lines code{font-size:23px;}
+
+  /* ---- steps3 ---- */
+  .steps3{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;}
+  .stps{display:flex;flex-direction:column;gap:16px;}
+  .stp{display:flex;align-items:center;gap:22px;padding:24px 28px;border-radius:16px;
+    background:var(--panel);border:1px solid var(--line);}
+  .stp-n{display:grid;place-items:center;width:58px;height:58px;border-radius:16px;flex:none;
+    font-size:30px;font-weight:900;color:#06121a;background:var(--c);}
+  .stp-t{font-size:29px;font-weight:600;line-height:1.35;}
+  .callout{padding:26px 28px;border-radius:18px;}
+  .callout-indigo{background:linear-gradient(160deg,color-mix(in srgb,#818cf8 22%,transparent),var(--panel));
+    border:1px solid color-mix(in srgb,#818cf8 45%,transparent);}
+  .callout-h{font-size:27px;font-weight:800;color:#c7d2fe;margin-bottom:16px;}
+  .callout-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px;}
+  .callout-list li{font-size:21px;color:var(--ink);padding-left:26px;position:relative;line-height:1.5;}
+  .callout-list li::before{content:"›";position:absolute;left:0;color:#a5b4fc;font-weight:800;}
+
+  /* ---- install2 ---- */
+  .install2{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;}
+  .icol{padding:26px;border-radius:18px;background:var(--panel);border:1px solid var(--line);
+    border-top:3px solid var(--c1);}
+  .icol-h{font-size:29px;font-weight:800;margin-bottom:18px;}
+  .icol-steps{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:13px;counter-reset:s;}
+  .icol-steps li{font-size:22px;color:var(--ink);padding-left:38px;position:relative;line-height:1.5;counter-increment:s;}
+  .icol-steps li::before{content:counter(s);position:absolute;left:0;top:-2px;width:26px;height:26px;
+    display:grid;place-items:center;font-size:15px;font-weight:800;border-radius:7px;color:#06121a;
+    background:var(--c1);}
+
+  /* ---- concepts ---- */
+  .concepts{display:flex;flex-direction:column;gap:24px;}
+  .cc-center{align-self:center;text-align:center;padding:18px 36px;border-radius:14px;font-size:25px;
+    font-weight:700;color:var(--ink);background:var(--panel2);border:1px dashed var(--line2);}
+  .ccards{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  .ccard{padding:24px 22px;border-radius:16px;background:var(--panel);border:1px solid var(--line);
+    border-top:3px solid var(--c1);}
+  .ccard-n{font-size:42px;font-weight:900;color:var(--c1);line-height:1;}
+  .ccard-t{font-size:26px;font-weight:800;margin-top:12px;}
+  .ccard-d{font-size:19px;color:var(--ink2);margin-top:10px;line-height:1.5;}
+
+  /* ---- workflow ---- */
+  .workflow{display:flex;flex-direction:column;gap:22px;}
+  .flow{display:flex;align-items:stretch;gap:10px;justify-content:center;}
+  .fl-node{flex:1;max-width:230px;padding:20px 16px;border-radius:14px;background:var(--panel);
+    border:1px solid var(--line);display:flex;align-items:center;justify-content:center;text-align:center;
+    font-size:19px;font-weight:600;line-height:1.4;white-space:pre-line;min-height:96px;}
+  .fl-decision{background:linear-gradient(160deg,color-mix(in srgb,var(--c1) 22%,transparent),var(--panel));
+    border-color:color-mix(in srgb,var(--c1) 50%,transparent);color:var(--ink);}
+  .fl-arrow{display:grid;place-items:center;color:var(--c1);font-size:30px;font-weight:700;}
+
+  /* ---- grid6 ---- */
+  .grid6{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:20px;}
+  .gcard{padding:24px;border-radius:16px;background:var(--panel);border:1px solid var(--line);
+    display:flex;flex-direction:column;gap:8px;position:relative;}
+  .gcard-n{position:absolute;top:18px;right:22px;font-size:52px;font-weight:900;color:var(--c);opacity:.3;line-height:1;}
+  .gcard-t{font-size:27px;font-weight:800;padding-right:48px;}
+  .gcard-d{font-size:20px;color:var(--ink2);line-height:1.5;margin-top:auto;}
+
+  /* ---- demos ---- */
+  .demos{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  .dcard{padding:28px;border-radius:18px;background:var(--panel);border:1px solid var(--line);
+    display:flex;flex-direction:column;gap:16px;border-top:3px solid var(--c1);}
+  .dcard-t{font-size:27px;font-weight:800;color:var(--c1);}
+  .dcard-prompt{font-size:22px;color:var(--ink);line-height:1.6;padding:18px 20px;border-radius:12px;
+    background:#05080f;border:1px solid var(--line2);border-left:3px solid var(--c1);}
+  .dcard-out{font-size:20px;color:var(--ink2);line-height:1.5;}
+  .dcard-out b{color:var(--c1);font-weight:700;margin-right:6px;}
+
+  /* ---- config ---- */
+  .config{display:grid;grid-template-columns:1fr;gap:16px;}
+  .cfg-why{font-size:24px;color:var(--c1);font-weight:600;}
+  .cfg-code{padding:6px 0;}
+  .cfg-secs{display:flex;flex-direction:column;}
+  .cfg-sec{display:grid;grid-template-columns:340px 1fr;gap:24px;padding:18px 28px;border-bottom:1px solid var(--line);}
+  .cfg-sec:last-child{border-bottom:none;}
+  .cfg-key{font-family:"SF Mono","JetBrains Mono",ui-monospace,monospace;font-size:22px;font-weight:700;color:#7ee0ff;}
+  .cfg-val{font-size:21px;color:var(--ink);line-height:1.5;}
+  .cfg-path{font-size:20px;color:var(--ink2);font-family:"SF Mono","JetBrains Mono",ui-monospace,monospace;}
+
+  /* ---- skills2 ---- */
+  .skills2{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  .scard{padding:28px;border-radius:18px;background:var(--panel);border:1px solid var(--line);
+    display:flex;flex-direction:column;gap:14px;border-top:3px solid var(--c1);}
+  .scard-t{font-size:27px;font-weight:800;color:var(--c1);}
+  .scard-d{font-size:21px;color:var(--ink);line-height:1.6;}
+  .scard-cmd{margin-top:auto;}
+
+  /* ---- safety ---- */
+  .safety{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  .zone{padding:28px;border-radius:18px;display:flex;flex-direction:column;gap:14px;}
+  .zone-green{background:linear-gradient(160deg,color-mix(in srgb,#34d399 18%,transparent),var(--panel));
+    border:1px solid color-mix(in srgb,#34d399 42%,transparent);}
+  .zone-red{background:linear-gradient(160deg,color-mix(in srgb,#fb7185 18%,transparent),var(--panel));
+    border:1px solid color-mix(in srgb,#fb7185 42%,transparent);}
+  .zone-h{font-size:26px;font-weight:800;}
+  .zone-green .zone-h{color:#6ee7b7;} .zone-red .zone-h{color:#fda4af;}
+  .zone ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px;}
+  .zone li{font-size:23px;color:var(--ink);padding-left:34px;position:relative;line-height:1.5;}
+  .zone-green li::before{content:"✓";position:absolute;left:0;color:#34d399;font-weight:800;}
+  .zone-red li::before{content:"✕";position:absolute;left:0;color:#fb7185;font-weight:800;}
+
+  /* ---- faq ---- */
+  .faqs{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .qcard{padding:26px;border-radius:18px;background:var(--panel);border:1px solid var(--line);
+    display:flex;flex-direction:column;gap:16px;border-top:3px solid var(--c1);}
+  .qcard-q{font-size:26px;font-weight:800;color:var(--c1);line-height:1.35;}
+  .qcard-a{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px;counter-reset:q;}
+  .qcard-a li{font-size:21px;color:var(--ink2);padding-left:34px;position:relative;line-height:1.5;counter-increment:q;}
+  .qcard-a li::before{content:counter(q);position:absolute;left:0;top:0;width:24px;height:24px;
+    display:grid;place-items:center;font-size:14px;font-weight:800;border-radius:6px;color:#06121a;
+    background:var(--c1);}
+
+  /* ---- checklist ---- */
+  .checklist{display:flex;flex-direction:column;gap:20px;}
+  .cks{display:grid;grid-template-columns:1fr 1fr;gap:13px 40px;}
+  .ck{display:flex;align-items:center;gap:16px;padding:14px 22px;border-radius:13px;
+    background:var(--panel);border:1px solid var(--line);}
+  .ck-box{display:grid;place-items:center;width:30px;height:30px;border-radius:8px;flex:none;font-size:17px;
+    font-weight:800;color:#06121a;background:linear-gradient(135deg,#34d399,#059669);}
+  .ck-n{font-size:19px;font-weight:800;color:var(--c1);min-width:26px;}
+  .ck-t{font-size:22px;font-weight:500;color:var(--ink);}
+  .ck-next{font-size:22px;color:var(--ink2);padding:18px 24px;border-radius:13px;
+    background:linear-gradient(90deg,color-mix(in srgb,var(--c1) 12%,transparent),transparent 80%);
+    border-left:4px solid var(--c1);line-height:1.5;}
+
+  /* ---- panels (versatile titled grid) ---- */
+  .panels{display:grid;gap:20px;}
+  .panel{padding:24px;border-radius:16px;background:var(--panel);border:1px solid var(--line);
+    border-top:3px solid var(--c1);display:flex;flex-direction:column;gap:12px;}
+  .pn-head{display:flex;align-items:center;gap:12px;}
+  .pn-num{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;flex:none;
+    font-size:18px;font-weight:800;color:#06121a;background:var(--c);}
+  .pn-t{font-size:25px;font-weight:800;line-height:1.3;}
+  .pn-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px;}
+  .pn-list li{font-size:20px;color:var(--ink2);padding-left:22px;position:relative;line-height:1.5;}
+  .pn-list li::before{content:"·";position:absolute;left:6px;color:var(--c1);font-weight:800;}
+  .pn-note{font-size:18px;color:var(--ink3);font-style:italic;margin-top:auto;}
+
+  /* ---- compare (bad vs good) ---- */
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  .cmp{padding:26px;border-radius:18px;display:flex;flex-direction:column;gap:14px;}
+  .cmp-bad{background:linear-gradient(160deg,color-mix(in srgb,#fb7185 14%,transparent),var(--panel));
+    border:1px solid color-mix(in srgb,#fb7185 38%,transparent);}
+  .cmp-good{background:linear-gradient(160deg,color-mix(in srgb,var(--c1) 16%,transparent),var(--panel));
+    border:1px solid color-mix(in srgb,var(--c1) 42%,transparent);}
+  .cmp-tag{align-self:flex-start;font-size:16px;font-weight:800;padding:5px 13px;border-radius:8px;color:#06121a;}
+  .cmp-bad .cmp-tag{background:linear-gradient(135deg,#fda4af,#fb7185);}
+  .cmp-good .cmp-tag{background:linear-gradient(135deg,var(--c1),var(--c2));}
+  .cmp-h{font-size:24px;font-weight:800;line-height:1.4;white-space:pre-line;}
+  .cmp-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;}
+  .cmp-list li{font-size:20px;color:var(--ink);padding-left:26px;position:relative;line-height:1.5;}
+  .cmp-bad .cmp-list li::before{content:"✗";position:absolute;left:0;color:#fb7185;font-weight:800;}
+  .cmp-good .cmp-list li::before{content:"✓";position:absolute;left:0;color:var(--c1);font-weight:800;}
+
+  /* ---- phases (timeline columns) ---- */
+  .phases{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .ph{padding:20px 18px;border-radius:15px;background:var(--panel);border:1px solid var(--line);
+    border-top:3px solid var(--c1);display:flex;flex-direction:column;gap:8px;}
+  .ph-tag{align-self:flex-start;font-size:15px;font-weight:800;padding:4px 11px;border-radius:7px;
+    color:#06121a;background:linear-gradient(135deg,var(--c1),var(--c2));}
+  .ph-h{font-size:22px;font-weight:800;line-height:1.3;}
+  .ph-dur{font-size:17px;color:var(--c1);font-weight:600;}
+  .ph-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .ph-list li{font-size:17px;color:var(--ink2);padding-left:16px;position:relative;line-height:1.4;}
+  .ph-list li::before{content:"›";position:absolute;left:0;color:var(--c1);font-weight:800;}
+
+  /* ---- captions ---- */
+  #captions{position:absolute;left:0;right:0;bottom:56px;height:0;z-index:35;pointer-events:none;}
+  .cap{position:absolute;bottom:0;left:50%;transform:translateX(-50%);max-width:1720px;opacity:0;
+    padding:12px 30px;border-radius:15px;background:rgba(8,12,22,.93);
+    border:1px solid color-mix(in srgb,var(--c1) 35%,transparent);
+    box-shadow:0 10px 40px rgba(0,0,0,.5);}
+  .cap span{font-size:31px;font-weight:700;color:#fff;line-height:1.3;letter-spacing:.3px;
+    text-shadow:0 2px 12px rgba(0,0,0,.7);}
+</style>
+</head>
+<body>
+  <div id="stage" data-composition-id="main-video" data-width="1920" data-height="1080"
+       data-start="0" data-duration="514.92">
+
+    <div id="brand">
+      <div class="logo">C</div>
+      <div class="wm"><b>CIMICode</b><span class="sep">·</span>用好大模型 · 进阶</div>
+    </div>
+
+    <div id="section-rail"></div>
+
+    <!-- scenes -->
+    <section class="scene" id="scene-1" data-n="1" style="--c1:#22d3ee;--c2:#0891b2">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip chip-plain"><span class="chip-label">CIMICode · 进阶培训</span></span><span class="counter">01<i>/</i>17</span></div>
+        
+        <div class="scene-body">
+      <div class="layout-title">
+        <div class="kvline"><span>CIMICode 进阶应用与团队落地</span></div>
+        <h1 class="big-title">用好大模型</h1>
+        <p class="big-sub">从「会聊」到「用好」，让团队真正发挥大模型价值</p>
+        <div class="meta">受众：TL、组内资深工程师　·　讲师：TD Testing</div>
+        <div class="footnote">配套：《公司大模型工具使用入门》(PPT1)</div>
+      </div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-2" data-n="2" style="--c1:#22d3ee;--c2:#0891b2">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>导览</b><span class="chip-label"></span></span><span class="counter">02<i>/</i>17</span></div>
+        <h2 class="scene-title">三大进阶痛点，五板斧破局</h2>
+        <div class="scene-body">
+      <div class="agenda">
+        <div class="ag-col">
+          <div class="ag-h">公司已就位的能力</div>
+          <div class="acards"><div class="acard"><div class="acard-num" style="--c:#22d3ee">1</div><div class="acard-body"><div class="acard-t">输出不稳</div><div class="acard-d">没配背景 / 术语，大模型望文生义，反复返工</div></div></div><div class="acard"><div class="acard-num" style="--c:#22d3ee">2</div><div class="acard-body"><div class="acard-t">重复造轮子</div><div class="acard-d">每个人各写各的 Prompt，经验无法沉淀复用</div></div></div><div class="acard"><div class="acard-num" style="--c:#22d3ee">3</div><div class="acard-body"><div class="acard-t">水平参差</div><div class="acard-d">新人不会问、老人不会教，团队能力断层</div></div></div></div>
+        </div>
+        <div class="ag-col">
+          <div class="ag-h">本课五段路线图</div>
+          <div class="rsteps"><div class="rs"><span class="rs-n" style="--c:#22d3ee">1</span><span class="rs-t">选对模型（按任务选型）</span></div><div class="rs"><span class="rs-n" style="--c:#22d3ee">2</span><span class="rs-t">配好 AGENTS.md（人设与术语）</span></div><div class="rs"><span class="rs-n" style="--c:#22d3ee">3</span><span class="rs-t">写好 Prompt（具体 + 结构化）</span></div><div class="rs"><span class="rs-n" style="--c:#22d3ee">4</span><span class="rs-t">用对工作流与工具（Plan-Build + Skill）</span></div><div class="rs"><span class="rs-n" style="--c:#22d3ee">5</span><span class="rs-t">团队规范落地（统一配置 + 复用）</span></div></div>
+        </div>
+      </div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-3" data-n="3" style="--c1:#22d3ee;--c2:#0891b2">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>板斧①</b><span class="chip-label">选对模型</span></span><span class="counter">03<i>/</i>17</span></div>
+        <h2 class="scene-title">按任务选模型：简单归 Flash、复杂归高阶</h2>
+        <div class="scene-body"><div class="panels" style="grid-template-columns:2fr 3fr"><div class="panel"><div class="pn-head"><span class="pn-t">默认：DeepSeek Flash</span></div><div class="pn-note">成本极低、响应快，覆盖绝大多数日常任务</div></div><div class="panel"><div class="pn-head"><span class="pn-t">何时升高阶？</span></div><ul class="pn-list"><li>多次改代码仍未解决</li><li>逻辑推理陷入死循环</li><li>长文档 / 海量对比任务</li></ul></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">选型不是越强越好 —— 把深度推理能力留给真正复杂的任务，日常交给 Flash 快速完成。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-4" data-n="4" style="--c1:#fbbf24;--c2:#d97706">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>板斧②</b><span class="chip-label">配好 AGENTS.md</span></span><span class="counter">04<i>/</i>17</span></div>
+        <h2 class="scene-title">AGENTS.md 让大模型秒懂半导体专业语义</h2>
+        <div class="scene-body"><div class="config">
+        <div class="cfg-why">消歧义 + 完整四段模板，从第一次响应就理解术语</div>
+        <div class="code-block cfg-code"><div class="cfg-secs"><div class="cfg-sec"><div class="cfg-key"># Role &amp; Background</div><div class="cfg-val">半导体先进封装 TD Testing 高级测试工程师（测试 Flow / 自动化 / 数据分析）</div></div><div class="cfg-sec"><div class="cfg-key"># Terminology &amp; Context</div><div class="cfg-val">Pre-DC / CPK / Yield / DOE / SECS-GEM / Prober 等术语</div></div><div class="cfg-sec"><div class="cfg-key"># Coding &amp; Response Style</div><div class="cfg-val">优先 Python + pandas，异常处理健壮，结果导向</div></div><div class="cfg-sec"><div class="cfg-key"># Safety &amp; Constraints</div><div class="cfg-val">产线操作先确认安全步骤，改动前先备份</div></div></div></div>
+        <div class="cfg-path">路径：~/.cimi/cimicode/AGENTS.md　·　一次配置，永久生效</div></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-5" data-n="5" style="--c1:#fbbf24;--c2:#d97706">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>板斧②</b><span class="chip-label">双层配置</span></span><span class="counter">05<i>/</i>17</span></div>
+        <h2 class="scene-title">全局 + 项目级双层配置，兼顾通用与专用</h2>
+        <div class="scene-body"><div class="panels" style="grid-template-columns:1fr 1fr"><div class="panel"><div class="pn-head"><span class="pn-t">全局配置</span></div><ul class="pn-list"><li>角色背景与术语（打底）</li><li>通用编码与回复风格</li><li>团队统一的红线约束</li></ul><div class="pn-note">~/.cimi/cimicode/AGENTS.md　·　对所有项目生效</div></div><div class="panel"><div class="pn-head"><span class="pn-t">项目级配置</span></div><ul class="pn-list"><li>项目信息：机型 / 测试项</li><li>数据目录结构：logs / data / scripts</li><li>特殊要求：UTF-8、UTC+8</li></ul><div class="pn-note">&lt;项目目录&gt;/AGENTS.md　·　仅对该项目生效（同名覆盖全局）</div></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">全局打底 + 项目叠加 —— 通用规范一次写好，项目细节随用随加，团队不再各写各的。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-6" data-n="6" style="--c1:#a78bfa;--c2:#7c3aed">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>板斧③</b><span class="chip-label">写好 Prompt</span></span><span class="counter">06<i>/</i>17</span></div>
+        <h2 class="scene-title">信息越具体，输出越准确</h2>
+        <div class="scene-body"><div class="compare"><div class="cmp cmp-bad"><span class="cmp-tag">✗ 模糊</span><div class="cmp-h">帮我排查这个测试机报错。</div><div class="cmp-body"><ul class="cmp-list"><li>不知道机台型号</li><li>不知道 Log 位置</li><li>不知道测试项与现象</li><li>→ 输出通用步骤，不具针对性</li></ul></div></div><div class="cmp cmp-good"><span class="cmp-tag">✓ 具体</span><div class="cmp-h">Accretech 探针台 Pre-DC 报 ERR-2041 Contact Resistance Exceeded。</div><div class="cmp-body"><div class="code-block code-lines"><code>Wafer 第3次Pass，Pin: Row A-F Col 1-12</code><code>Log: ./logs/prober_20260726.txt</code><code>请分析 ERR-2041 前后 Pin 坐标，</code><code>识别高阻 Die，生成 Python 散点图。</code></div></div></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">机台、错误码、坐标范围、Log 路径都给全 —— 才能从「通用答案」升级到「可直接用的方案」。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-7" data-n="7" style="--c1:#a78bfa;--c2:#7c3aed">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>板斧③</b><span class="chip-label">结构化提问</span></span><span class="counter">07<i>/</i>17</span></div>
+        <h2 class="scene-title">用「背景 / 目标 / 约束 / 输入 / 输出」五段式提问</h2>
+        <div class="scene-body"><div class="panels" style="grid-template-columns:3fr 2fr"><div class="panel"><div class="pn-head"><span class="pn-t">五段式模板</span></div><ul class="pn-list"><li>【背景】项目 / 场景 / 技术栈 / 已有条件</li><li>【目标】期望功能与输出格式</li><li>【约束】性能 / 兼容性 / 安全限制</li><li>【输入】数据 / 代码 / 配置位置</li><li>【输出】文件格式 / 保存位置 / 是否测试</li></ul></div><div class="panel"><div class="pn-head"><span class="pn-t">3 个优化技巧</span></div><ul class="pn-list"><li>提供示例：给一行期望格式</li><li>分步骤指令：读→筛选→统计→导出</li><li>明确输出格式：语言 / 库 / 文件名</li></ul></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">五段式是可复用的提问框架 —— 团队统一用它，输出质量与一致性都能稳定提升。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-8" data-n="8" style="--c1:#818cf8;--c2:#4f46e5">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>板斧④</b><span class="chip-label">工作流</span></span><span class="counter">08<i>/</i>17</span></div>
+        <h2 class="scene-title">Plan 5 步规划审核，Build 自动落地执行</h2>
+        <div class="scene-body"><div class="workflow"><div class="flow"><div class="fl-node">理解需求</div><div class="fl-arrow">→</div><div class="fl-node">拆解任务</div><div class="fl-arrow">→</div><div class="fl-node">设计架构</div><div class="fl-arrow">→</div><div class="fl-node">评估风险</div><div class="fl-arrow">→</div><div class="fl-node">生成 TODO.md</div></div>
+      <div class="code-block code-lines"><code># 测试数据自动化分析平台</code><code>架构: pandas + SQLAlchemy / matplotlib / HTML+PDF</code><code>Phase1 基础框架 · Phase2 可视化 · Phase3 报告</code><code>风险: 数据格式不一致→清洗层；大数据量→分块</code><code>→ 工程师审核 Plan：通过进 Build；有问题回 Plan</code></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">Plan 让「做不做、怎么做」先想清楚 —— 减少返工，复杂项目稳步推进，团队协作更高效。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-9" data-n="9" style="--c1:#818cf8;--c2:#4f46e5">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>板斧④</b><span class="chip-label">Skill 工具</span></span><span class="counter">09<i>/</i>17</span></div>
+        <h2 class="scene-title">Grill-Me 厘清需求，Web Search 补时效</h2>
+        <div class="scene-body"><div class="skills2"><div class="scard"><div class="scard-t">Grill-Me　需求澄清</div><div class="scard-d">用 5 类反问厘清需求：Log 格式、关键字段、输出格式、是否统计、是否可视化，帮你把问题问全。</div><div class="code-block scard-cmd"><code>$ /install-skill grill-me</code></div></div><div class="scard"><div class="scard-t">Web Search　联网搜索</div><div class="scard-d">查最新 API 文档与库版本、行业最佳实践、类似报错方案、JEDEC 等标准更新 —— 让知识不过期。</div><div class="code-block scard-cmd"><code>$ /install-skill web-search</code></div></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">Grill-Me 把模糊需求变完整需求，Web Search 把过时知识变最新信息 —— 双 Skill 让团队用好工具。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-10" data-n="10" style="--c1:#34d399;--c2:#059669">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>场景</b><span class="chip-label">实战</span></span><span class="counter">10<i>/</i>17</span></div>
+        <h2 class="scene-title">喂对数据，让大模型设计可执行 DOE 实验</h2>
+        <div class="scene-body"><div class="concepts">
+        <div class="cc-center">已有数据 → 数据分析 → 识别问题 → 设计 DOE</div>
+        <div class="ccards"><div class="ccard"><div class="ccard-n">①</div><div class="ccard-t">读项目文件</div><div class="ccard-d">指定 ./data/rc_data.csv 路径</div></div><div class="ccard"><div class="ccard-n">②</div><div class="ccard-t">粘贴关键数据</div><div class="ccard-d">批次统计表（样本 / 均值 / CPK）</div></div><div class="ccard"><div class="ccard-n">③</div><div class="ccard-t">提供文件路径</div><div class="ccard-d">原始 + 处理后 + 配置文件</div></div></div></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-11" data-n="11" style="--c1:#34d399;--c2:#059669">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>场景</b><span class="chip-label">实战</span></span><span class="counter">11<i>/</i>17</span></div>
+        <h2 class="scene-title">技术难题没思路？让大模型做调研与头脑风暴</h2>
+        <div class="scene-body"><div class="panels" style="grid-template-columns:3fr 2fr"><div class="panel"><div class="pn-head"><span class="pn-t">场景：探针针尖磨损致虚焊</span></div><ul class="pn-list"><li>检索工业界解决 Micro-bump 探针损伤的主流方案</li><li>列 5 个头脑风暴方向</li><li>对比利弊与引入成本，给推荐路径（可用 web-search）</li></ul><div class="pn-note">明确失效机制 + 要求多方案对比 + 要求决策维度</div></div><div class="panel"><div class="pn-head"><span class="pn-t">预期产出</span></div><ul class="pn-list"><li>技术方案对比表（5 方向）</li><li>各方案利弊分析</li><li>引入成本评估</li><li>推荐实施路径</li></ul></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">从「没思路」到「5 方向对比 + 推荐路径」 —— 把经验型难题快速拆成可决策的清单。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-12" data-n="12" style="--c1:#34d399;--c2:#059669">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>场景</b><span class="chip-label">实战</span></span><span class="counter">12<i>/</i>17</span></div>
+        <h2 class="scene-title">复杂系统一句话起步：Plan-Build 全流程示范</h2>
+        <div class="scene-body"><div class="workflow"><div class="flow"><div class="fl-node">一句话讲清 5 项需求</div><div class="fl-arrow">→</div><div class="fl-node">Plan 自动拆解架构</div><div class="fl-arrow">→</div><div class="fl-node">Build 自动建目录写代码</div></div>
+      <div class="code-block code-lines"><code># 测试数据自动化分析平台</code><code>支持 CSV/Excel/SQLite · CPK 趋势 / Yield 分布</code><code>历史对比 · 异常报警 · HTML + PDF 报告</code><code>Build：自动建目录、写代码、跑测试、出报告</code></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">复杂系统不必从零手敲 —— Plan 拆解 + Build 自动落地，把「周级」开发压缩到「天级」。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-13" data-n="13" style="--c1:#34d399;--c2:#059669">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>场景</b><span class="chip-label">实战</span></span><span class="counter">13<i>/</i>17</span></div>
+        <h2 class="scene-title">把经验沉淀成手册：排查手册 / SOP / 培训材料</h2>
+        <div class="scene-body"><div class="panels" style="grid-template-columns:repeat(4,1fr)"><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">①</span><span class="pn-t">排查手册</span></div><div class="pn-note">常见报错的原因 / 步骤 / 解决 / 预防</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">②</span><span class="pn-t">测试 SOP</span></div><div class="pn-note">机台操作与测试 Flow 标准化</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">③</span><span class="pn-t">培训材料</span></div><div class="pn-note">新人上手 PPT / 文档</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">④</span><span class="pn-t">脚本库</span></div><div class="pn-note">可复用的自动化脚本集合</div></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">把「个人经验」沉淀为「团队资产」 —— 手册、SOP、脚本库让新人快速接班，不再依赖单点。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-14" data-n="14" style="--c1:#38bdf8;--c2:#0284c7">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>提效</b><span class="chip-label">与规范</span></span><span class="counter">14<i>/</i>17</span></div>
+        <h2 class="scene-title">Auto-Approve + 会话复用，把重复操作清零</h2>
+        <div class="scene-body"><div class="panels" style="grid-template-columns:1fr 1fr"><div class="panel"><div class="pn-head"><span class="pn-t">Auto-Approve · 自动执行</span></div><ul class="pn-list"><li>个人开发环境 / 独立分支可放开</li><li>⚠ 产线数据库删除、线上配置严禁全局免确认</li><li>完成任务后及时关闭</li></ul></div><div class="panel"><div class="pn-head"><span class="pn-t">会话复用三招</span></div><ul class="pn-list"><li>保存常用对话模板，下次直接复用</li><li>利用会话历史延续讨论，不重复输入上下文</li><li>方向错误果断重启，避免越聊越偏</li></ul></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">个人环境放开提效、产线严守确认；会话模板化让团队的重复输入清零，专注判断与决策。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-15" data-n="15" style="--c1:#38bdf8;--c2:#0284c7">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>团队</b><span class="chip-label">规范</span></span><span class="counter">15<i>/</i>17</span></div>
+        <h2 class="scene-title">统一配置 + 模板库 + 审查，拉齐团队水平</h2>
+        <div class="scene-body"><div class="panels" style="grid-template-columns:repeat(4,1fr)"><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">1</span><span class="pn-t">统一部门级 AGENTS.md</span></div><div class="pn-note">全员共用术语与角色背景，输出一致</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">2</span><span class="pn-t">共享 Prompt 模板库</span></div><div class="pn-note">高频任务的五段式模板沉淀进知识库</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">3</span><span class="pn-t">定期经验分享会</span></div><div class="pn-note">复盘好用案例与踩坑，扩散给全团队</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">4</span><span class="pn-t">代码审查机制</span></div><div class="pn-note">AI 生成代码也走 review，守住质量</div></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">规范不是限制，而是放大器 —— 一套统一配置 + 模板库，让新人的起点就是团队的最高水平。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-16" data-n="16" style="--c1:#38bdf8;--c2:#0284c7">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>团队</b><span class="chip-label">落地</span></span><span class="counter">16<i>/</i>17</span></div>
+        <h2 class="scene-title">4 阶段推进，从基础建设到持续优化</h2>
+        <div class="scene-body"><div class="phases"><div class="ph"><div class="ph-tag">Phase 1</div><div class="ph-h">基础建设</div><div class="ph-dur">第 1-2 周</div><ul class="ph-list"><li>全员申请权限</li><li>安装桌面版 + 终端版</li><li>统一配置 AGENTS.md</li><li>安装基础 Skill</li></ul></div><div class="ph"><div class="ph-tag">Phase 2</div><div class="ph-h">技能培训</div><div class="ph-dur">第 3-4 周</div><ul class="ph-list"><li>组织使用培训</li><li>分享最佳实践</li><li>建立反馈机制</li><li>制定使用规范</li></ul></div><div class="ph"><div class="ph-tag">Phase 3</div><div class="ph-h">深度应用</div><div class="ph-dur">第 5-8 周</div><ul class="ph-list"><li>推广 Plan-Build</li><li>建立脚本库</li><li>沉淀 SOP 文档</li><li>推广高价值场景</li></ul></div><div class="ph"><div class="ph-tag">Phase 4</div><div class="ph-h">持续优化</div><div class="ph-dur">长期</div><ul class="ph-list"><li>定期复盘效果</li><li>优化配置</li><li>扩展 Skill 场景</li><li>分享最佳实践</li></ul></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">4 阶段渐进 —— 先把基建和规范立起来，再推深度场景，避免一哄而上导致水平参差。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-17" data-n="17" style="--c1:#38bdf8;--c2:#0284c7">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>团队</b><span class="chip-label">落地</span></span><span class="counter">17<i>/</i>17</span></div>
+        <h2 class="scene-title">怎么看团队真的「用好」了？</h2>
+        <div class="scene-body"><div class="grid6"><div class="gcard"><div class="gcard-n" style="--c:#34d399">①</div><div class="gcard-t">Plan-Build 采用率</div><div class="gcard-d">复杂任务是否普遍先 Plan 再 Build</div></div><div class="gcard"><div class="gcard-n" style="--c:#34d399">②</div><div class="gcard-t">脚本 / 模板复用数</div><div class="gcard-d">共享库里沉淀了多少可复用资产</div></div><div class="gcard"><div class="gcard-n" style="--c:#34d399">③</div><div class="gcard-t">AGENTS.md 配置完整度</div><div class="gcard-d">部门级 + 项目级是否到位</div></div><div class="gcard"><div class="gcard-n" style="--c:#34d399">④</div><div class="gcard-t">新人独立上手速度</div><div class="gcard-d">从入职到完成首个任务的时间</div></div><div class="gcard"><div class="gcard-n" style="--c:#34d399">⑤</div><div class="gcard-t">知识沉淀量</div><div class="gcard-d">SOP / 手册 / 培训材料的产出</div></div><div class="gcard"><div class="gcard-n" style="--c:#34d399">⑥</div><div class="gcard-t">问题复现率下降</div><div class="gcard-d">同类报错是否靠手册自助解决</div></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">不追求好看的数字，而看真实的采用与沉淀 —— 信号持续向好，就是团队「用好」的证据。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-18" data-n="18" style="--c1:#22d3ee;--c2:#0891b2">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip chip-plain"><span class="chip-label">收束 · 立即行动</span></span><span class="counter">18<i>/</i>17</span></div>
+        <h2 class="scene-title">五板斧 + 4 阶段，让全团队用好大模型</h2>
+        <div class="scene-body"><div class="checklist"><div class="cks"><div class="ck"><span class="ck-box">✓</span><span class="ck-n">1</span><span class="ck-t">统一部门级 AGENTS.md（本周）</span></div><div class="ck"><span class="ck-box">✓</span><span class="ck-n">2</span><span class="ck-t">完成全员 Skill 安装（下周）</span></div><div class="ck"><span class="ck-box">✓</span><span class="ck-n">3</span><span class="ck-t">组织 CIMICode 使用培训</span></div><div class="ck"><span class="ck-box">✓</span><span class="ck-n">4</span><span class="ck-t">推广 Plan-Build 工作流</span></div><div class="ck"><span class="ck-box">✓</span><span class="ck-n">5</span><span class="ck-t">沉淀首批 Prompt 模板与脚本库</span></div><div class="ck"><span class="ck-box">✓</span><span class="ck-n">6</span><span class="ck-t">分享首批最佳实践（第 4 周）</span></div><div class="ck"><span class="ck-box">✓</span><span class="ck-n">7</span><span class="ck-t">启动 Phase 1 基础建设</span></div><div class="ck"><span class="ck-box">✓</span><span class="ck-n">8</span><span class="ck-t">建立效果信号看板</span></div></div>
+        <div class="ck-next">入门教「开通上手」→ PPT1　|　进阶教「用好赋能」→ 本课 PPT2　|　实践落地 → PPT3</div></div></div>
+      </div>
+    </section>
+
+    <!-- captions -->
+    <div id="captions">
+      <div class="cap" id="cap-0" data-in="0.100" data-out="4.345"><span>大家好，欢迎参加 CIMICode 进阶培训。</span></div>
+      <div class="cap" id="cap-1" data-in="4.295" data-out="7.659"><span>这一讲的主题是「用好大模型」。</span></div>
+      <div class="cap" id="cap-2" data-in="7.659" data-out="19.148"><span>基础入门教的是怎么开通和上手，而进阶要解决的核心问题是：从「会聊」，升级到「用好」，让团队真正发挥大模型的价值。</span></div>
+      <div class="cap" id="cap-3" data-in="19.148" data-out="24.295"><span>本课面向组长和资深工程师，配套第一讲一起看。</span></div>
+      <div class="cap" id="cap-4" data-in="24.910" data-out="26.588"><span>先看导览。</span></div>
+      <div class="cap" id="cap-5" data-in="26.538" data-out="30.873"><span>团队不缺工具，缺的是「用好」的方法论和规范。</span></div>
+      <div class="cap" id="cap-6" data-in="30.873" data-out="37.575"><span>常见的痛点有三个：输出不稳定、重复造轮子、水平参差不齐。</span></div>
+      <div class="cap" id="cap-7" data-in="37.575" data-out="47.536"><span>本课用「五板斧」来破局：选对模型、配好 AGENTS.md、写好 Prompt、用对工作流与工具，最后是团队规范落地。</span></div>
+      <div class="cap" id="cap-8" data-in="47.536" data-out="51.817"><span>目标是把「个人会用」升级成「团队用好」。</span></div>
+      <div class="cap" id="cap-9" data-in="52.430" data-out="54.919"><span>第一板斧，选对模型。</span></div>
+      <div class="cap" id="cap-10" data-in="54.869" data-out="59.271"><span>原则很简单：够用即可，不盲目上高阶。</span></div>
+      <div class="cap" id="cap-11" data-in="59.271" data-out="66.266"><span>日常默认就用 DeepSeek Flash，成本极低、响应快，能覆盖绝大多数任务。</span></div>
+      <div class="cap" id="cap-12" data-in="66.266" data-out="77.103"><span>只有在三种情况下才升高阶模型：多次改代码仍未解决、逻辑推理陷入死循环，或者长文档和海量对比任务。</span></div>
+      <div class="cap" id="cap-13" data-in="77.103" data-out="84.005"><span>记住，选型不是越强越好，把深度推理能力留给真正复杂的任务。</span></div>
+      <div class="cap" id="cap-14" data-in="84.610" data-out="87.685"><span>第二板斧，配好 AGENTS.md。</span></div>
+      <div class="cap" id="cap-15" data-in="87.635" data-out="96.132"><span>它的作用是让大模型秒懂半导体专业语义，从第一次响应就理解术语，避免望文生义。</span></div>
+      <div class="cap" id="cap-16" data-in="96.132" data-out="104.629"><span>一份完整的配置分四段：角色背景、术语上下文、编码与回复风格，以及安全约束。</span></div>
+      <div class="cap" id="cap-17" data-in="104.629" data-out="114.483"><span>比如告诉它你是 TD 测试工程师，熟悉 CPK、DOE、SECS-GEM 这些词，它就不会再按通用语义去猜。</span></div>
+      <div class="cap" id="cap-18" data-in="115.080" data-out="119.325"><span>AGENTS.md 支持全局和项目级双层配置。</span></div>
+      <div class="cap" id="cap-19" data-in="119.275" data-out="131.589"><span>全局配置放在用户主目录下，对所有项目打底；项目级配置放在项目目录里，只对当前项目生效，而且同名内容会覆盖全局。</span></div>
+      <div class="cap" id="cap-20" data-in="131.589" data-out="138.078"><span>项目级可以写明这次具体测什么、机型是什么、数据放在哪个目录。</span></div>
+      <div class="cap" id="cap-21" data-in="138.078" data-out="144.687"><span>这样通用规范一次写好，项目细节随用随加，团队就不再各写各的了。</span></div>
+      <div class="cap" id="cap-22" data-in="145.290" data-out="147.926"><span>第三板斧，写好 Prompt。</span></div>
+      <div class="cap" id="cap-23" data-in="147.876" data-out="152.557"><span>黄金法则是：信息越具体，输出越准确。</span></div>
+      <div class="cap" id="cap-24" data-in="152.557" data-out="163.807"><span>举个例子，如果你只说「帮我排查这个测试机报错」，大模型不知道机台型号、不知道日志在哪，只能给出一套通用的排查步骤。</span></div>
+      <div class="cap" id="cap-25" data-in="163.807" data-out="172.876"><span>但如果你给全机台、错误码、坐标范围和日志路径，它就能输出可以直接运行的分析脚本。</span></div>
+      <div class="cap" id="cap-26" data-in="172.876" data-out="177.822"><span>模糊指令得通用答案，具体指令得可用结果。</span></div>
+      <div class="cap" id="cap-27" data-in="178.430" data-out="185.986"><span>为了让提问更稳定，可以用「背景、目标、约束、输入、输出」这套五段式框架。</span></div>
+      <div class="cap" id="cap-28" data-in="185.936" data-out="194.766"><span>背景说清场景和技术栈，目标说清要什么，约束说清限制，输入给数据位置，输出指定格式。</span></div>
+      <div class="cap" id="cap-29" data-in="194.766" data-out="201.441"><span>再配合三个技巧：提供示例、分步骤下指令、一次性说清输出格式。</span></div>
+      <div class="cap" id="cap-30" data-in="201.441" data-out="207.811"><span>团队统一用这套框架，输出质量和一致性都能稳定提升。</span></div>
+      <div class="cap" id="cap-31" data-in="208.420" data-out="211.760"><span>第四板斧，用对工作流和工具。</span></div>
+      <div class="cap" id="cap-32" data-in="211.710" data-out="222.322"><span>复杂任务一定要先走 Plan 模式，分五步：理解需求、拆解任务、设计架构、评估风险，最后生成一份 TODO 清单。</span></div>
+      <div class="cap" id="cap-33" data-in="222.322" data-out="226.697"><span>工程师审核通过后，再进入 Build 自动落地。</span></div>
+      <div class="cap" id="cap-34" data-in="226.697" data-out="234.782"><span>Plan 的价值是让「做不做、怎么做」先想清楚，减少返工，复杂项目也能稳步推进。</span></div>
+      <div class="cap" id="cap-35" data-in="235.390" data-out="239.355"><span>工具方面，有两个 Skill 是团队必备的。</span></div>
+      <div class="cap" id="cap-36" data-in="239.305" data-out="245.609"><span>第一个是 Grill-Me，需求澄清助手，它会用五类反问帮你把需求问全。</span></div>
+      <div class="cap" id="cap-37" data-in="245.609" data-out="254.438"><span>第二个是 Web Search，联网搜索，用来查最新的 API 文档、库版本、行业最佳实践和标准更新。</span></div>
+      <div class="cap" id="cap-38" data-in="254.438" data-out="263.016"><span>Grill-Me 把模糊需求变完整，Web Search 把过时知识变最新，两个 Skill 让团队真正用好工具。</span></div>
+      <div class="cap" id="cap-39" data-in="263.630" data-out="265.667"><span>进入场景实战。</span></div>
+      <div class="cap" id="cap-40" data-in="265.617" data-out="269.128"><span>第一个高价值场景是 DOE 实验设计。</span></div>
+      <div class="cap" id="cap-41" data-in="269.128" data-out="271.162"><span>关键是「喂对数据」。</span></div>
+      <div class="cap" id="cap-42" data-in="271.162" data-out="278.503"><span>数据输入有三种方式：读项目文件、粘贴关键数据，或者提供文件路径。</span></div>
+      <div class="cap" id="cap-43" data-in="278.503" data-out="288.982"><span>把测试数据加上失效机制一起喂给大模型，它就能直接产出可执行的实验矩阵，DOE 的周期会显著缩短。</span></div>
+      <div class="cap" id="cap-44" data-in="289.590" data-out="293.675"><span>第二个场景是技术调研和头脑风暴。</span></div>
+      <div class="cap" id="cap-45" data-in="293.625" data-out="309.051"><span>遇到经验型难题、没有思路时，可以这么用：比如探针针尖磨损导致虚焊，让大模型检索工业界的主流方案，列五个头脑风暴方向，对比利弊和成本，给出推荐路径。</span></div>
+      <div class="cap" id="cap-46" data-in="309.051" data-out="318.904"><span>明确失效机制、要求多方案对比、要求决策维度，大模型就能把「没思路」变成一份可决策的清单。</span></div>
+      <div class="cap" id="cap-47" data-in="319.510" data-out="323.382"><span>第三个场景，复杂系统一句话起步。</span></div>
+      <div class="cap" id="cap-48" data-in="323.332" data-out="335.181"><span>比如要做一个测试数据自动化分析平台，用一句话把五项需求讲清楚，进入 Plan 模式，大模型自动拆解出架构和分阶段计划。</span></div>
+      <div class="cap" id="cap-49" data-in="335.181" data-out="341.045"><span>确认后 Build 会自动建目录、写代码、跑测试、出报告。</span></div>
+      <div class="cap" id="cap-50" data-in="341.045" data-out="347.761"><span>复杂系统不必从零手敲，Plan 加 Build 能把「周级」开发压缩到「天级」。</span></div>
+      <div class="cap" id="cap-51" data-in="348.380" data-out="351.401"><span>第四个场景是知识沉淀。</span></div>
+      <div class="cap" id="cap-52" data-in="351.351" data-out="357.761"><span>让大模型把散落在个人脑子里的经验，整理成团队可查的文档。</span></div>
+      <div class="cap" id="cap-53" data-in="357.761" data-out="365.833"><span>比如整理一份探针台常见报错排查手册，或者测试 SOP、培训材料、可复用脚本库。</span></div>
+      <div class="cap" id="cap-54" data-in="365.833" data-out="373.984"><span>人走了知识留下 —— 排查手册和脚本库让新人快速接班，团队不再依赖单点。</span></div>
+      <div class="cap" id="cap-55" data-in="374.610" data-out="376.767"><span>提效方面有两招。</span></div>
+      <div class="cap" id="cap-56" data-in="376.717" data-out="389.137"><span>第一是 Auto-Approve 自动执行，个人开发环境可以放开，但产线数据库删除、线上配置修改这类操作，严禁全局免确认，用完也要及时关闭。</span></div>
+      <div class="cap" id="cap-57" data-in="389.137" data-out="397.754"><span>第二是会话复用：保存常用对话模板、利用会话历史延续讨论、方向错了果断重启。</span></div>
+      <div class="cap" id="cap-58" data-in="397.754" data-out="403.765"><span>把团队的重复输入清零，才能把时间花在判断和决策上。</span></div>
+      <div class="cap" id="cap-59" data-in="404.390" data-out="408.422"><span>团队规范这一页解决的是水平参差问题。</span></div>
+      <div class="cap" id="cap-60" data-in="408.372" data-out="425.101"><span>四条做法：统一部门级 AGENTS.md，让输出一致；共享 Prompt 模板库，把高频任务沉淀下来；定期开经验分享会，扩散好案例和踩坑；建立代码审查机制，AI 生成的代码也要走 review。</span></div>
+      <div class="cap" id="cap-61" data-in="425.101" data-out="431.896"><span>规范不是限制，而是放大器，让新人的起点就是团队的最高水平。</span></div>
+      <div class="cap" id="cap-62" data-in="432.510" data-out="435.983"><span>团队落地分四个阶段渐进推进。</span></div>
+      <div class="cap" id="cap-63" data-in="435.933" data-out="456.459"><span>Phase 1 基础建设，前两周搞定权限、安装和统一配置；Phase 2 技能培训，第 3 到 4 周组织培训和建立反馈机制；Phase 3 深度应用，第 5 到 8 周推广 Plan-Build、建立脚本库、沉淀文档；Phase 4 持续优化，长期复盘和迭代。</span></div>
+      <div class="cap" id="cap-64" data-in="456.459" data-out="461.087"><span>先把基建和规范立起来，再推深度场景。</span></div>
+      <div class="cap" id="cap-65" data-in="461.710" data-out="464.838"><span>怎么判断团队真的「用好」了？</span></div>
+      <div class="cap" id="cap-66" data-in="464.788" data-out="469.070"><span>不要看抽象的百分比，而看可观察的信号。</span></div>
+      <div class="cap" id="cap-67" data-in="469.070" data-out="480.998"><span>比如 Plan-Build 的采用率、脚本和模板的复用数、AGENTS.md 配置的完整度、新人独立上手速度、知识沉淀量，以及问题复现率的下降。</span></div>
+      <div class="cap" id="cap-68" data-in="480.998" data-out="487.633"><span>这些信号都可观察、可统计，持续向好就是团队在进步的证据。</span></div>
+      <div class="cap" id="cap-69" data-in="488.250" data-out="490.181"><span>最后做个收束。</span></div>
+      <div class="cap" id="cap-70" data-in="490.131" data-out="496.195"><span>五板斧加四阶段，就是让全团队用好大模型的完整路径。</span></div>
+      <div class="cap" id="cap-71" data-in="496.195" data-out="505.716"><span>立即行动起来：本周统一部门级 AGENTS.md，下周完成全员 Skill 安装，第 4 周分享首批最佳实践。</span></div>
+      <div class="cap" id="cap-72" data-in="505.716" data-out="511.979"><span>入门教开通上手看第一讲，进阶用好看本课，实践落地看第三讲。</span></div>
+      <div class="cap" id="cap-73" data-in="511.979" data-out="514.400"><span>感谢大家的收听！</span></div>
+    </div>
+
+    <!-- master narration audio -->
+    <audio id="narration" class="clip" data-start="0" data-duration="514.92" data-track-index="0" data-volume="1"
+           src="assets/audio/narration.mp3"></audio>
+
+    <!-- progress -->
+    <div id="progress"><div class="fill" id="prog-fill"></div></div>
+
+    <script>
+      (function(){
+        const TIMING = {"total": 514.92, "scenes": [{"n": 1, "start": -0.15, "dur": 24.96}, {"n": 2, "start": 24.66, "dur": 27.67}, {"n": 3, "start": 52.18, "dur": 32.33}, {"n": 4, "start": 84.36, "dur": 30.62}, {"n": 5, "start": 114.83, "dur": 30.36}, {"n": 6, "start": 145.04, "dur": 33.29}, {"n": 7, "start": 178.18, "dur": 30.14}, {"n": 8, "start": 208.17, "dur": 27.12}, {"n": 9, "start": 235.14, "dur": 28.39}, {"n": 10, "start": 263.38, "dur": 26.11}, {"n": 11, "start": 289.34, "dur": 30.07}, {"n": 12, "start": 319.26, "dur": 29.02}, {"n": 13, "start": 348.13, "dur": 26.38}, {"n": 14, "start": 374.36, "dur": 29.93}, {"n": 15, "start": 404.14, "dur": 28.27}, {"n": 16, "start": 432.26, "dur": 29.35}, {"n": 17, "start": 461.46, "dur": 26.69}, {"n": 18, "start": 488.0, "dur": 26.9}]};
+        const CAPS = [{"i": 0, "in": 0.1, "out": 4.345}, {"i": 1, "in": 4.295, "out": 7.659}, {"i": 2, "in": 7.659, "out": 19.148}, {"i": 3, "in": 19.148, "out": 24.295}, {"i": 4, "in": 24.91, "out": 26.588}, {"i": 5, "in": 26.538, "out": 30.873}, {"i": 6, "in": 30.873, "out": 37.575}, {"i": 7, "in": 37.575, "out": 47.536}, {"i": 8, "in": 47.536, "out": 51.817}, {"i": 9, "in": 52.43, "out": 54.919}, {"i": 10, "in": 54.869, "out": 59.271}, {"i": 11, "in": 59.271, "out": 66.266}, {"i": 12, "in": 66.266, "out": 77.103}, {"i": 13, "in": 77.103, "out": 84.005}, {"i": 14, "in": 84.61, "out": 87.685}, {"i": 15, "in": 87.635, "out": 96.132}, {"i": 16, "in": 96.132, "out": 104.629}, {"i": 17, "in": 104.629, "out": 114.483}, {"i": 18, "in": 115.08, "out": 119.325}, {"i": 19, "in": 119.275, "out": 131.589}, {"i": 20, "in": 131.589, "out": 138.078}, {"i": 21, "in": 138.078, "out": 144.687}, {"i": 22, "in": 145.29, "out": 147.926}, {"i": 23, "in": 147.876, "out": 152.557}, {"i": 24, "in": 152.557, "out": 163.807}, {"i": 25, "in": 163.807, "out": 172.876}, {"i": 26, "in": 172.876, "out": 177.822}, {"i": 27, "in": 178.43, "out": 185.986}, {"i": 28, "in": 185.936, "out": 194.766}, {"i": 29, "in": 194.766, "out": 201.441}, {"i": 30, "in": 201.441, "out": 207.811}, {"i": 31, "in": 208.42, "out": 211.76}, {"i": 32, "in": 211.71, "out": 222.322}, {"i": 33, "in": 222.322, "out": 226.697}, {"i": 34, "in": 226.697, "out": 234.782}, {"i": 35, "in": 235.39, "out": 239.355}, {"i": 36, "in": 239.305, "out": 245.609}, {"i": 37, "in": 245.609, "out": 254.438}, {"i": 38, "in": 254.438, "out": 263.016}, {"i": 39, "in": 263.63, "out": 265.667}, {"i": 40, "in": 265.617, "out": 269.128}, {"i": 41, "in": 269.128, "out": 271.162}, {"i": 42, "in": 271.162, "out": 278.503}, {"i": 43, "in": 278.503, "out": 288.982}, {"i": 44, "in": 289.59, "out": 293.675}, {"i": 45, "in": 293.625, "out": 309.051}, {"i": 46, "in": 309.051, "out": 318.904}, {"i": 47, "in": 319.51, "out": 323.382}, {"i": 48, "in": 323.332, "out": 335.181}, {"i": 49, "in": 335.181, "out": 341.045}, {"i": 50, "in": 341.045, "out": 347.761}, {"i": 51, "in": 348.38, "out": 351.401}, {"i": 52, "in": 351.351, "out": 357.761}, {"i": 53, "in": 357.761, "out": 365.833}, {"i": 54, "in": 365.833, "out": 373.984}, {"i": 55, "in": 374.61, "out": 376.767}, {"i": 56, "in": 376.717, "out": 389.137}, {"i": 57, "in": 389.137, "out": 397.754}, {"i": 58, "in": 397.754, "out": 403.765}, {"i": 59, "in": 404.39, "out": 408.422}, {"i": 60, "in": 408.372, "out": 425.101}, {"i": 61, "in": 425.101, "out": 431.896}, {"i": 62, "in": 432.51, "out": 435.983}, {"i": 63, "in": 435.933, "out": 456.459}, {"i": 64, "in": 456.459, "out": 461.087}, {"i": 65, "in": 461.71, "out": 464.838}, {"i": 66, "in": 464.788, "out": 469.07}, {"i": 67, "in": 469.07, "out": 480.998}, {"i": 68, "in": 480.998, "out": 487.633}, {"i": 69, "in": 488.25, "out": 490.181}, {"i": 70, "in": 490.131, "out": 496.195}, {"i": 71, "in": 496.195, "out": 505.716}, {"i": 72, "in": 505.716, "out": 511.979}, {"i": 73, "in": 511.979, "out": 514.4}];
+        const DUR = TIMING.total;
+
+        // section rail dots: 8 sections
+        const rail = document.getElementById('section-rail');
+        const railEl = (function(){ /* build 9 markers by section group */ return null; })();
+
+        const tl = gsap.timeline({ paused: true });
+        window.__timelines = window.__timelines || {};
+
+        // brand + rail fade in early
+        tl.fromTo('#brand', {opacity:0, y:-12}, {opacity:1, y:0, duration:0.7, ease:'power2.out'}, 0.2);
+        tl.fromTo('#section-rail', {opacity:0, y:-12}, {opacity:1, y:0, duration:0.7, ease:'power2.out'}, 0.3);
+
+        // progress bar fill across whole duration
+        gsap.set('#prog-fill', { scaleX: 0 });
+        tl.to('#prog-fill', { scaleX: 1, duration: DUR, ease:'none' }, 0);
+
+        // scenes: fade+rise in, fade out at end
+        TIMING.scenes.forEach(function(sc){
+          const sel = '#scene-' + sc.n;
+          gsap.set(sel, { opacity: 0, y: 24 });
+          // entrance
+          tl.to(sel, { opacity: 1, y: 0, duration: 0.55, ease:'power3.out' }, sc.start);
+          // body items stagger on a touch after entrance
+          // exit (last 0.32s)
+          tl.to(sel, { opacity: 0, y: -16, duration: 0.34, ease:'power2.in' }, sc.start + sc.dur - 0.34);
+          tl.set(sel, { opacity: 0 }, sc.start + sc.dur);
+        });
+
+        // captions: opacity tween per cue (seek-safe — static text, only opacity animates)
+        CAPS.forEach(function(c){
+          const sel = '#cap-' + c.i;
+          const dur = Math.max(0.25, c.out - c.in);
+          tl.set(sel, { opacity: 0 }, 0);
+          tl.fromTo(sel, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.18, ease:'power2.out' }, c.in);
+          tl.to(sel, { opacity: 0, y: -6, duration: 0.16, ease:'power2.in' }, c.out - 0.16);
+          tl.set(sel, { opacity: 0 }, c.out);
+        });
+
+        // section rail highlight: pre-compute per-time active section via tweens on dots
+        // build dots dynamically and tween their class state across each scene band
+        const sectionBand = [];
+        TIMING.scenes.forEach(function(sc){
+          const key = 's' + sc.n;
+          sectionBand.push({ start: sc.start, end: sc.start + sc.dur });
+        });
+        // (rail dots rendered statically below via inline style markers are optional; keep minimal)
+
+        window.__timelines['main-video'] = tl;
+      })();
+    </script>
+  </div>
+</body>
+</html>

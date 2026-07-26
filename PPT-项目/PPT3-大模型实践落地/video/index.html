@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="zh-CN" data-resolution="landscape">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CIMICode · 大模型实践落地</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+  :root{
+    --bg0:#070b16; --bg1:#0d1326; --bg2:#111a33;
+    --panel:rgba(255,255,255,.045); --panel2:rgba(255,255,255,.07);
+    --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.16);
+    --ink:#eef3fb; --ink2:#aeb9cc; --ink3:#7c889e;
+    --c1:#22d3ee; --c2:#0891b2;
+  }
+  @font-face { font-family:'PingFang SC'; src:local('PingFang SC'), local('.PingFangSC-Regular'); font-display:swap; }
+  @font-face { font-family:'Noto Sans SC'; src:local('Noto Sans SC'); font-display:swap; }
+  @font-face { font-family:'Microsoft YaHei'; src:local('Microsoft YaHei'); font-display:swap; }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;width:1920px;height:1080px;overflow:hidden;
+    background:radial-gradient(120% 90% at 78% 8%, var(--bg2) 0%, var(--bg1) 38%, var(--bg0) 100%);
+    font-family:"PingFang SC","Noto Sans SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+    color:var(--ink); -webkit-font-smoothing:antialiased;}
+  #stage{position:relative;width:1920px;height:1080px;overflow:hidden;}
+  /* faint grid + glow */
+  #stage::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+    background-size:80px 80px;mask-image:radial-gradient(80% 70% at 50% 40%,#000 30%,transparent 100%);}
+  #stage::after{content:"";position:absolute;width:1100px;height:1100px;right:-260px;top:-420px;
+    background:radial-gradient(circle, color-mix(in srgb,var(--c1) 22%,transparent) 0%, transparent 62%);
+    filter:blur(8px);pointer-events:none;opacity:.5;}
+
+  /* persistent brand + progress */
+  #brand{position:absolute;top:46px;left:72px;display:flex;align-items:center;gap:14px;z-index:40;
+    opacity:0;}
+  #brand .logo{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-weight:800;
+    font-size:19px;color:#06121a;background:linear-gradient(135deg,var(--c1),var(--c2));
+    box-shadow:0 6px 20px color-mix(in srgb,var(--c1) 40%,transparent);}
+  #brand .wm{font-size:23px;font-weight:700;letter-spacing:.5px;}
+  #brand .wm b{color:var(--c1);}
+  #brand .wm .sep{color:var(--ink3);margin:0 8px;font-weight:400;}
+  #progress{position:absolute;left:0;bottom:0;height:6px;width:100%;z-index:45;
+    background:rgba(255,255,255,.06);}
+  #progress .fill{height:100%;width:100%;transform-origin:left center;transform:scaleX(0);
+    background:linear-gradient(90deg,var(--c1),var(--c2) 70%,color-mix(in srgb,var(--c1) 60%, #818cf8));}
+  #section-rail{position:absolute;right:72px;top:52px;z-index:40;display:flex;gap:7px;opacity:0;}
+  #section-rail .dot{width:9px;height:9px;border-radius:3px;background:rgba(255,255,255,.16);
+    transition:none;}
+  #section-rail .dot.on{background:var(--c1);box-shadow:0 0 10px color-mix(in srgb,var(--c1) 70%,transparent);}
+
+  /* scenes */
+  .scene{position:absolute;inset:0;display:flex;opacity:0;z-index:10;padding:118px 96px 152px;}
+  .scene-inner{width:100%;margin:auto 0;display:flex;flex-direction:column;gap:22px;}
+  .scene-head{display:flex;align-items:center;justify-content:space-between;}
+  .chip{display:inline-flex;align-items:center;gap:11px;padding:8px 16px 8px 9px;border-radius:999px;
+    background:color-mix(in srgb,var(--c1) 12%,transparent);border:1px solid color-mix(in srgb,var(--c1) 40%,transparent);}
+  .chip b{display:grid;place-items:center;min-width:34px;height:30px;padding:0 8px;border-radius:8px;
+    font-size:16px;color:#02060c;background:linear-gradient(135deg,var(--c1),var(--c2));font-weight:800;}
+  .chip-label{font-size:19px;font-weight:600;color:var(--ink);letter-spacing:.5px;}
+  .chip-plain{padding-left:16px;}
+  .counter{font-size:21px;font-weight:600;color:var(--ink2);font-variant-numeric:tabular-nums;}
+  .counter i{font-style:normal;color:#8d98ae;margin:0 6px;font-weight:400;}
+  .scene-title{font-size:62px;line-height:1.16;font-weight:800;margin:0;letter-spacing:-.5px;
+    max-width:1500px;}
+  .scene-title em{font-style:normal;background:linear-gradient(120deg,var(--c1),color-mix(in srgb,var(--c1) 55%,#a78bfa));
+    -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .scene-body{flex:1;min-height:0;}
+
+  .takeaway{display:flex;align-items:center;gap:18px;padding:20px 26px;border-radius:16px;
+    background:linear-gradient(90deg,color-mix(in srgb,var(--c1) 14%,transparent),transparent 80%);
+    border-left:4px solid var(--c1);}
+  .tk-tag{font-size:15px;font-weight:800;letter-spacing:2px;color:var(--c1);
+    padding:5px 11px;border:1px solid color-mix(in srgb,var(--c1) 45%,transparent);border-radius:7px;flex:none;}
+  .tk-text{font-size:26px;font-weight:500;color:var(--ink);line-height:1.45;}
+
+  /* ---- title slide ---- */
+  .layout-title{display:flex;flex-direction:column;gap:0;}
+  .kvline{font-size:24px;font-weight:600;color:var(--c1);letter-spacing:2px;margin-bottom:26px;}
+  .big-title{font-size:104px;line-height:1.1;font-weight:900;margin:0;letter-spacing:-1px;
+    max-width:1400px;}
+  .big-sub{font-size:46px;font-weight:500;color:var(--ink2);margin:30px 0 0;}
+  .meta{font-size:25px;color:var(--ink3);margin-top:64px;letter-spacing:.5px;}
+  .footnote{font-size:21px;color:var(--ink3);margin-top:14px;opacity:.85;}
+
+  /* ---- agenda ---- */
+  .agenda{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+  .ag-h{font-size:23px;font-weight:700;color:var(--c1);margin-bottom:18px;letter-spacing:.5px;}
+  .acards{display:flex;flex-direction:column;gap:14px;}
+  .acard{display:flex;align-items:center;gap:22px;padding:22px 26px;border-radius:16px;
+    background:var(--panel);border:1px solid var(--line);}
+  .acard-num{font-size:60px;font-weight:900;line-height:1;color:var(--c);min-width:96px;}
+  .acard-t{font-size:30px;font-weight:700;}
+  .acard-d{font-size:21px;color:var(--ink2);margin-top:5px;line-height:1.4;}
+  .rsteps{display:flex;flex-direction:column;gap:8px;}
+  .rs{display:flex;align-items:center;gap:16px;padding:11px 20px;border-radius:12px;
+    background:var(--panel);border:1px solid var(--line);}
+  .rs-n{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;flex:none;
+    font-size:21px;font-weight:800;color:#06121a;background:var(--c);}
+  .rs-t{font-size:22px;font-weight:600;}
+
+  /* ---- models ---- */
+  .mcards{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
+  .mcard{display:flex;flex-direction:column;gap:10px;padding:28px 24px;border-radius:18px;
+    background:var(--panel);border:1px solid var(--line);position:relative;overflow:hidden;}
+  .mcard-pri{background:linear-gradient(160deg,color-mix(in srgb,var(--c1) 22%,transparent),var(--panel));
+    border-color:color-mix(in srgb,var(--c1) 55%,transparent);box-shadow:0 18px 50px color-mix(in srgb,var(--c1) 18%,transparent);}
+  .mcard-tag{align-self:flex-start;font-size:17px;font-weight:800;padding:6px 14px;border-radius:8px;
+    color:#06121a;background:linear-gradient(135deg,var(--c1),var(--c2));}
+  .mcard-pri .mcard-tag{background:linear-gradient(135deg,#fde68a,#f59e0b);}
+  .mcard-name{font-size:31px;font-weight:800;margin-top:4px;}
+  .mcard-cost{font-size:20px;font-weight:700;color:var(--c1);}
+  .mcard-pri .mcard-cost{color:#f59e0b;}
+  .mcard-desc{font-size:19px;color:var(--ink2);line-height:1.5;margin-top:auto;}
+
+  /* ---- forms ---- */
+  .forms{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:8px;}
+  .fcard{padding:26px;border-radius:18px;background:var(--panel);border:1px solid var(--line);
+    border-top:3px solid var(--c1);}
+  .fcard-n{font-size:30px;font-weight:800;}
+  .fcard-w{font-size:20px;color:var(--c1);font-weight:600;margin-top:8px;}
+  .fcard-u{font-size:20px;color:var(--ink2);margin-top:16px;line-height:1.5;}
+
+  .code-block{font-family:"SF Mono","JetBrains Mono",ui-monospace,monospace;border-radius:14px;
+    background:#05080f;border:1px solid var(--line2);padding:22px 28px;overflow:hidden;}
+  .code-block code{font-size:24px;color:#7ee0ff;line-height:1.7;white-space:pre-wrap;display:block;}
+  .code-lines{display:flex;flex-direction:column;gap:2px;}
+  .code-lines code{font-size:23px;}
+
+  /* ---- steps3 ---- */
+  .steps3{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;}
+  .stps{display:flex;flex-direction:column;gap:16px;}
+  .stp{display:flex;align-items:center;gap:22px;padding:24px 28px;border-radius:16px;
+    background:var(--panel);border:1px solid var(--line);}
+  .stp-n{display:grid;place-items:center;width:58px;height:58px;border-radius:16px;flex:none;
+    font-size:30px;font-weight:900;color:#06121a;background:var(--c);}
+  .stp-t{font-size:29px;font-weight:600;line-height:1.35;}
+  .callout{padding:26px 28px;border-radius:18px;}
+  .callout-indigo{background:linear-gradient(160deg,color-mix(in srgb,#818cf8 22%,transparent),var(--panel));
+    border:1px solid color-mix(in srgb,#818cf8 45%,transparent);}
+  .callout-h{font-size:27px;font-weight:800;color:#c7d2fe;margin-bottom:16px;}
+  .callout-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px;}
+  .callout-list li{font-size:21px;color:var(--ink);padding-left:26px;position:relative;line-height:1.5;}
+  .callout-list li::before{content:"›";position:absolute;left:0;color:#a5b4fc;font-weight:800;}
+
+  /* ---- install2 ---- */
+  .install2{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;}
+  .icol{padding:26px;border-radius:18px;background:var(--panel);border:1px solid var(--line);
+    border-top:3px solid var(--c1);}
+  .icol-h{font-size:29px;font-weight:800;margin-bottom:18px;}
+  .icol-steps{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:13px;counter-reset:s;}
+  .icol-steps li{font-size:22px;color:var(--ink);padding-left:38px;position:relative;line-height:1.5;counter-increment:s;}
+  .icol-steps li::before{content:counter(s);position:absolute;left:0;top:-2px;width:26px;height:26px;
+    display:grid;place-items:center;font-size:15px;font-weight:800;border-radius:7px;color:#06121a;
+    background:var(--c1);}
+
+  /* ---- concepts ---- */
+  .concepts{display:flex;flex-direction:column;gap:24px;}
+  .cc-center{align-self:center;text-align:center;padding:18px 36px;border-radius:14px;font-size:25px;
+    font-weight:700;color:var(--ink);background:var(--panel2);border:1px dashed var(--line2);}
+  .ccards{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  .ccard{padding:24px 22px;border-radius:16px;background:var(--panel);border:1px solid var(--line);
+    border-top:3px solid var(--c1);}
+  .ccard-n{font-size:42px;font-weight:900;color:var(--c1);line-height:1;}
+  .ccard-t{font-size:26px;font-weight:800;margin-top:12px;}
+  .ccard-d{font-size:19px;color:var(--ink2);margin-top:10px;line-height:1.5;}
+
+  /* ---- workflow ---- */
+  .workflow{display:flex;flex-direction:column;gap:22px;}
+  .flow{display:flex;align-items:stretch;gap:10px;justify-content:center;}
+  .fl-node{flex:1;max-width:230px;padding:20px 16px;border-radius:14px;background:var(--panel);
+    border:1px solid var(--line);display:flex;align-items:center;justify-content:center;text-align:center;
+    font-size:19px;font-weight:600;line-height:1.4;white-space:pre-line;min-height:96px;}
+  .fl-decision{background:linear-gradient(160deg,color-mix(in srgb,var(--c1) 22%,transparent),var(--panel));
+    border-color:color-mix(in srgb,var(--c1) 50%,transparent);color:var(--ink);}
+  .fl-arrow{display:grid;place-items:center;color:var(--c1);font-size:30px;font-weight:700;}
+
+  /* ---- grid6 ---- */
+  .grid6{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:20px;}
+  .gcard{padding:24px;border-radius:16px;background:var(--panel);border:1px solid var(--line);
+    display:flex;flex-direction:column;gap:8px;position:relative;}
+  .gcard-n{position:absolute;top:18px;right:22px;font-size:52px;font-weight:900;color:var(--c);opacity:.3;line-height:1;}
+  .gcard-t{font-size:27px;font-weight:800;padding-right:48px;}
+  .gcard-d{font-size:20px;color:var(--ink2);line-height:1.5;margin-top:auto;}
+
+  /* ---- demos ---- */
+  .demos{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  .dcard{padding:28px;border-radius:18px;background:var(--panel);border:1px solid var(--line);
+    display:flex;flex-direction:column;gap:16px;border-top:3px solid var(--c1);}
+  .dcard-t{font-size:27px;font-weight:800;color:var(--c1);}
+  .dcard-prompt{font-size:22px;color:var(--ink);line-height:1.6;padding:18px 20px;border-radius:12px;
+    background:#05080f;border:1px solid var(--line2);border-left:3px solid var(--c1);}
+  .dcard-out{font-size:20px;color:var(--ink2);line-height:1.5;}
+  .dcard-out b{color:var(--c1);font-weight:700;margin-right:6px;}
+
+  /* ---- config ---- */
+  .config{display:grid;grid-template-columns:1fr;gap:16px;}
+  .cfg-why{font-size:24px;color:var(--c1);font-weight:600;}
+  .cfg-code{padding:6px 0;}
+  .cfg-secs{display:flex;flex-direction:column;}
+  .cfg-sec{display:grid;grid-template-columns:340px 1fr;gap:24px;padding:18px 28px;border-bottom:1px solid var(--line);}
+  .cfg-sec:last-child{border-bottom:none;}
+  .cfg-key{font-family:"SF Mono","JetBrains Mono",ui-monospace,monospace;font-size:22px;font-weight:700;color:#7ee0ff;}
+  .cfg-val{font-size:21px;color:var(--ink);line-height:1.5;}
+  .cfg-path{font-size:20px;color:var(--ink2);font-family:"SF Mono","JetBrains Mono",ui-monospace,monospace;}
+
+  /* ---- skills2 ---- */
+  .skills2{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  .scard{padding:28px;border-radius:18px;background:var(--panel);border:1px solid var(--line);
+    display:flex;flex-direction:column;gap:14px;border-top:3px solid var(--c1);}
+  .scard-t{font-size:27px;font-weight:800;color:var(--c1);}
+  .scard-d{font-size:21px;color:var(--ink);line-height:1.6;}
+  .scard-cmd{margin-top:auto;}
+
+  /* ---- safety ---- */
+  .safety{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  .zone{padding:28px;border-radius:18px;display:flex;flex-direction:column;gap:14px;}
+  .zone-green{background:linear-gradient(160deg,color-mix(in srgb,#34d399 18%,transparent),var(--panel));
+    border:1px solid color-mix(in srgb,#34d399 42%,transparent);}
+  .zone-red{background:linear-gradient(160deg,color-mix(in srgb,#fb7185 18%,transparent),var(--panel));
+    border:1px solid color-mix(in srgb,#fb7185 42%,transparent);}
+  .zone-h{font-size:26px;font-weight:800;}
+  .zone-green .zone-h{color:#6ee7b7;} .zone-red .zone-h{color:#fda4af;}
+  .zone ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px;}
+  .zone li{font-size:23px;color:var(--ink);padding-left:34px;position:relative;line-height:1.5;}
+  .zone-green li::before{content:"✓";position:absolute;left:0;color:#34d399;font-weight:800;}
+  .zone-red li::before{content:"✕";position:absolute;left:0;color:#fb7185;font-weight:800;}
+
+  /* ---- faq ---- */
+  .faqs{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .qcard{padding:26px;border-radius:18px;background:var(--panel);border:1px solid var(--line);
+    display:flex;flex-direction:column;gap:16px;border-top:3px solid var(--c1);}
+  .qcard-q{font-size:26px;font-weight:800;color:var(--c1);line-height:1.35;}
+  .qcard-a{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px;counter-reset:q;}
+  .qcard-a li{font-size:21px;color:var(--ink2);padding-left:34px;position:relative;line-height:1.5;counter-increment:q;}
+  .qcard-a li::before{content:counter(q);position:absolute;left:0;top:0;width:24px;height:24px;
+    display:grid;place-items:center;font-size:14px;font-weight:800;border-radius:6px;color:#06121a;
+    background:var(--c1);}
+
+  /* ---- checklist ---- */
+  .checklist{display:flex;flex-direction:column;gap:20px;}
+  .cks{display:grid;grid-template-columns:1fr 1fr;gap:13px 40px;}
+  .ck{display:flex;align-items:center;gap:16px;padding:14px 22px;border-radius:13px;
+    background:var(--panel);border:1px solid var(--line);}
+  .ck-box{display:grid;place-items:center;width:30px;height:30px;border-radius:8px;flex:none;font-size:17px;
+    font-weight:800;color:#06121a;background:linear-gradient(135deg,#34d399,#059669);}
+  .ck-n{font-size:19px;font-weight:800;color:var(--c1);min-width:26px;}
+  .ck-t{font-size:22px;font-weight:500;color:var(--ink);}
+  .ck-next{font-size:22px;color:var(--ink2);padding:18px 24px;border-radius:13px;
+    background:linear-gradient(90deg,color-mix(in srgb,var(--c1) 12%,transparent),transparent 80%);
+    border-left:4px solid var(--c1);line-height:1.5;}
+
+  /* ---- panels (versatile titled grid) ---- */
+  .panels{display:grid;gap:20px;}
+  .panel{padding:24px;border-radius:16px;background:var(--panel);border:1px solid var(--line);
+    border-top:3px solid var(--c1);display:flex;flex-direction:column;gap:12px;}
+  .pn-head{display:flex;align-items:center;gap:12px;}
+  .pn-num{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;flex:none;
+    font-size:18px;font-weight:800;color:#06121a;background:var(--c);}
+  .pn-t{font-size:25px;font-weight:800;line-height:1.3;}
+  .pn-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px;}
+  .pn-list li{font-size:20px;color:var(--ink2);padding-left:22px;position:relative;line-height:1.5;}
+  .pn-list li::before{content:"·";position:absolute;left:6px;color:var(--c1);font-weight:800;}
+  .pn-note{font-size:18px;color:var(--ink3);font-style:italic;margin-top:auto;}
+
+  /* ---- compare (bad vs good) ---- */
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  .cmp{padding:26px;border-radius:18px;display:flex;flex-direction:column;gap:14px;}
+  .cmp-bad{background:linear-gradient(160deg,color-mix(in srgb,#fb7185 14%,transparent),var(--panel));
+    border:1px solid color-mix(in srgb,#fb7185 38%,transparent);}
+  .cmp-good{background:linear-gradient(160deg,color-mix(in srgb,var(--c1) 16%,transparent),var(--panel));
+    border:1px solid color-mix(in srgb,var(--c1) 42%,transparent);}
+  .cmp-tag{align-self:flex-start;font-size:16px;font-weight:800;padding:5px 13px;border-radius:8px;color:#06121a;}
+  .cmp-bad .cmp-tag{background:linear-gradient(135deg,#fda4af,#fb7185);}
+  .cmp-good .cmp-tag{background:linear-gradient(135deg,var(--c1),var(--c2));}
+  .cmp-h{font-size:24px;font-weight:800;line-height:1.4;white-space:pre-line;}
+  .cmp-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;}
+  .cmp-list li{font-size:20px;color:var(--ink);padding-left:26px;position:relative;line-height:1.5;}
+  .cmp-bad .cmp-list li::before{content:"✗";position:absolute;left:0;color:#fb7185;font-weight:800;}
+  .cmp-good .cmp-list li::before{content:"✓";position:absolute;left:0;color:var(--c1);font-weight:800;}
+
+  /* ---- phases (timeline columns) ---- */
+  .phases{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .ph{padding:20px 18px;border-radius:15px;background:var(--panel);border:1px solid var(--line);
+    border-top:3px solid var(--c1);display:flex;flex-direction:column;gap:8px;}
+  .ph-tag{align-self:flex-start;font-size:15px;font-weight:800;padding:4px 11px;border-radius:7px;
+    color:#06121a;background:linear-gradient(135deg,var(--c1),var(--c2));}
+  .ph-h{font-size:22px;font-weight:800;line-height:1.3;}
+  .ph-dur{font-size:17px;color:var(--c1);font-weight:600;}
+  .ph-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .ph-list li{font-size:17px;color:var(--ink2);padding-left:16px;position:relative;line-height:1.4;}
+  .ph-list li::before{content:"›";position:absolute;left:0;color:var(--c1);font-weight:800;}
+
+  /* ---- captions ---- */
+  #captions{position:absolute;left:0;right:0;bottom:56px;height:0;z-index:35;pointer-events:none;}
+  .cap{position:absolute;bottom:0;left:50%;transform:translateX(-50%);max-width:1720px;opacity:0;
+    padding:12px 30px;border-radius:15px;background:rgba(8,12,22,.93);
+    border:1px solid color-mix(in srgb,var(--c1) 35%,transparent);
+    box-shadow:0 10px 40px rgba(0,0,0,.5);}
+  .cap span{font-size:31px;font-weight:700;color:#fff;line-height:1.3;letter-spacing:.3px;
+    text-shadow:0 2px 12px rgba(0,0,0,.7);}
+</style>
+</head>
+<body>
+  <div id="stage" data-composition-id="main-video" data-width="1920" data-height="1080"
+       data-start="0" data-duration="600.43">
+
+    <div id="brand">
+      <div class="logo">C</div>
+      <div class="wm"><b>CIMICode</b><span class="sep">·</span>实践落地 · 复现</div>
+    </div>
+
+    <div id="section-rail"></div>
+
+    <!-- scenes -->
+    <section class="scene" id="scene-1" data-n="1" style="--c1:#22d3ee;--c2:#0891b2">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip chip-plain"><span class="chip-label">CIMICode · 实践分享</span></span><span class="counter">01<i>/</i>17</span></div>
+        
+        <div class="scene-body">
+      <div class="layout-title">
+        <div class="kvline"><span>大模型实践落地</span></div>
+        <h1 class="big-title">从文字材料到咨询级 PPT 的全流程复现</h1>
+        <p class="big-sub">新人照着一步步做，就能用大模型做出一模一样的效果</p>
+        <div class="meta">受众：想用大模型提效的全员　·　讲师：TD Testing</div>
+        <div class="footnote">实战案例：PPT1《入门》+ PPT2《进阶》</div>
+      </div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-2" data-n="2" style="--c1:#22d3ee;--c2:#0891b2">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>导览</b><span class="chip-label"></span></span><span class="counter">02<i>/</i>17</span></div>
+        <h2 class="scene-title">直接让大模型做 PPT 会翻车，工程化方法才能稳定出活</h2>
+        <div class="scene-body">
+      <div class="agenda">
+        <div class="ag-col">
+          <div class="ag-h">公司已就位的能力</div>
+          <div class="acards"><div class="acard"><div class="acard-num" style="--c:#22d3ee">1</div><div class="acard-body"><div class="acard-t">模板化</div><div class="acard-d">默认卡片堆叠，缺乏咨询级的层级与密度</div></div></div><div class="acard"><div class="acard-num" style="--c:#22d3ee">2</div><div class="acard-body"><div class="acard-t">不可编辑</div><div class="acard-d">文字烘焙成图片，没法改、没法复用</div></div></div><div class="acard"><div class="acard-num" style="--c:#22d3ee">3</div><div class="acard-body"><div class="acard-t">内容失真</div><div class="acard-d">AI 编造数据，或把预估当成实测成果</div></div></div></div>
+        </div>
+        <div class="ag-col">
+          <div class="ag-h">本课五段路线图</div>
+          <div class="rsteps"><div class="rs"><span class="rs-n" style="--c:#22d3ee">1</span><span class="rs-t">证据分析 + 逐页大纲</span></div><div class="rs"><span class="rs-n" style="--c:#22d3ee">2</span><span class="rs-t">8 张样张选风格</span></div><div class="rs"><span class="rs-n" style="--c:#22d3ee">3</span><span class="rs-t">环境核查 + 降级决策</span></div><div class="rs"><span class="rs-n" style="--c:#22d3ee">4</span><span class="rs-t">搭共享视觉模块</span></div><div class="rs"><span class="rs-n" style="--c:#22d3ee">5</span><span class="rs-t">3 页风格验证</span></div><div class="rs"><span class="rs-n" style="--c:#22d3ee">6</span><span class="rs-t">生产 + 渲染 QA + 自检</span></div><div class="rs"><span class="rs-n" style="--c:#22d3ee">7</span><span class="rs-t">方向纠偏</span></div></div>
+        </div>
+      </div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-3" data-n="3" style="--c1:#a78bfa;--c2:#7c3aed">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>认知</b><span class="chip-label">重塑</span></span><span class="counter">03<i>/</i>17</span></div>
+        <h2 class="scene-title">重新认识大模型：它是「能动手的助理」</h2>
+        <div class="scene-body"><div class="panels" style="grid-template-columns:repeat(3,1fr)"><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">1</span><span class="pn-t">价值在端到端动手</span></div><div class="pn-note">能读文件、写代码、生成 PPTX、渲染、自检、迭代，把活真正干完</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">2</span><span class="pn-t">环境能力决定路径</span></div><div class="pn-note">有没有图像生成、有没有渲染器，直接决定能用哪套流程</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">3</span><span class="pn-t">降级不等于失败</span></div><div class="pn-note">跳过某步没关系，关键是如实告知、留痕、用替代方案保证交付</div></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">把大模型当「能动手的助理」 —— 它的产出是文件、是结果，不只是回答。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-4" data-n="4" style="--c1:#818cf8;--c2:#4f46e5">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>环境</b><span class="chip-label">准备</span></span><span class="counter">04<i>/</i>17</span></div>
+        <h2 class="scene-title">打通渲染链路是第一步 —— 先核查再动手</h2>
+        <div class="scene-body"><div class="panels" style="grid-template-columns:repeat(3,1fr)"><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">①</span><span class="pn-t">bun + pptxgenjs</span></div><div class="pn-note">生成 PPTX</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">②</span><span class="pn-t">LibreOffice</span></div><div class="pn-note">PPTX → PDF</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">③</span><span class="pn-t">PyMuPDF</span></div><div class="pn-note">PDF → 每页 PNG</div></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">环境核查是「动手前」的动作 —— 链路没打通就开工，必然中途卡死。⚠ LibreOffice 只能导首页 PNG，多页必须走 PDF→PyMuPDF。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-5" data-n="5" style="--c1:#22d3ee;--c2:#0891b2">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>七步</b><span class="chip-label">总览</span></span><span class="counter">05<i>/</i>17</span></div>
+        <h2 class="scene-title">七步工程化流程，让大模型稳定产出可编辑 PPT</h2>
+        <div class="scene-body"><div class="panels" style="grid-template-columns:repeat(4,1fr)"><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">1</span><span class="pn-t">证据分析</span></div><div class="pn-note">建证据表、SCR、逐页大纲，第一次确认</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">2</span><span class="pn-t">风格选择</span></div><div class="pn-note">8 张样张选风格，锁定视觉系统</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">3</span><span class="pn-t">环境核查</span></div><div class="pn-note">查工具链，缺则如实降级留痕</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">4</span><span class="pn-t">搭模块</span></div><div class="pn-note">把风格固化成共享视觉模块</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">5</span><span class="pn-t">3 页验证</span></div><div class="pn-note">先验证视觉执行，再批量生产</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">6</span><span class="pn-t">生产 QA</span></div><div class="pn-note">PptxGenJS 搭建 + 渲染 + 结构自检</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">7</span><span class="pn-t">方向纠偏</span></div><div class="pn-note">意图错了果断重写，不修补</div></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">七步是「防翻车」流程 —— 每一步都有确认门或自检，把不确定性逐步消除。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-6" data-n="6" style="--c1:#fbbf24;--c2:#d97706">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>步骤①</b><span class="chip-label">分析</span></span><span class="counter">06<i>/</i>17</span></div>
+        <h2 class="scene-title">别急着画 —— 先建证据表、写 SCR、定逐页大纲</h2>
+        <div class="scene-body"><div class="panels" style="grid-template-columns:1fr 1fr"><div class="panel"><div class="pn-head"><span class="pn-t">证据表纪律</span></div><ul class="pn-list"><li>每条事实都标来源</li><li>不用常识补数据</li><li>冲突如实标注</li><li>数字标置信度</li></ul></div><div class="panel"><div class="pn-head"><span class="pn-t">第一次确认门（必须一次性）</span></div><ul class="pn-list"><li>故事线（2-3 条选 1）</li><li>页数 + 逐页论点与结论标题</li><li>每页信息密度与组件清单</li><li>开放数据冲突与 caveat</li></ul></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">证据表保证内容真实，确认门保证方向对齐 —— 地基稳了，后面的生产才不会塌。⚠ 不能只在「页标题」层面确认，否则后面必返工。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-7" data-n="7" style="--c1:#a78bfa;--c2:#7c3aed">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>步骤②</b><span class="chip-label">风格</span></span><span class="counter">07<i>/</i>17</span></div>
+        <h2 class="scene-title">8 张样张直接选，锁定视觉系统再动手</h2>
+        <div class="scene-body"><div class="panels" style="grid-template-columns:repeat(4,1fr)"><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">1</span><span class="pn-t">经典深红咨询风</span></div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">2</span><span class="pn-t">冷灰 + 勃艮第红</span></div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">3</span><span class="pn-t">暖象牙 + 暗酒红</span></div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">4</span><span class="pn-t">象牙白 + 深蓝 ★</span></div><div class="pn-note">选定 · 专为科技/AI</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">5</span><span class="pn-t">浅灰白 + 墨绿</span></div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">6</span><span class="pn-t">纸张米色 + 铜棕</span></div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">7</span><span class="pn-t">浅灰 + 黑金</span></div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">8</span><span class="pn-t">冷白灰 + 深紫</span></div></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">一套视觉系统贯穿全系列 —— 锁定色板、15 级 Typography Scale、字体、图表语言，PPT1/2/3 共用风格 4，品牌统一不漂移。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-8" data-n="8" style="--c1:#38bdf8;--c2:#0284c7">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>步骤③</b><span class="chip-label">核查</span></span><span class="counter">08<i>/</i>17</span></div>
+        <h2 class="scene-title">环境缺图像生成？如实降级，留痕继续</h2>
+        <div class="scene-body"><div class="compare"><div class="cmp cmp-bad"><span class="cmp-tag">🔍 核查发现</span><div class="cmp-h">缺关键能力</div><div class="cmp-body"><ul class="cmp-list"><li>无图像生成（ImageGen）能力</li><li>无法生成逐页位图蓝图</li></ul></div></div><div class="cmp cmp-good"><span class="cmp-tag">✓ 降级方案</span><div class="cmp-h">跳过蓝图，原生生产 + 渲染 QA</div><div class="cmp-body"><ul class="cmp-list"><li>跳过 ImageGen 蓝图（留痕 imagegen_skipped）</li><li>改用 PptxGenJS 原生生产</li><li>LibreOffice 渲染每页 PNG 做 QA</li><li>三原则：如实告知 / 给可选方案 / 留痕继续</li></ul></div></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">环境限制不是死局 —— 关键是不假装、留痕迹、用替代方案把活交付。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-9" data-n="9" style="--c1:#fbbf24;--c2:#d97706">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>步骤④</b><span class="chip-label">模块</span></span><span class="counter">09<i>/</i>17</span></div>
+        <h2 class="scene-title">把风格固化成模块，多份 PPT 共用一套系统</h2>
+        <div class="scene-body"><div class="config">
+        <div class="cfg-why">theme.js —— 改一处，全套跟着变</div>
+        <div class="code-block cfg-code"><div class="cfg-secs"><div class="cfg-sec"><div class="cfg-key">色板</div><div class="cfg-val">bg / paper / title / body / accent / warn / pos…</div></div><div class="cfg-sec"><div class="cfg-key">Typography Scale</div><div class="cfg-val">15 级（C0 封面 + T1-T14），字号写死</div></div><div class="cfg-sec"><div class="cfg-key">字体</div><div class="cfg-val">中文苹方 PingFang SC / 代码 Menlo</div></div><div class="cfg-sec"><div class="cfg-key">元素函数</div><div class="cfg-val">addTitle / addFooter / addSoWhat / addKPI / addTable / addPanel</div></div></div></div>
+        <div class="cfg-path">两份 PPT 共用 theme.js → 统一观感靠函数复用，风格绝不漂移</div></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-10" data-n="10" style="--c1:#818cf8;--c2:#4f46e5">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>步骤⑤</b><span class="chip-label">验证</span></span><span class="counter">10<i>/</i>17</span></div>
+        <h2 class="scene-title">先做 3 页样张验证，再批量生产</h2>
+        <div class="scene-body"><div class="workflow"><div class="flow"><div class="fl-node">做 3 页代表性样张</div><div class="fl-arrow">→</div><div class="fl-node">渲染每页 PNG</div><div class="fl-arrow">→</div><div class="fl-node">人审视觉执行</div><div class="fl-arrow">→</div><div class="fl-node">通过 → 批量生产</div></div>
+      <div class="code-block code-lines"><code># 3 页样张代表什么</code><code>封面页：C0 大标题 + 字体 + 留白</code><code>内容页：KPI + 卡片 + SO WHAT 密度</code><code>表格页：表头 + 代码块样式</code></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">3 页验证是「风险闸门」 —— 用最小成本确认视觉执行，再放心量产，避免 35 页返工。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-11" data-n="11" style="--c1:#34d399;--c2:#059669">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>步骤⑥</b><span class="chip-label">生产</span></span><span class="counter">11<i>/</i>17</span></div>
+        <h2 class="scene-title">PptxGenJS 原生搭建 + 渲染 QA + 结构自检</h2>
+        <div class="scene-body"><div class="panels" style="grid-template-columns:1fr 1fr"><div class="panel"><div class="pn-head"><span class="pn-t">生产循环（每份 PPT 走一遍）</span></div><ul class="pn-list"><li>bun run build-x.js → 生成 PPTX</li><li>bash render.sh → 每页 PNG</li><li>python 结构自检 → 零尺寸 / 越界</li><li>渲染图发人审 → 有问题就修</li></ul></div><div class="panel"><div class="pn-head"><span class="pn-t">结构自检（复现必备）</span></div><ul class="pn-list"><li>遍历 shapes 量 left/top/width/height</li><li>w≤0 或 h≤0 → 报「零尺寸」</li><li>l+w&gt;W → 报「右越界」</li><li>用脚本查，不靠肉眼 —— 又快又准</li></ul></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">生产不是「生成完就交」 —— 100% 原生对象、0 图片、完全可编辑；渲染 + 自检 + 人审三道关，才保证每页都合格。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-12" data-n="12" style="--c1:#fb7185;--c2:#e11d48">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>步骤⑦</b><span class="chip-label">纠偏</span></span><span class="counter">12<i>/</i>17</span></div>
+        <h2 class="scene-title">发现意图理解错，果断重写</h2>
+        <div class="scene-body"><div class="panels" style="grid-template-columns:repeat(3,1fr)"><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">1</span><span class="pn-t">源材料标题 ≠ 真实意图</span></div><div class="pn-note">材料叫「成本优化」，但用户要「用好」 —— 要挖到真实目的</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">2</span><span class="pn-t">重写前先确认新结构</span></div><div class="pn-note">已经错过一次，新方向必须再确认，避免二次跑偏</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">3</span><span class="pn-t">不在错误方向上修补</span></div><div class="pn-note">方向错就推翻重来，别在小修小补上浪费时间</div></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">方向纠偏不是失败，而是流程的一部分 —— 早发现、早重写，比硬撑到底省得多。（本会话 PPT2 从「成本」重写为「用好」）</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-13" data-n="13" style="--c1:#a78bfa;--c2:#7c3aed">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>方法</b><span class="chip-label">论</span></span><span class="counter">13<i>/</i>17</span></div>
+        <h2 class="scene-title">六条核心实践，让大模型协作又稳又快</h2>
+        <div class="scene-body"><div class="grid6"><div class="gcard"><div class="gcard-n" style="--c:#34d399">1</div><div class="gcard-t">证据表先行</div><div class="gcard-d">每个事实标来源，不臆造、不用常识补</div></div><div class="gcard"><div class="gcard-n" style="--c:#34d399">2</div><div class="gcard-t">确认门要重</div><div class="gcard-d">故事线 / 页数 / 论点 / 密度一次确认</div></div><div class="gcard"><div class="gcard-n" style="--c:#34d399">3</div><div class="gcard-t">先验证再量产</div><div class="gcard-d">3 页样张确认视觉，再批量生产</div></div><div class="gcard"><div class="gcard-n" style="--c:#34d399">4</div><div class="gcard-t">结构自检</div><div class="gcard-d">脚本查零尺寸 / 越界，不靠肉眼</div></div><div class="gcard"><div class="gcard-n" style="--c:#34d399">5</div><div class="gcard-t">局限要诚实</div><div class="gcard-d">AI 无法读图交人审；缺能力就降级留痕</div></div><div class="gcard"><div class="gcard-n" style="--c:#34d399">6</div><div class="gcard-t">错了果断重写</div><div class="gcard-d">意图错就推翻重来，不修补</div></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">六条方法论是「防翻车护栏」 —— 每一条都来自本会话的真实教训。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-14" data-n="14" style="--c1:#fb7185;--c2:#e11d48">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>避坑</b><span class="chip-label">指南</span></span><span class="counter">14<i>/</i>17</span></div>
+        <h2 class="scene-title">七个坑及解法 —— 别再踩一次</h2>
+        <div class="scene-body"><div class="panels" style="grid-template-columns:repeat(4,1fr)"><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">1</span><span class="pn-t">直接让做 PPT → 模板化</span></div><div class="pn-note">解：先证据分析 + 逐页大纲</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">2</span><span class="pn-t">LibreOffice 只导首页 PNG</span></div><div class="pn-note">解：改走 PDF → PyMuPDF 切页</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">3</span><span class="pn-t">缺图像生成硬撑</span></div><div class="pn-note">解：如实降级、留痕、换方案</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">4</span><span class="pn-t">不验证就量产</span></div><div class="pn-note">解：先做 3 页样张</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">5</span><span class="pn-t">生成完就交</span></div><div class="pn-note">解：渲染 + 结构自检 + 人审</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">6</span><span class="pn-t">确认门只在页标题层</span></div><div class="pn-note">解：故事线 / 页数 / 密度一次确认</div></div><div class="panel"><div class="pn-head"><span class="pn-num" style="--c:#22d3ee">7</span><span class="pn-t">方向错了还修补</span></div><div class="pn-note">解：果断重写，删旧版</div></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">踩坑不可怕 —— 记下来、有解法，新人就能直接绕过。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-15" data-n="15" style="--c1:#38bdf8;--c2:#0284c7">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>复现</b><span class="chip-label">指南</span></span><span class="counter">15<i>/</i>17</span></div>
+        <h2 class="scene-title">照这 6 阶段做，新手也能复现</h2>
+        <div class="scene-body"><div class="checklist"><div class="cks"><div class="ck"><span class="ck-box">✓</span><span class="ck-n">1</span><span class="ck-t">A 准备：装 bun/pptxgenjs/LibreOffice + python-pptx/PyMuPDF，跑环境核查</span></div><div class="ck"><span class="ck-box">✓</span><span class="ck-n">2</span><span class="ck-t">B 分析：建证据表 + 脑暴故事线选 1 + 写 SCR 与逐页大纲 + 确认门拍板</span></div><div class="ck"><span class="ck-box">✓</span><span class="ck-n">3</span><span class="ck-t">C 定风格：展示 8 张样张 + 选定风格 + 锁色板/字体/图标</span></div><div class="ck"><span class="ck-box">✓</span><span class="ck-n">4</span><span class="ck-t">D 模块 + 验证：写共享视觉模块 + 做 3 页样张 + 渲染确认</span></div><div class="ck"><span class="ck-box">✓</span><span class="ck-n">5</span><span class="ck-t">E 生产：逐页 PptxGenJS 搭建 + 渲染 + 结构自检 + 人审定稿</span></div><div class="ck"><span class="ck-box">✓</span><span class="ck-n">6</span><span class="ck-t">F 校准：方向不对→确认新结构 + 果断重写 + 删旧版</span></div><div class="ck"><span class="ck-box">✓</span><span class="ck-n">7</span><span class="ck-t">把 theme.js 存成团队资产</span></div><div class="ck"><span class="ck-box">✓</span><span class="ck-n">8</span><span class="ck-t">沉淀你自己的踩坑清单</span></div></div>
+        <div class="ck-next">Checklist 把「经验」变成「步骤」 —— 新人照着勾，就能走完全程。</div></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-16" data-n="16" style="--c1:#34d399;--c2:#059669">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip"><b>成果</b><span class="chip-label">交付</span></span><span class="counter">16<i>/</i>17</span></div>
+        <h2 class="scene-title">实战成果：两份可编辑咨询级 PPT</h2>
+        <div class="scene-body"><div class="demos"><div class="dcard"><div class="dcard-t">PPT1《公司大模型工具使用入门》</div><div class="dcard-prompt">17 页 · 面向新人 · 手把手教学：模型一览 / 权限安装 / 核心概念 / Plan-Build / 六大场景 / 6 个 Demo / AGENTS.md / Skill / 安全 / FAQ / Checklist</div><div class="dcard-out"><b>输出</b> 新人当天独立完成首个任务</div></div><div class="dcard"><div class="dcard-t">PPT2《用好大模型：进阶与团队落地》</div><div class="dcard-prompt">18 页 · 面向 TL/资深 · 团队赋能：五板斧 / 4 高价值场景（DOE / 调研 / 项目 / 沉淀）/ 提效配置 / 团队规范 / 落地路线图 / 效果信号</div><div class="dcard-out"><b>输出</b> 团队从「会聊」到「用好」</div></div></div><div class="takeaway"><span class="tk-tag">SO&nbsp;WHAT</span><span class="tk-text">同一套流程、同一套风格，产出系列化交付物 —— 改文案 / 换主题 / 加页数都能复用 theme.js + render.sh + build 模板。</span></div></div>
+      </div>
+    </section>
+    <section class="scene" id="scene-17" data-n="17" style="--c1:#22d3ee;--c2:#0891b2">
+      <div class="scene-inner">
+        <div class="scene-head"><span class="chip chip-plain"><span class="chip-label">收束 · 行动</span></span><span class="counter">17<i>/</i>17</span></div>
+        <h2 class="scene-title">把「个人会用」变成「团队会做」</h2>
+        <div class="scene-body"><div class="checklist"><div class="cks"><div class="ck"><span class="ck-box">✓</span><span class="ck-n">1</span><span class="ck-t">装好环境，打通渲染链路</span></div><div class="ck"><span class="ck-box">✓</span><span class="ck-n">2</span><span class="ck-t">用一份小材料跑通七步流程</span></div><div class="ck"><span class="ck-box">✓</span><span class="ck-n">3</span><span class="ck-t">把 theme.js 存成团队资产</span></div><div class="ck"><span class="ck-box">✓</span><span class="ck-n">4</span><span class="ck-t">沉淀你自己的踩坑清单</span></div></div>
+        <div class="ck-next">一句话：大模型不是聊天机器人，而是「能动手的助理」 —— 用工程化方法把它变成可复现的生产力。　|　三份配套：PPT1 入门 · PPT2 进阶 · PPT3 实践落地</div></div></div>
+      </div>
+    </section>
+
+    <!-- captions -->
+    <div id="captions">
+      <div class="cap" id="cap-0" data-in="0.100" data-out="4.438"><span>大家好，欢迎参加 CIMICode 实践分享。</span></div>
+      <div class="cap" id="cap-1" data-in="4.388" data-out="7.393"><span>这一讲是「大模型实践落地」。</span></div>
+      <div class="cap" id="cap-2" data-in="7.393" data-out="16.316"><span>前两讲分别教了怎么开通上手、怎么用好，这一讲要解决的是：怎么把这些能力真正复现出来。</span></div>
+      <div class="cap" id="cap-3" data-in="16.316" data-out="25.159"><span>我们以「用大模型做出咨询级 PPT」为案例，把从文字材料到成品的全流程，一步步拆给你看。</span></div>
+      <div class="cap" id="cap-4" data-in="25.159" data-out="28.497"><span>新人照着做，效果一致。</span></div>
+      <div class="cap" id="cap-5" data-in="29.110" data-out="34.804"><span>先说一个真相：直接让大模型做 PPT，几乎一定会翻车。</span></div>
+      <div class="cap" id="cap-6" data-in="34.754" data-out="37.294"><span>常见的翻车有三种。</span></div>
+      <div class="cap" id="cap-7" data-in="37.294" data-out="43.318"><span>第一种是模板化，默认的卡片堆叠，缺乏咨询级的层级和密度。</span></div>
+      <div class="cap" id="cap-8" data-in="43.318" data-out="49.236"><span>第二种是不可编辑，它把文字烘焙成图片，没法改也没法复用。</span></div>
+      <div class="cap" id="cap-9" data-in="49.236" data-out="56.084"><span>第三种是内容失真，AI 会编造数据，或者把预估当成实测成果。</span></div>
+      <div class="cap" id="cap-10" data-in="56.084" data-out="62.547"><span>我们的解法是一套七步的工程化流程，把「碰运气」变成「可复现」。</span></div>
+      <div class="cap" id="cap-11" data-in="63.160" data-out="66.873"><span>在动手之前，先重塑三个认知。</span></div>
+      <div class="cap" id="cap-12" data-in="66.823" data-out="79.748"><span>第一，大模型的价值在于「端到端动手」——它不只是聊天，而是能读文件、写代码、生成 PPT、渲染、自检、迭代，把活真正干完。</span></div>
+      <div class="cap" id="cap-13" data-in="79.748" data-out="88.512"><span>第二，环境能力决定方法路径，有没有图像生成、有没有渲染器，直接决定你能用哪套流程。</span></div>
+      <div class="cap" id="cap-14" data-in="88.512" data-out="97.820"><span>第三，降级不等于失败，跳过某一步没关系，关键是如实告知、留痕、用替代方案保证交付。</span></div>
+      <div class="cap" id="cap-15" data-in="98.430" data-out="103.672"><span>环境准备这一步，核心是先打通渲染链路再动手。</span></div>
+      <div class="cap" id="cap-16" data-in="103.622" data-out="115.191"><span>我们的链路是三段：用 bun 加 pptxgenjs 生成 PPTX，用 LibreOffice 把 PPTX 转成 PDF，再用 PyMuPDF 把 PDF 切成每页 PNG。</span></div>
+      <div class="cap" id="cap-17" data-in="115.191" data-out="124.101"><span>这里有个大坑：LibreOffice 只能直接导出首页的 PNG，多页必须先转 PDF 再用 PyMuPDF 切。</span></div>
+      <div class="cap" id="cap-18" data-in="124.101" data-out="130.909"><span>环境核查是动手前的动作，链路没打通就开工，必然中途卡死。</span></div>
+      <div class="cap" id="cap-19" data-in="131.520" data-out="133.637"><span>整个流程是七步。</span></div>
+      <div class="cap" id="cap-20" data-in="133.587" data-out="150.974"><span>第一步证据分析和逐页大纲，第二步用八张样张选风格，第三步环境核查和降级决策，第四步搭共享视觉模块，第五步做三页风格验证，第六步生产加渲染 QA 加自检，第七步方向纠偏。</span></div>
+      <div class="cap" id="cap-21" data-in="150.974" data-out="156.293"><span>每一步都有确认门或自检，把不确定性逐步消除。</span></div>
+      <div class="cap" id="cap-22" data-in="156.293" data-out="159.246"><span>这是一套「防翻车」的流程。</span></div>
+      <div class="cap" id="cap-23" data-in="159.860" data-out="161.817"><span>第一步，分析。</span></div>
+      <div class="cap" id="cap-24" data-in="161.767" data-out="167.020"><span>别急着画，先建证据表、写 SCR、定逐页大纲。</span></div>
+      <div class="cap" id="cap-25" data-in="167.020" data-out="175.810"><span>证据表的纪律是：每条事实都标来源，不用常识补数据，冲突如实标注，数字标置信度。</span></div>
+      <div class="cap" id="cap-26" data-in="175.810" data-out="181.927"><span>然后收敛成 SCR，也就是「背景-冲突-方案」，再定逐页大纲。</span></div>
+      <div class="cap" id="cap-27" data-in="181.927" data-out="191.887"><span>这里有一个关键的第一道确认门，必须一次性确认故事线、页数、逐页论点、信息密度，以及开放的数据冲突。</span></div>
+      <div class="cap" id="cap-28" data-in="191.887" data-out="197.512"><span>注意，不能只在页标题层面确认，否则后面一定返工。</span></div>
+      <div class="cap" id="cap-29" data-in="198.130" data-out="200.127"><span>第二步，风格。</span></div>
+      <div class="cap" id="cap-30" data-in="200.077" data-out="206.926"><span>风格不是配色，而是色板、网格、层级、图表语言的整套系统。</span></div>
+      <div class="cap" id="cap-31" data-in="206.926" data-out="210.982"><span>我们的做法是直接发八张样张让你选。</span></div>
+      <div class="cap" id="cap-32" data-in="210.982" data-out="216.354"><span>从经典深红、冷灰勃艮第，到象牙白配深蓝等等。</span></div>
+      <div class="cap" id="cap-33" data-in="216.354" data-out="221.899"><span>我们最终选了风格 4，象牙白加深蓝，专为科技和 AI 设计。</span></div>
+      <div class="cap" id="cap-34" data-in="221.899" data-out="232.724"><span>锁定之后，色板、十五级字号、字体、页眉页脚、图表语言就全部固定，整个系列共用一套视觉系统。</span></div>
+      <div class="cap" id="cap-35" data-in="233.330" data-out="235.527"><span>第三步，核查。</span></div>
+      <div class="cap" id="cap-36" data-in="235.477" data-out="238.575"><span>这也是本会话的关键转折点。</span></div>
+      <div class="cap" id="cap-37" data-in="238.575" data-out="245.370"><span>我们核查发现：环境里没有图像生成能力，没法生成逐页的位图蓝图。</span></div>
+      <div class="cap" id="cap-38" data-in="245.370" data-out="256.833"><span>于是我们如实降级，跳过 ImageGen 蓝图，并留下 imagegen_skipped 的痕迹，改用 PptxGenJS 原生生产加 LibreOffice 渲染 QA。</span></div>
+      <div class="cap" id="cap-39" data-in="256.833" data-out="263.961"><span>降级有三条原则：如实告知哪道门无法满足、给出可选方案、留痕继续。</span></div>
+      <div class="cap" id="cap-40" data-in="263.961" data-out="271.168"><span>环境限制不是死局，关键是不假装、留痕迹、用替代方案把活交付。</span></div>
+      <div class="cap" id="cap-41" data-in="271.770" data-out="273.900"><span>第四步，模块。</span></div>
+      <div class="cap" id="cap-42" data-in="273.850" data-out="282.095"><span>我们把选定的风格固化成一个 theme.js，多份 PPT 共用一套系统，改一处全套跟着变。</span></div>
+      <div class="cap" id="cap-43" data-in="282.095" data-out="292.521"><span>它包含色板、十五级 Typography Scale、字体，以及一堆元素函数，比如加标题、加页脚、加 KPI、加表格。</span></div>
+      <div class="cap" id="cap-44" data-in="292.521" data-out="297.175"><span>每一页都用这些函数搭起来，风格就绝不漂移。</span></div>
+      <div class="cap" id="cap-45" data-in="297.175" data-out="302.973"><span>模块化是「可复现」的关键，风格写进代码，不靠手调。</span></div>
+      <div class="cap" id="cap-46" data-in="303.590" data-out="305.680"><span>第五步，验证。</span></div>
+      <div class="cap" id="cap-47" data-in="305.630" data-out="316.654"><span>先做三页代表性的样张：封面页、内容页、表格页，分别代表字体留白、KPI 和卡片密度、表头和代码块样式。</span></div>
+      <div class="cap" id="cap-48" data-in="316.654" data-out="321.801"><span>渲染成 PNG 交给人工审核，通过后再批量生产。</span></div>
+      <div class="cap" id="cap-49" data-in="321.801" data-out="327.226"><span>这一步是「风险闸门」，用最小成本确认视觉执行。</span></div>
+      <div class="cap" id="cap-50" data-in="327.226" data-out="336.907"><span>本会话里 PPT1 的连线遮挡、PPT2 的方向错误，都是做出来才发现，如果先验证就能更早暴露。</span></div>
+      <div class="cap" id="cap-51" data-in="337.520" data-out="339.650"><span>第六步，生产。</span></div>
+      <div class="cap" id="cap-52" data-in="339.600" data-out="354.986"><span>每份 PPT 都走一个循环：用 bun 生成 PPTX，用 render.sh 渲染每页 PNG，再用 python 做结构自检，查零尺寸和越界，最后渲染图发人工审核，有问题就修。</span></div>
+      <div class="cap" id="cap-53" data-in="354.986" data-out="362.752"><span>结构自检脚本是复现的必备，遍历每个形状量坐标，宽高为零或超出画布就报警。</span></div>
+      <div class="cap" id="cap-54" data-in="362.752" data-out="366.808"><span>用脚本查，不靠肉眼，又快又准。</span></div>
+      <div class="cap" id="cap-55" data-in="366.808" data-out="374.135"><span>生产不是生成完就交，渲染、自检、人审三道关，才保证每页都合格。</span></div>
+      <div class="cap" id="cap-56" data-in="374.135" data-out="379.241"><span>而且全程原生对象、零图片，完全可编辑。</span></div>
+      <div class="cap" id="cap-57" data-in="379.850" data-out="384.627"><span>第七步，纠偏，这也是本会话最重要的教训。</span></div>
+      <div class="cap" id="cap-58" data-in="384.577" data-out="394.430"><span>PPT2 第一版是按源材料标题做的「成本优化」，但用户反馈说：成本不是我要操心的，我要让团队更好地使用。</span></div>
+      <div class="cap" id="cap-59" data-in="394.430" data-out="399.071"><span>于是我们立即重写为「用好大模型加团队落地」。</span></div>
+      <div class="cap" id="cap-60" data-in="399.071" data-out="414.005"><span>三条经验：源材料标题不等于真实意图，要挖到真实目的；重写前要先确认新结构，避免二次跑偏；方向错了就推翻重来，别在小修小补上浪费时间。</span></div>
+      <div class="cap" id="cap-61" data-in="414.620" data-out="419.144"><span>把这整套实践提炼成方法论，一共六条。</span></div>
+      <div class="cap" id="cap-62" data-in="419.094" data-out="428.137"><span>证据表先行、确认门要重、先验证再量产、结构自检、局限要诚实、错了果断重写。</span></div>
+      <div class="cap" id="cap-63" data-in="428.137" data-out="434.174"><span>这六条是「防翻车的护栏」，每一条都来自本会话的真实教训。</span></div>
+      <div class="cap" id="cap-64" data-in="434.800" data-out="440.667"><span>再给一份避坑指南，把本会话踩过的七个坑和解法列出来。</span></div>
+      <div class="cap" id="cap-65" data-in="440.617" data-out="470.983"><span>比如直接让做 PPT 会模板化，解法是先做证据分析和大纲；LibreOffice 只能导首页 PNG，解法是走 PDF 再用 PyMuPDF 切页；缺图像生成硬撑，解法是如实降级留痕；不验证就量产，解法是先做三页样张；生成完就交，解法是渲染加自检加人审；确认门太轻，解法是故事线和密度一次确认；方向错了还修补，解法是果断重写。</span></div>
+      <div class="cap" id="cap-66" data-in="470.983" data-out="476.608"><span>踩坑不可怕，记下来、有解法，新人就能直接绕过。</span></div>
+      <div class="cap" id="cap-67" data-in="477.230" data-out="482.286"><span>最后给一份复现指南，分六个阶段，勾选式推进。</span></div>
+      <div class="cap" id="cap-68" data-in="482.236" data-out="512.682"><span>A 准备：装好工具、跑环境核查、准备文字材料；B 分析：建证据表、选故事线、写大纲、确认门拍板；C 定风格：展示样张、选定风格、锁色板字体；D 模块加验证：写视觉模块、做三页样张、渲染确认；E 生产：逐页搭建、渲染自检、人审定稿；F 校准：方向不对就确认新结构、果断重写、删掉旧版。</span></div>
+      <div class="cap" id="cap-69" data-in="512.682" data-out="518.400"><span>Checklist 把经验变成步骤，新人照着勾就能走完全程。</span></div>
+      <div class="cap" id="cap-70" data-in="519.010" data-out="523.507"><span>实战的成果是两份可编辑的咨询级 PPT。</span></div>
+      <div class="cap" id="cap-71" data-in="523.457" data-out="538.564"><span>PPT1《公司大模型工具使用入门》，17 页，面向新人，手把手教学；PPT2《用好大模型：进阶与团队落地》，18 页，面向组长和资深工程师，讲团队赋能。</span></div>
+      <div class="cap" id="cap-72" data-in="538.564" data-out="548.976"><span>两份共用同一套流程和风格，还沉淀出了可复用资产：theme.js 视觉模块、render.sh 渲染脚本、build 模板。</span></div>
+      <div class="cap" id="cap-73" data-in="548.976" data-out="557.234"><span>改文案、换主题、加页数都能复用这套资产，这就是「实践落地」的真正价值。</span></div>
+      <div class="cap" id="cap-74" data-in="557.840" data-out="559.359"><span>做个收束。</span></div>
+      <div class="cap" id="cap-75" data-in="559.309" data-out="565.266"><span>一句话总结：大模型不是聊天机器人，而是「能动手的助理」。</span></div>
+      <div class="cap" id="cap-76" data-in="565.266" data-out="575.971"><span>用工程化方法——证据分析、风格锁定、环境核查、模块化生产、渲染 QA、方向纠偏——把它变成可复现的生产力。</span></div>
+      <div class="cap" id="cap-77" data-in="575.971" data-out="588.072"><span>立即行动起来：装好环境打通渲染链路，用一份小材料跑通七步流程，把 theme.js 存成团队资产，沉淀你自己的踩坑清单。</span></div>
+      <div class="cap" id="cap-78" data-in="588.072" data-out="597.500"><span>入门教开通上手、进阶教用好赋能、实践落地教复现方法，三份合起来是一套完整的团队能力建设。</span></div>
+      <div class="cap" id="cap-79" data-in="597.500" data-out="599.920"><span>感谢大家的收听！</span></div>
+    </div>
+
+    <!-- master narration audio -->
+    <audio id="narration" class="clip" data-start="0" data-duration="600.43" data-track-index="0" data-volume="1"
+           src="assets/audio/narration.mp3"></audio>
+
+    <!-- progress -->
+    <div id="progress"><div class="fill" id="prog-fill"></div></div>
+
+    <script>
+      (function(){
+        const TIMING = {"total": 600.43, "scenes": [{"n": 1, "start": -0.15, "dur": 29.16}, {"n": 2, "start": 28.86, "dur": 34.2}, {"n": 3, "start": 62.91, "dur": 35.42}, {"n": 4, "start": 98.18, "dur": 33.24}, {"n": 5, "start": 131.27, "dur": 28.49}, {"n": 6, "start": 159.61, "dur": 38.42}, {"n": 7, "start": 197.88, "dur": 35.35}, {"n": 8, "start": 233.08, "dur": 38.59}, {"n": 9, "start": 271.52, "dur": 31.97}, {"n": 10, "start": 303.34, "dur": 34.08}, {"n": 11, "start": 337.27, "dur": 42.48}, {"n": 12, "start": 379.6, "dur": 34.92}, {"n": 13, "start": 414.37, "dur": 20.33}, {"n": 14, "start": 434.55, "dur": 42.58}, {"n": 15, "start": 476.98, "dur": 41.93}, {"n": 16, "start": 518.76, "dur": 38.98}, {"n": 17, "start": 557.59, "dur": 42.84}]};
+        const CAPS = [{"i": 0, "in": 0.1, "out": 4.438}, {"i": 1, "in": 4.388, "out": 7.393}, {"i": 2, "in": 7.393, "out": 16.316}, {"i": 3, "in": 16.316, "out": 25.159}, {"i": 4, "in": 25.159, "out": 28.497}, {"i": 5, "in": 29.11, "out": 34.804}, {"i": 6, "in": 34.754, "out": 37.294}, {"i": 7, "in": 37.294, "out": 43.318}, {"i": 8, "in": 43.318, "out": 49.236}, {"i": 9, "in": 49.236, "out": 56.084}, {"i": 10, "in": 56.084, "out": 62.547}, {"i": 11, "in": 63.16, "out": 66.873}, {"i": 12, "in": 66.823, "out": 79.748}, {"i": 13, "in": 79.748, "out": 88.512}, {"i": 14, "in": 88.512, "out": 97.82}, {"i": 15, "in": 98.43, "out": 103.672}, {"i": 16, "in": 103.622, "out": 115.191}, {"i": 17, "in": 115.191, "out": 124.101}, {"i": 18, "in": 124.101, "out": 130.909}, {"i": 19, "in": 131.52, "out": 133.637}, {"i": 20, "in": 133.587, "out": 150.974}, {"i": 21, "in": 150.974, "out": 156.293}, {"i": 22, "in": 156.293, "out": 159.246}, {"i": 23, "in": 159.86, "out": 161.817}, {"i": 24, "in": 161.767, "out": 167.02}, {"i": 25, "in": 167.02, "out": 175.81}, {"i": 26, "in": 175.81, "out": 181.927}, {"i": 27, "in": 181.927, "out": 191.887}, {"i": 28, "in": 191.887, "out": 197.512}, {"i": 29, "in": 198.13, "out": 200.127}, {"i": 30, "in": 200.077, "out": 206.926}, {"i": 31, "in": 206.926, "out": 210.982}, {"i": 32, "in": 210.982, "out": 216.354}, {"i": 33, "in": 216.354, "out": 221.899}, {"i": 34, "in": 221.899, "out": 232.724}, {"i": 35, "in": 233.33, "out": 235.527}, {"i": 36, "in": 235.477, "out": 238.575}, {"i": 37, "in": 238.575, "out": 245.37}, {"i": 38, "in": 245.37, "out": 256.833}, {"i": 39, "in": 256.833, "out": 263.961}, {"i": 40, "in": 263.961, "out": 271.168}, {"i": 41, "in": 271.77, "out": 273.9}, {"i": 42, "in": 273.85, "out": 282.095}, {"i": 43, "in": 282.095, "out": 292.521}, {"i": 44, "in": 292.521, "out": 297.175}, {"i": 45, "in": 297.175, "out": 302.973}, {"i": 46, "in": 303.59, "out": 305.68}, {"i": 47, "in": 305.63, "out": 316.654}, {"i": 48, "in": 316.654, "out": 321.801}, {"i": 49, "in": 321.801, "out": 327.226}, {"i": 50, "in": 327.226, "out": 336.907}, {"i": 51, "in": 337.52, "out": 339.65}, {"i": 52, "in": 339.6, "out": 354.986}, {"i": 53, "in": 354.986, "out": 362.752}, {"i": 54, "in": 362.752, "out": 366.808}, {"i": 55, "in": 366.808, "out": 374.135}, {"i": 56, "in": 374.135, "out": 379.241}, {"i": 57, "in": 379.85, "out": 384.627}, {"i": 58, "in": 384.577, "out": 394.43}, {"i": 59, "in": 394.43, "out": 399.071}, {"i": 60, "in": 399.071, "out": 414.005}, {"i": 61, "in": 414.62, "out": 419.144}, {"i": 62, "in": 419.094, "out": 428.137}, {"i": 63, "in": 428.137, "out": 434.174}, {"i": 64, "in": 434.8, "out": 440.667}, {"i": 65, "in": 440.617, "out": 470.983}, {"i": 66, "in": 470.983, "out": 476.608}, {"i": 67, "in": 477.23, "out": 482.286}, {"i": 68, "in": 482.236, "out": 512.682}, {"i": 69, "in": 512.682, "out": 518.4}, {"i": 70, "in": 519.01, "out": 523.507}, {"i": 71, "in": 523.457, "out": 538.564}, {"i": 72, "in": 538.564, "out": 548.976}, {"i": 73, "in": 548.976, "out": 557.234}, {"i": 74, "in": 557.84, "out": 559.359}, {"i": 75, "in": 559.309, "out": 565.266}, {"i": 76, "in": 565.266, "out": 575.971}, {"i": 77, "in": 575.971, "out": 588.072}, {"i": 78, "in": 588.072, "out": 597.5}, {"i": 79, "in": 597.5, "out": 599.92}];
+        const DUR = TIMING.total;
+
+        // section rail dots: 8 sections
+        const rail = document.getElementById('section-rail');
+        const railEl = (function(){ /* build 9 markers by section group */ return null; })();
+
+        const tl = gsap.timeline({ paused: true });
+        window.__timelines = window.__timelines || {};
+
+        // brand + rail fade in early
+        tl.fromTo('#brand', {opacity:0, y:-12}, {opacity:1, y:0, duration:0.7, ease:'power2.out'}, 0.2);
+        tl.fromTo('#section-rail', {opacity:0, y:-12}, {opacity:1, y:0, duration:0.7, ease:'power2.out'}, 0.3);
+
+        // progress bar fill across whole duration
+        gsap.set('#prog-fill', { scaleX: 0 });
+        tl.to('#prog-fill', { scaleX: 1, duration: DUR, ease:'none' }, 0);
+
+        // scenes: fade+rise in, fade out at end
+        TIMING.scenes.forEach(function(sc){
+          const sel = '#scene-' + sc.n;
+          gsap.set(sel, { opacity: 0, y: 24 });
+          // entrance
+          tl.to(sel, { opacity: 1, y: 0, duration: 0.55, ease:'power3.out' }, sc.start);
+          // body items stagger on a touch after entrance
+          // exit (last 0.32s)
+          tl.to(sel, { opacity: 0, y: -16, duration: 0.34, ease:'power2.in' }, sc.start + sc.dur - 0.34);
+          tl.set(sel, { opacity: 0 }, sc.start + sc.dur);
+        });
+
+        // captions: opacity tween per cue (seek-safe — static text, only opacity animates)
+        CAPS.forEach(function(c){
+          const sel = '#cap-' + c.i;
+          const dur = Math.max(0.25, c.out - c.in);
+          tl.set(sel, { opacity: 0 }, 0);
+          tl.fromTo(sel, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.18, ease:'power2.out' }, c.in);
+          tl.to(sel, { opacity: 0, y: -6, duration: 0.16, ease:'power2.in' }, c.out - 0.16);
+          tl.set(sel, { opacity: 0 }, c.out);
+        });
+
+        // section rail highlight: pre-compute per-time active section via tweens on dots
+        // build dots dynamically and tween their class state across each scene band
+        const sectionBand = [];
+        TIMING.scenes.forEach(function(sc){
+          const key = 's' + sc.n;
+          sectionBand.push({ start: sc.start, end: sc.start + sc.dur });
+        });
+        // (rail dots rendered statically below via inline style markers are optional; keep minimal)
+
+        window.__timelines['main-video'] = tl;
+      })();
+    </script>
+  </div>
+</body>
+</html>
