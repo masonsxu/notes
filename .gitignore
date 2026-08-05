@@ -1,13 +1,57 @@
+# --- OS / Editor ---
 .DS_Store
+.DS_Store?
 Icon?
 ._*
-Thumbs.db
-*.swp
-*.swo
-*~
-.DS_Store?
 .AppleDouble
 .Spotlight-V100
 .Trashes
+Thumbs.db
 ehthumbs.db
 Desktop.ini
+*.swp
+*.swo
+*~
+
+# --- 工具 / IDE 本地状态 ---
+.omo/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# --- 虚拟环境 ---
+.venv/
+venv/
+env/
+
+# --- uv ---
+# uv.lock 需要提交(锁定依赖版本);只忽略临时缓存
+.uv/
+
+# --- ML / 数据科学 ---
+# 学习脚本生成的图表、中间产物,只忽略约定的输出目录,避免误伤 PPT 等图片资产
+code/**/output/
+code/**/outputs/
+code/**/runs/
+code/**/mlruns/
+
+# 大数据集 / 模型权重,本地存放不进库(按需在具体项目下加更精确的规则)
+*.h5
+*.parquet
+*.feather
+*.ckpt
+*.pt
+*.onnx
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Optuna / SHAP / 训练日志
+optuna.db
+optuna-journal*
+*.sqlite
+*.sqlite3
