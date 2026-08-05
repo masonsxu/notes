@@ -13,9 +13,9 @@
   6. 用最优参数重训练 + 最终评估
 
 运行:
-    cd code/python/xgboost-demo
-    uv run xgboost_demo.py                  # 默认 Optuna 30 trials,几分钟
-    XGB_DEMO_TRIALS=3 uv run xgboost_demo.py   # 快速验证模式
+    cd learning/xgboost
+    uv run xgboost_demo.py                          # 默认 Optuna 30 trials,几分钟
+    XGB_DEMO_TRIALS=3 uv run xgboost_demo.py        # 快速验证模式
 
 依赖通过 notes 项目根目录的 pyproject.toml 管理(已 uv add)。
 切换到 Home Credit Default Risk (二分类):

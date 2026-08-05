@@ -38,6 +38,10 @@ code/**/output/
 code/**/outputs/
 code/**/runs/
 code/**/mlruns/
+learning/**/output/
+learning/**/outputs/
+learning/**/runs/
+learning/**/mlruns/
 
 # 大数据集 / 模型权重,本地存放不进库(按需在具体项目下加更精确的规则)
 *.h5
