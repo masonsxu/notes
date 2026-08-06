@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>森林覆盖类型预测 · XGBoost 推理</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'><rect width='28' height='28' rx='6' fill='%230f766e'/><path d='M14 6 L20 16 L16 16 L16 22 L12 22 L12 16 L8 16 Z' fill='white'/></svg>">
+<style>
+/* ============ 设计 token ============ */
+:root {
+  --bg: #f6f5f1;
+  --surface: #ffffff;
+  --surface-2: #faf9f6;
+  --border: #e7e4dd;
+  --border-strong: #d2cec3;
+  --text: #1c1917;
+  --text-2: #57534e;
+  --text-3: #8a857b;
+
+  --accent: #0f766e;
+  --accent-hover: #115e57;
+  --accent-soft: #ccfbf1;
+  --accent-bg: #f0fdfa;
+
+  --warn: #b45309;
+  --danger: #b91c1c;
+  --danger-soft: #fef2f2;
+  --success-soft: #d1fae5;
+  --success: #047857;
+
+  /* 三类色板:teal / amber / rose */
+  --c0: #0f766e;
+  --c1: #c2410c;
+  --c2: #be123c;
+
+  --radius: 8px;
+  --radius-sm: 5px;
+  --shadow-sm: 0 1px 2px rgba(28,25,23,.04);
+
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px; --s6: 24px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; padding: 0;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit; font-size: 13px;
+  cursor: pointer; border: none; background: none;
+  color: inherit; padding: 0;
+}
+
+/* ============ 顶栏 ============ */
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: var(--s4) var(--s6);
+}
+.topbar-inner {
+  max-width: 1440px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s5); flex-wrap: wrap;
+}
+.brand { display: flex; align-items: center; gap: var(--s3); }
+.brand-mark { flex-shrink: 0; border-radius: 6px; }
+.brand-text h1 {
+  margin: 0; font-size: 15px; font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.brand-text p {
+  margin: 2px 0 0; font-size: 12px; color: var(--text-3);
+  font-family: var(--font-mono);
+}
+
+.metrics { display: flex; gap: var(--s3); align-items: center; }
+.metric-badge {
+  display: flex; flex-direction: column; align-items: flex-start;
+  padding: 6px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  min-width: 86px;
+}
+.metric-label {
+  font-size: 10px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-3);
+}
+.metric-value {
+  font-family: var(--font-mono);
+  font-size: 15px; font-weight: 600;
+  color: var(--accent); margin-top: 2px; line-height: 1;
+}
+.metric-value.muted { color: var(--text-3); }
+
+/* ============ 主体布局 ============ */
+.main {
+  max-width: 1440px; margin: 0 auto;
+  padding: var(--s5);
+  display: grid;
+  grid-template-columns: 540px 1fr;
+  gap: var(--s5);
+  align-items: start;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* ============ 工具栏 ============ */
+.toolbar {
+  display: flex; gap: var(--s2);
+  padding: var(--s3) var(--s4);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+  align-items: center; flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 500;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+  transition: background .12s, border-color .12s, color .12s;
+  white-space: nowrap;
+  height: 30px;
+}
+.btn:hover { background: var(--surface-2); border-color: var(--text-3); }
+.btn:active { background: var(--border); }
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+.btn-primary {
+  background: var(--accent); color: white; border-color: var(--accent);
+}
+.btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+.btn-ghost { border-color: transparent; background: transparent; color: var(--text-2); }
+.btn-ghost:hover { background: var(--surface-2); color: var(--text); border-color: transparent; }
+
+.true-label-chip {
+  margin-left: auto;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
+  background: var(--accent-soft);
+  color: var(--accent-hover);
+  border-radius: 999px;
+  font-size: 12px; font-weight: 500;
+}
+.true-label-chip strong { font-weight: 600; }
+
+/* ============ 表单 ============ */
+.form-body {
+  max-height: calc(100vh - 220px);
+  overflow-y: auto;
+  padding: var(--s2) var(--s4) var(--s5);
+}
+
+.section-title {
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-3);
+  margin: var(--s5) 0 var(--s3);
+  padding-bottom: var(--s2);
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.section-title:first-child { margin-top: var(--s3); }
+.section-title .count {
+  font-weight: 400; text-transform: none; letter-spacing: 0;
+  color: var(--text-3); font-size: 11px;
+}
+
+/* continuous */
+.cont-row {
+  display: grid;
+  grid-template-columns: 130px 1fr 86px;
+  gap: var(--s3); align-items: center;
+  padding: var(--s2) 0;
+}
+.cont-name {
+  font-size: 12.5px; color: var(--text-2);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cont-range { display: flex; flex-direction: column; gap: 4px; }
+.cont-track { position: relative; height: 18px; display: flex; align-items: center; }
+.cont-track input[type=range] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 4px;
+  background: var(--border); border-radius: 2px;
+  outline: none; margin: 0;
+}
+.cont-track input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  cursor: pointer; transition: transform .1s;
+}
+.cont-track input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.18); }
+.cont-track input[type=range]::-moz-range-thumb {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--surface); border: 2px solid var(--accent); cursor: pointer;
+}
+.cont-bounds {
+  display: flex; justify-content: space-between;
+  font-size: 10px; color: var(--text-3);
+  font-family: var(--font-mono);
+}
+.cont-input {
+  width: 86px; padding: 5px 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 12px; color: var(--text);
+  text-align: right;
+  transition: border-color .12s, box-shadow .12s;
+}
+.cont-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* binary */
+.binary-group { margin-bottom: var(--s4); }
+.binary-grid { display: grid; gap: 6px; margin-top: var(--s2); }
+.binary-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+.binary-grid.cols-8 { grid-template-columns: repeat(8, 1fr); }
+.chip {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 7px 4px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 11.5px; font-family: var(--font-mono);
+  cursor: pointer; user-select: none;
+  text-align: center; line-height: 1;
+  transition: all .12s;
+  min-height: 28px;
+}
+.chip:hover { background: var(--surface-2); border-color: var(--text-3); }
+.chip.active {
+  background: var(--accent); border-color: var(--accent);
+  color: white; font-weight: 600;
+}
+
+/* ============ 结果面板 ============ */
+.result-empty {
+  padding: 80px var(--s6); text-align: center; color: var(--text-3);
+}
+.result-empty .ph {
+  width: 52px; height: 52px; margin: 0 auto var(--s3);
+  border: 2px dashed var(--border-strong);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-3); font-size: 24px; font-weight: 300;
+  font-family: var(--font-mono);
+}
+.result-empty p { margin: 0; font-size: 13px; }
+.result-empty p + p { margin-top: var(--s2); font-size: 12px; }
+
+.prediction-display {
+  padding: var(--s5) var(--s6);
+  border-bottom: 1px solid var(--border);
+}
+.pred-label {
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-3);
+}
+.pred-name {
+  font-size: 30px; font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: var(--s2); line-height: 1.15;
+  display: flex; align-items: center; gap: var(--s3); flex-wrap: wrap;
+}
+.class-dot {
+  width: 14px; height: 14px; border-radius: 50%;
+  display: inline-block; flex-shrink: 0;
+}
+.pred-meta {
+  font-family: var(--font-mono);
+  font-size: 12px; color: var(--text-3);
+  margin-top: var(--s2);
+}
+.match-chip {
+  display: inline-flex; align-items: center;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px; font-weight: 500;
+  margin-left: var(--s1);
+}
+.match-chip.ok { background: var(--success-soft); color: var(--success); }
+.match-chip.no { background: var(--danger-soft); color: var(--danger); }
+
+.section {
+  padding: var(--s5) var(--s6);
+  border-bottom: 1px solid var(--border);
+}
+.section:last-child { border-bottom: none; }
+.section-head {
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-3);
+  margin-bottom: var(--s3);
+  display: flex; align-items: baseline; gap: 8px;
+}
+.section-head .note {
+  font-weight: 400; text-transform: none; letter-spacing: 0;
+  color: var(--text-3); font-size: 11px;
+  font-family: var(--font-mono);
+}
+
+/* probability bars */
+.proba-row {
+  display: grid;
+  grid-template-columns: 150px 1fr 60px;
+  gap: var(--s3); align-items: center;
+  padding: var(--s2) 0;
+}
+.proba-label {
+  font-size: 13px; color: var(--text-2);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  display: flex; align-items: center; gap: 8px;
+}
+.proba-label .dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.proba-track {
+  height: 18px; background: var(--surface-2);
+  border-radius: var(--radius-sm); overflow: hidden;
+  border: 1px solid var(--border);
+}
+.proba-fill {
+  height: 100%;
+  border-radius: var(--radius-sm);
+  transition: width .6s cubic-bezier(.16,1,.3,1);
+  min-width: 2px;
+}
+.proba-value {
+  font-family: var(--font-mono);
+  font-size: 13px; color: var(--text);
+  text-align: right; font-weight: 500;
+}
+
+/* SHAP table */
+.shap-table {
+  width: 100%; border-collapse: collapse; font-size: 12.5px;
+}
+.shap-table th {
+  text-align: left; font-weight: 500;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--text-3);
+  padding: 0 var(--s2) var(--s2);
+  border-bottom: 1px solid var(--border);
+}
+.shap-table td {
+  padding: var(--s2);
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.shap-table tr:last-child td { border-bottom: none; }
+.shap-rank {
+  font-family: var(--font-mono); color: var(--text-3); font-size: 11px;
+}
+.shap-name { font-family: var(--font-mono); font-size: 12px; }
+.shap-value-cell {
+  font-family: var(--font-mono); color: var(--text-2); text-align: right;
+}
+.shap-contrib-cell { display: flex; align-items: center; gap: var(--s2); }
+.shap-contrib-bar-wrap {
+  flex: 1; height: 6px;
+  background: var(--surface-2);
+  border-radius: 3px; overflow: hidden;
+  max-width: 100px;
+}
+.shap-contrib-bar { height: 100%; background: var(--accent); border-radius: 3px; }
+.shap-contrib-val {
+  font-family: var(--font-mono); font-size: 11.5px;
+  color: var(--accent); min-width: 52px; text-align: right; font-weight: 500;
+}
+
+/* loading + error */
+.loading {
+  padding: 60px var(--s6); text-align: center; color: var(--text-3);
+}
+.spinner {
+  width: 28px; height: 28px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  margin: 0 auto var(--s3);
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.error-box {
+  padding: var(--s4) var(--s6);
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: 13px;
+  border-left: 3px solid var(--danger);
+}
+.error-box strong { font-weight: 600; display: block; margin-bottom: 2px; }
+
+.boot-error {
+  padding: var(--s6); margin: var(--s5);
+  background: var(--danger-soft);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--danger);
+  color: var(--danger);
+}
+.boot-error code {
+  font-family: var(--font-mono);
+  background: white; padding: 2px 8px;
+  border-radius: 3px; border: 1px solid var(--border);
+  font-size: 12px; color: var(--text-2);
+}
+.boot-hint { margin-top: 10px; font-size: 12px; color: var(--text-3); }
+
+/* 滚动条 */
+.form-body::-webkit-scrollbar { width: 8px; }
+.form-body::-webkit-scrollbar-track { background: transparent; }
+.form-body::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+.form-body::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+
+/* 1280px 收紧 */
+@media (max-width: 1320px) {
+  .main {
+    grid-template-columns: 500px 1fr;
+    padding: var(--s4); gap: var(--s4);
+  }
+  .topbar { padding: var(--s3) var(--s4); }
+}
+@media (max-width: 980px) {
+  .main { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <svg class="brand-mark" width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect width="28" height="28" rx="6" fill="#0f766e"/>
+          <path d="M14 5 L20.5 16 L17 16 L17 22 L11 22 L11 16 L7.5 16 Z" fill="#ffffff"/>
+        </svg>
+        <div class="brand-text">
+          <h1>森林覆盖类型预测</h1>
+          <p>{{ info ? `${info.model_type} · ${info.objective} · ${info.n_features} 特征 · ${info.num_class} 类` : 'XGBoost 推理服务' }}</p>
+        </div>
+      </div>
+      <div class="metrics" v-if="info && info.test_metrics">
+        <div class="metric-badge">
+          <span class="metric-label">Accuracy</span>
+          <span class="metric-value">{{ fmtPct(info.test_metrics.accuracy) }}</span>
+        </div>
+        <div class="metric-badge">
+          <span class="metric-label">F1 Macro</span>
+          <span class="metric-value">{{ fmtPct(info.test_metrics.f1_macro) }}</span>
+        </div>
+        <div class="metric-badge">
+          <span class="metric-label">ROC AUC</span>
+          <span class="metric-value">{{ fmt4(info.test_metrics.roc_auc_ovr) }}</span>
+        </div>
+        <div class="metric-badge" v-if="info.best_iteration != null">
+          <span class="metric-label">Best Iter</span>
+          <span class="metric-value muted">{{ info.best_iteration }}</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main" v-if="info">
+    <!-- 左侧:特征表单 -->
+    <section class="panel">
+      <div class="toolbar">
+        <button class="btn" @click="loadSample" :disabled="loading.sample">
+          {{ loading.sample ? '加载中…' : '随机样本' }}
+        </button>
+        <button class="btn btn-primary" @click="predict" :disabled="loading.predict">
+          {{ loading.predict ? '推理中…' : '预测' }}
+        </button>
+        <button class="btn btn-ghost" @click="resetForm">重置</button>
+        <span v-if="sample" class="true-label-chip">
+          真实标签 <strong>{{ classNames[sample.true_label] || ('Class ' + sample.true_label) }}</strong>
+        </span>
+      </div>
+
+      <div class="form-body">
+        <h3 class="section-title">连续特征 <span class="count">{{ continuousFeatures.length }} 项</span></h3>
+        <div class="cont-row" v-for="f in continuousFeatures" :key="f.name">
+          <div class="cont-name" :title="f.name">{{ f.name }}</div>
+          <div class="cont-range">
+            <div class="cont-track">
+              <input type="range"
+                     :min="f.min" :max="f.max" step="any"
+                     v-model.number="features[f.name]"
+                     @change="clampFeature(f)">
+            </div>
+            <div class="cont-bounds">
+              <span>{{ f.min }}</span>
+              <span>{{ f.max }}</span>
+            </div>
+          </div>
+          <input type="number" class="cont-input"
+                 :min="f.min" :max="f.max" step="any"
+                 v-model.number="features[f.name]"
+                 @change="clampFeature(f)">
+        </div>
+
+        <template v-for="g in binaryGroups" :key="g.name">
+          <h3 class="section-title">{{ g.name }} <span class="count">{{ g.items.length }} 项</span></h3>
+          <div class="binary-group">
+            <div class="binary-grid" :class="g.items.length <= 4 ? 'cols-4' : 'cols-8'">
+              <div class="chip"
+                   v-for="f in g.items" :key="f.name"
+                   :class="{ active: Number(features[f.name]) === 1 }"
+                   @click="toggleBinary(f)"
+                   :title="f.name">
+                {{ shortLabel(f.name, g.name) }}
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </section>
+
+    <!-- 右侧:结果面板 -->
+    <section class="panel">
+      <div v-if="loading.predict" class="loading">
+        <div class="spinner"></div>
+        <p>正在推理…</p>
+      </div>
+
+      <div v-else-if="error.predict" class="error-box">
+        <strong>预测失败</strong>
+        {{ error.predict }}
+      </div>
+
+      <div v-else-if="result">
+        <div class="prediction-display">
+          <div class="pred-label">预测类别</div>
+          <div class="pred-name">
+            <span class="class-dot" :style="{ background: classColor(result.predicted_class) }"></span>
+            {{ result.predicted_class_name }}
+            <span class="match-chip"
+                  v-if="sample && sample.true_label != null"
+                  :class="result.predicted_class === sample.true_label ? 'ok' : 'no'">
+              {{ result.predicted_class === sample.true_label ? '与真实标签一致' : `真实: ${classNames[sample.true_label] || sample.true_label}` }}
+            </span>
+          </div>
+          <div class="pred-meta">Class {{ result.predicted_class }} · 置信度 {{ fmt4(maxProba) }}</div>
+        </div>
+
+        <div class="section">
+          <div class="section-head">类别概率</div>
+          <div class="proba-row" v-for="p in result.probabilities" :key="p.class_index">
+            <div class="proba-label">
+              <span class="dot" :style="{ background: classColor(p.class_index) }"></span>
+              {{ p.class_name }}
+            </div>
+            <div class="proba-track">
+              <div class="proba-fill"
+                   :style="{ width: (p.probability * 100).toFixed(2) + '%', background: classColor(p.class_index) }"></div>
+            </div>
+            <div class="proba-value">{{ fmt4(p.probability) }}</div>
+          </div>
+        </div>
+
+        <div class="section" v-if="result.top_features && result.top_features.length">
+          <div class="section-head">
+            SHAP 贡献 Top {{ result.top_features.length }}
+            <span class="note">|贡献| 多分类汇总</span>
+          </div>
+          <table class="shap-table">
+            <thead>
+              <tr>
+                <th style="width:32px">#</th>
+                <th>特征</th>
+                <th style="width:90px;text-align:right">输入值</th>
+                <th style="width:170px">贡献度</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(f, i) in result.top_features" :key="f.name">
+                <td class="shap-rank">{{ i + 1 }}</td>
+                <td class="shap-name">{{ f.name }}</td>
+                <td class="shap-value-cell">{{ fmtNum(f.value) }}</td>
+                <td>
+                  <div class="shap-contrib-cell">
+                    <div class="shap-contrib-bar-wrap">
+                      <div class="shap-contrib-bar"
+                           :style="{ width: contribPct(f.contribution) + '%' }"></div>
+                    </div>
+                    <span class="shap-contrib-val">{{ fmt3(f.contribution) }}</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div v-else class="result-empty">
+        <div class="ph">?</div>
+        <p>尚未预测</p>
+        <p>填写左侧特征,或点击「随机样本」后开始推理</p>
+      </div>
+    </section>
+  </main>
+
+  <div v-else-if="bootError" class="boot-error">
+    <strong>无法连接后端服务</strong>
+    <div style="margin-top:4px">{{ bootError }}</div>
+    <div class="boot-hint">
+      请先在项目根目录启动服务:<br>
+      <code>uv run uvicorn api.main:app --reload --port 8000</code>
+    </div>
+  </div>
+
+  <div v-else class="loading" style="padding-top:80px">
+    <div class="spinner"></div>
+    <p>正在加载模型信息…</p>
+  </div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script>
+const { createApp, ref, reactive, computed, onMounted } = Vue;
+
+// 同源访问时为空串(由 FastAPI 的 GET / 直接服务);
+// file:// 打开时打到本地 8000 端口。
+const API_BASE = location.protocol === 'file:' ? 'http://localhost:8000' : '';
+
+// 三类色板(teal / burnt-orange / rose),与森林覆盖三种类别一一对应
+const CLASS_COLORS = ['#0f766e', '#c2410c', '#be123c'];
+
+createApp({
+  setup() {
+    const info = ref(null);
+    const features = reactive({});
+    const sample = ref(null);
+    const result = ref(null);
+    const loading = reactive({ info: false, sample: false, predict: false });
+    const error = reactive({ info: null, sample: null, predict: null });
+    const bootError = ref(null);
+
+    const continuousFeatures = computed(() => {
+      if (!info.value) return [];
+      return info.value.feature_schema.filter(f => f.type === 'continuous');
+    });
+
+    const binaryGroups = computed(() => {
+      if (!info.value) return [];
+      const groups = {};
+      info.value.feature_schema
+        .filter(f => f.type === 'binary')
+        .forEach(f => {
+          let g;
+          if (f.name.startsWith('Wilderness_Area')) g = 'Wilderness Area';
+          else if (f.name.startsWith('Soil_Type')) g = 'Soil Type';
+          else g = '其他二值';
+          (groups[g] = groups[g] || []).push(f);
+        });
+      const order = ['Wilderness Area', 'Soil Type', '其他二值'];
+      return order.filter(n => groups[n]).map(n => ({ name: n, items: groups[n] }));
+    });
+
+    const classNames = computed(() => info.value?.class_names || []);
+    const maxProba = computed(() => {
+      if (!result.value?.probabilities?.length) return 0;
+      return Math.max(...result.value.probabilities.map(p => p.probability));
+    });
+
+    // ---------- 格式化 ----------
+    function fmtPct(v) { return v == null ? '—' : (v * 100).toFixed(2) + '%'; }
+    function fmt4(v) { return v == null ? '—' : Number(v).toFixed(4); }
+    function fmt3(v) { return v == null ? '—' : Number(v).toFixed(3); }
+    function fmtNum(v) {
+      const n = Number(v);
+      if (Number.isInteger(n)) return n.toString();
+      return n.toFixed(2);
+    }
+    function classColor(i) { return CLASS_COLORS[i % CLASS_COLORS.length]; }
+
+    // 标签短化:Wilderness_Area_3 -> "3", Soil_Type_27 -> "27"
+    function shortLabel(name, groupName) {
+      const m = name.match(/_(\d+)$/);
+      return m ? m[1] : name;
+    }
+
+    // ---------- 交互 ----------
+    function clampFeature(f) {
+      const v = Number(features[f.name]);
+      if (isNaN(v)) { features[f.name] = f.default; return; }
+      if (v < f.min) features[f.name] = f.min;
+      else if (v > f.max) features[f.name] = f.max;
+    }
+    function toggleBinary(f) {
+      features[f.name] = Number(features[f.name]) === 1 ? 0 : 1;
+    }
+    function contribPct(c) {
+      if (!result.value?.top_features?.length) return 0;
+      const mx = Math.max(...result.value.top_features.map(t => Math.abs(t.contribution)));
+      if (mx === 0) return 0;
+      return (Math.abs(c) / mx) * 100;
+    }
+
+    // ---------- API ----------
+    async function fetchInfo() {
+      const r = await fetch(`${API_BASE}/api/info`);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    }
+    async function fetchSample() {
+      const r = await fetch(`${API_BASE}/api/sample`);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    }
+
+    async function loadSample() {
+      loading.sample = true;
+      error.sample = null;
+      try {
+        const s = await fetchSample();
+        sample.value = s;
+        Object.assign(features, s.features);
+        // sample 可能没带 binary 之外的所有字段,确保 schema 字段都存在
+        if (info.value) {
+          info.value.feature_schema.forEach(f => {
+            if (!(f.name in features)) features[f.name] = f.default;
+          });
+        }
+      } catch (e) {
+        error.sample = e.message;
+      } finally {
+        loading.sample = false;
+      }
+    }
+
+    function resetForm() {
+      if (!info.value) return;
+      info.value.feature_schema.forEach(f => { features[f.name] = f.default; });
+      sample.value = null;
+      result.value = null;
+      error.predict = null;
+    }
+
+    async function predict() {
+      if (!info.value) return;
+      loading.predict = true;
+      error.predict = null;
+      result.value = null;
+      try {
+        const payload = { features: {} };
+        info.value.feature_schema.forEach(f => {
+          let v = features[f.name];
+          if (v == null || v === '' || isNaN(Number(v))) v = f.default;
+          payload.features[f.name] = Number(v);
+        });
+        const r = await fetch(`${API_BASE}/api/predict?explain=true`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!r.ok) {
+          let msg = `HTTP ${r.status}`;
+          try {
+            const detail = (await r.json()).detail;
+            if (detail) msg += ' · ' + (typeof detail === 'string' ? detail : JSON.stringify(detail));
+          } catch (_) {}
+          throw new Error(msg);
+        }
+        result.value = await r.json();
+      } catch (e) {
+        error.predict = e.message;
+      } finally {
+        loading.predict = false;
+      }
+    }
+
+    // ---------- 启动:并行拉取 info + sample ----------
+    onMounted(async () => {
+      loading.info = true;
+      // sample 用 catch 包一层,避免 info 失败时被 sample 的拒绝连累
+      const infoP = fetchInfo();
+      const sampleP = fetchSample().catch(e => ({ __error: e }));
+      try {
+        info.value = await infoP;
+        // 先用 schema 默认值兜底
+        info.value.feature_schema.forEach(f => { features[f.name] = f.default; });
+        const s = await sampleP;
+        if (s && !s.__error) {
+          sample.value = s;
+          Object.assign(features, s.features);
+        }
+      } catch (e) {
+        bootError.value = e.message || String(e);
+      } finally {
+        loading.info = false;
+      }
+    });
+
+    return {
+      info, features, sample, result, loading, error, bootError,
+      continuousFeatures, binaryGroups, classNames, maxProba,
+      fmtPct, fmt4, fmt3, fmtNum, classColor, shortLabel,
+      clampFeature, toggleBinary, contribPct,
+      loadSample, resetForm, predict,
+    };
+  }
+}).mount('#app');
+</script>
+</body>
+</html>
