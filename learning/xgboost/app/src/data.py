@@ -22,6 +22,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -43,6 +45,15 @@ MODEL_PATH = MODELS_DIR / "model.json"                  # XGBoost 原生格式
 MODEL_PATH_FALLBACK = MODEL_PATH                        # API 兼容别名
 METADATA_PATH = MODELS_DIR / "metadata.json"
 METRICS_PATH = MODELS_DIR / "metrics.json"
+
+# 模型版本归档目录:每次训练把当前 active 模型归档到 versions/<version_id>/
+VERSIONS_DIR = MODELS_DIR / "versions"
+
+# 用户上传的训练数据目录
+UPLOADS_DIR = DATA_DIR / "uploads"
+
+for _d in (VERSIONS_DIR, UPLOADS_DIR):
+    _d.mkdir(parents=True, exist_ok=True)
 
 # 3 分类映射:原始 cover_type → 我们的目标类
 KEEP_RAW_CLASSES = [1, 2, 3]   # 取样本量前三的类
@@ -102,6 +113,174 @@ def get_feature_schema(df: pd.DataFrame) -> list[dict]:
             "default": float(df[col].median() if ftype == "continuous" else 0),
         })
     return schema
+
+
+# ---------- 模型版本管理 ----------
+def derive_version_id(created_at: str | None = None,
+                      fallback_path: Path | None = None) -> str:
+    """从 created_at(ISO) 推导 YYYYMMDD_HHMMSS 格式的版本 ID;失败回退文件 mtime。"""
+    if created_at:
+        try:
+            dt = datetime.fromisoformat(created_at.replace("Z", "+00:00"))
+            return dt.strftime("%Y%m%d_%H%M%S")
+        except (ValueError, TypeError):
+            pass
+    if fallback_path and fallback_path.exists():
+        return datetime.fromtimestamp(fallback_path.stat().st_mtime).strftime("%Y%m%d_%H%M%S")
+    return datetime.now().strftime("%Y%m%d_%H%M%S")
+
+
+def unique_version_dir(base_id: str) -> Path:
+    """返回不冲突的 versions/<base_id> 路径;同秒重训自动加 _2/_3 后缀。"""
+    candidate = VERSIONS_DIR / base_id
+    if not candidate.exists():
+        return candidate
+    n = 2
+    while (VERSIONS_DIR / f"{base_id}_{n}").exists():
+        n += 1
+    return VERSIONS_DIR / f"{base_id}_{n}"
+
+
+def archive_current_model() -> str | None:
+    """把当前 active 模型归档到 versions/<version_id>/。幂等:已归档过则跳过。
+
+    返回版本 ID;无 active 模型(model.json 不存在)时返回 None。
+    """
+    if not MODEL_PATH.exists():
+        return None
+    created_at = None
+    if METADATA_PATH.exists():
+        try:
+            created_at = json.loads(METADATA_PATH.read_text()).get("created_at")
+        except (json.JSONDecodeError, OSError):
+            pass
+    vid = derive_version_id(created_at, fallback_path=MODEL_PATH)
+    target = VERSIONS_DIR / vid
+    if target.exists():
+        return vid
+    target.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(MODEL_PATH, target / MODEL_PATH.name)
+    if METADATA_PATH.exists():
+        shutil.copy2(METADATA_PATH, target / METADATA_PATH.name)
+    if METRICS_PATH.exists():
+        shutil.copy2(METRICS_PATH, target / METRICS_PATH.name)
+    return vid
+
+
+def find_version_dir(version_id: str) -> Path | None:
+    if not VERSIONS_DIR.exists():
+        return None
+    d = VERSIONS_DIR / Path(version_id).name
+    if d.is_dir() and (d / MODEL_PATH.name).exists():
+        return d
+    return None
+
+
+def promote_version_to_active(version_id: str) -> bool:
+    """把指定版本的 3 个文件复制回顶层 models/,覆盖当前 active。失败返回 False。"""
+    src = find_version_dir(version_id)
+    if src is None:
+        return False
+    shutil.copy2(src / MODEL_PATH.name, MODEL_PATH)
+    if (src / METADATA_PATH.name).exists():
+        shutil.copy2(src / METADATA_PATH.name, METADATA_PATH)
+    if (src / METRICS_PATH.name).exists():
+        shutil.copy2(src / METRICS_PATH.name, METRICS_PATH)
+    return True
+
+
+def _read_metrics_summary(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    try:
+        m = json.loads(path.read_text())
+        return {k: m[k] for k in ("accuracy", "f1_macro", "roc_auc_ovr") if k in m}
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+
+def list_versions() -> list[dict]:
+    """返回 active 版本 + 所有归档版本,按 version_id 降序。active 永远在最前。"""
+    versions: list[dict] = []
+    if METADATA_PATH.exists() and MODEL_PATH.exists():
+        try:
+            md = json.loads(METADATA_PATH.read_text())
+            versions.append({
+                "version_id": md.get("version_id") or derive_version_id(md.get("created_at"), MODEL_PATH),
+                "created_at": md.get("created_at"),
+                "is_active": True,
+                "model_type": md.get("model_type"),
+                "objective": md.get("objective"),
+                "num_class": md.get("num_class"),
+                "n_features": md.get("n_features"),
+                "class_names": md.get("class_names", []),
+                "best_iteration": md.get("best_iteration"),
+                "n_train_samples": md.get("n_train_samples"),
+                "best_params": md.get("best_params", {}),
+                "metrics": _read_metrics_summary(METRICS_PATH),
+            })
+        except (json.JSONDecodeError, OSError):
+            pass
+    archived: list[dict] = []
+    if VERSIONS_DIR.exists():
+        for d in VERSIONS_DIR.iterdir():
+            if not d.is_dir():
+                continue
+            md_path = d / METADATA_PATH.name
+            if not md_path.exists():
+                continue
+            try:
+                md = json.loads(md_path.read_text())
+            except (json.JSONDecodeError, OSError):
+                continue
+            archived.append({
+                "version_id": d.name,
+                "created_at": md.get("created_at"),
+                "is_active": False,
+                "model_type": md.get("model_type"),
+                "objective": md.get("objective"),
+                "num_class": md.get("num_class"),
+                "n_features": md.get("n_features"),
+                "class_names": md.get("class_names", []),
+                "best_iteration": md.get("best_iteration"),
+                "n_train_samples": md.get("n_train_samples"),
+                "best_params": md.get("best_params", {}),
+                "metrics": _read_metrics_summary(d / METRICS_PATH.name),
+            })
+    archived.sort(key=lambda v: v["version_id"], reverse=True)
+    return versions + archived
+
+
+# ---------- 用户上传数据集 ----------
+def dataset_path(name: str) -> Path:
+    """安全拼接上传目录路径,防路径穿越(只取文件名部分)。"""
+    return UPLOADS_DIR / Path(name).name
+
+
+def list_datasets() -> list[dict]:
+    if not UPLOADS_DIR.exists():
+        return []
+    out = []
+    for p in sorted(UPLOADS_DIR.glob("*.csv"), key=lambda x: x.stat().st_mtime, reverse=True):
+        st = p.stat()
+        out.append({
+            "name": p.name,
+            "size_bytes": st.st_size,
+            "created_at": datetime.fromtimestamp(st.st_mtime).isoformat(timespec="seconds"),
+        })
+    return out
+
+
+def summarize_dataset(df: pd.DataFrame) -> dict:
+    """读 DataFrame 的训练数据摘要(行数/特征数/类别分布)。要求含 target 列。"""
+    feature_names = [c for c in df.columns if c != "target"]
+    class_counts = df["target"].value_counts().sort_index().to_dict() if "target" in df.columns else {}
+    return {
+        "n_rows": int(len(df)),
+        "n_features": len(feature_names),
+        "feature_names": feature_names,
+        "class_distribution": {int(k): int(v) for k, v in class_counts.items()},
+    }
 
 
 def main() -> None:

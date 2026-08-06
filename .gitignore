@@ -51,6 +51,11 @@ learning/**/mlruns/
 *.pt
 *.onnx
 
+# XGBoost app: 用户上传的训练数据 + 模型版本归档(本地实验产物)
+# active 模型 models/{model,metadata,metrics}.json 仍入库,保证开箱即用
+learning/xgboost/app/data/uploads/
+learning/xgboost/app/models/versions/
+
 # Jupyter
 .ipynb_checkpoints/
 

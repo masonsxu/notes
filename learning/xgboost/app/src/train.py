@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 import time
 from datetime import datetime
 from pathlib import Path
@@ -47,6 +48,7 @@ from sklearn.model_selection import KFold, train_test_split
 from .data import (
     CLASS_NAMES, APP_DIR, load_or_fetch,
     MODEL_PATH, METADATA_PATH, METRICS_PATH,
+    derive_version_id, unique_version_dir, archive_current_model,
 )
 
 OUTPUT_DIR = APP_DIR / "output"
@@ -73,7 +75,8 @@ def make_splits(X: pd.DataFrame, y: pd.Series) -> dict:
                 y_tr=y_tr, y_va=y_va, y_te=y_te)
 
 
-def train_model(X_tr, X_va, y_tr, y_va, **params) -> xgb.XGBClassifier:
+def train_model(X_tr, X_va, y_tr, y_va, *,
+                class_names: list[str] = CLASS_NAMES, **params) -> xgb.XGBClassifier:
     defaults = dict(
         n_estimators=2000,
         learning_rate=0.1,
@@ -83,7 +86,7 @@ def train_model(X_tr, X_va, y_tr, y_va, **params) -> xgb.XGBClassifier:
         early_stopping_rounds=50,
         eval_metric="mlogloss",
         objective="multi:softprob",
-        num_class=len(CLASS_NAMES),
+        num_class=len(class_names),
         tree_method="hist",
         random_state=42,
         n_jobs=-1,
@@ -94,7 +97,8 @@ def train_model(X_tr, X_va, y_tr, y_va, **params) -> xgb.XGBClassifier:
     return model
 
 
-def evaluate(model, X_te, y_te) -> dict:
+def evaluate(model, X_te, y_te, *,
+             class_names: list[str] = CLASS_NAMES) -> dict:
     y_pred = model.predict(X_te)
     y_proba = model.predict_proba(X_te)
     metrics = {
@@ -105,20 +109,21 @@ def evaluate(model, X_te, y_te) -> dict:
         "roc_auc_ovr": float(roc_auc_score(y_te, y_proba, multi_class="ovr",
                                            average="macro")),
     }
-    cm = confusion_matrix(y_te, y_pred, labels=list(range(len(CLASS_NAMES))))
+    cm = confusion_matrix(y_te, y_pred, labels=list(range(len(class_names))))
     metrics["confusion_matrix"] = cm.tolist()
     metrics["classification_report"] = classification_report(
-        y_te, y_pred, target_names=CLASS_NAMES, output_dict=True, digits=4)
+        y_te, y_pred, target_names=class_names, output_dict=True, digits=4)
     return metrics
 
 
-def plot_confusion(cm: np.ndarray) -> None:
+def plot_confusion(cm: np.ndarray, *,
+                   class_names: list[str] = CLASS_NAMES) -> None:
     fig, ax = plt.subplots(figsize=(6, 5))
     im = ax.imshow(cm, cmap="Blues")
-    ax.set_xticks(range(len(CLASS_NAMES)))
-    ax.set_yticks(range(len(CLASS_NAMES)))
-    ax.set_xticklabels(CLASS_NAMES, rotation=30, ha="right")
-    ax.set_yticklabels(CLASS_NAMES)
+    ax.set_xticks(range(len(class_names)))
+    ax.set_yticks(range(len(class_names)))
+    ax.set_xticklabels(class_names, rotation=30, ha="right")
+    ax.set_yticklabels(class_names)
     ax.set_xlabel("Predicted")
     ax.set_ylabel("True")
     ax.set_title("Confusion Matrix (test set)")
@@ -138,7 +143,8 @@ def plot_confusion(cm: np.ndarray) -> None:
     print(f"[Train] saved {out}")
 
 
-def tune_with_optuna(X: pd.DataFrame, y: pd.Series, n_trials: int) -> dict:
+def tune_with_optuna(X: pd.DataFrame, y: pd.Series, n_trials: int, *,
+                     class_names: list[str] = CLASS_NAMES) -> dict:
     optuna.logging.set_verbosity(optuna.logging.WARNING)
 
     def objective(trial: optuna.Trial) -> float:
@@ -155,7 +161,8 @@ def tune_with_optuna(X: pd.DataFrame, y: pd.Series, n_trials: int) -> dict:
         kf = KFold(n_splits=5, shuffle=True, random_state=42)
         for tr_idx, va_idx in kf.split(X):
             m = train_model(X.iloc[tr_idx], X.iloc[va_idx],
-                            y.iloc[tr_idx], y.iloc[va_idx], **params)
+                            y.iloc[tr_idx], y.iloc[va_idx],
+                            class_names=class_names, **params)
             cv_f1.append(f1_score(y.iloc[va_idx], m.predict(X.iloc[va_idx]),
                                   average="macro"))
         return float(np.mean(cv_f1))
@@ -168,7 +175,8 @@ def tune_with_optuna(X: pd.DataFrame, y: pd.Series, n_trials: int) -> dict:
     return study.best_params
 
 
-def explain_with_shap(model, X_te: pd.DataFrame) -> None:
+def explain_with_shap(model, X_te: pd.DataFrame, *,
+                      class_names: list[str] = CLASS_NAMES) -> None:
     """SHAP TreeExplainer,多分类会返回 (n_samples, n_features, n_classes)。"""
     explainer = shap.TreeExplainer(model)
     shap_values = explainer.shap_values(X_te)
@@ -188,7 +196,7 @@ def explain_with_shap(model, X_te: pd.DataFrame) -> None:
                     else shap_values[..., target_class])
     plt.figure()
     shap.summary_plot(sv_for_class, X_te, show=False)
-    plt.title(f"SHAP Summary - {CLASS_NAMES[target_class]}")
+    plt.title(f"SHAP Summary - {class_names[target_class]}")
     plt.tight_layout()
     out = OUTPUT_DIR / "06_shap_summary.png"
     plt.savefig(out, dpi=120, bbox_inches="tight")
@@ -200,7 +208,7 @@ def explain_with_shap(model, X_te: pd.DataFrame) -> None:
     top_feat = X_te.columns[top_idx]
     plt.figure()
     shap.dependence_plot(top_feat, sv_for_class, X_te, show=False)
-    plt.title(f"SHAP Dependence: {top_feat} ({CLASS_NAMES[target_class]})")
+    plt.title(f"SHAP Dependence: {top_feat} ({class_names[target_class]})")
     plt.tight_layout()
     out = OUTPUT_DIR / f"07_shap_dependence_{top_feat}.png"
     plt.savefig(out, dpi=120, bbox_inches="tight")
@@ -208,58 +216,81 @@ def explain_with_shap(model, X_te: pd.DataFrame) -> None:
     print(f"[Train] saved {out}")
 
 
-def main() -> None:
-    _setup_cjk_font()
+def run_training(df: pd.DataFrame, trials: int | None = None, *,
+                 generate_shap: bool = False,
+                 class_names_default: list[str] = CLASS_NAMES
+                 ) -> tuple[dict, dict, str]:
+    """在给定 DataFrame 上跑完整训练流程。
+
+    流程:baseline → Optuna 调参 → 重训评估 → 归档旧模型 → 保存新 active + 版本归档。
+    df 必须含 target 列(整数类别,0-based 连续)。返回 (metadata, metrics, version_id)。
+    供 CLI 与 API 共用;API 路径传 generate_shap=False 跳过出图。
+    """
     started = time.time()
-    print("=" * 60)
-    print("[1/6] Load data")
-    df = load_or_fetch()
+    if "target" not in df.columns:
+        raise ValueError("训练数据缺少 target 列")
+
     X = df.drop(columns=["target"])
     y = df["target"]
     feature_names = list(X.columns)
-    splits = make_splits(X, y)
-    print(f"  train={splits['X_tr'].shape}, val={splits['X_va'].shape}, "
-          f"test={splits['X_te'].shape}")
 
-    print("\n" + "=" * 60)
-    print("[2/6] Baseline train (early_stopping)")
+    num_class = int(y.nunique())
+    class_names = list(class_names_default)
+    if num_class > len(class_names):
+        class_names += [f"Class {i}" for i in range(len(class_names), num_class)]
+    class_names = class_names[:num_class]
+
+    splits = make_splits(X, y)
+    print(f"[Train] train={splits['X_tr'].shape}, val={splits['X_va'].shape}, "
+          f"test={splits['X_te'].shape}, num_class={num_class}")
+
+    print("[Train] baseline")
     baseline = train_model(splits["X_tr"], splits["X_va"],
-                           splits["y_tr"], splits["y_va"])
-    print(f"  best_iter={baseline.best_iteration}, "
-          f"val mlogloss={baseline.best_score:.4f}")
-    base_metrics = evaluate(baseline, splits["X_te"], splits["y_te"])
-    print(f"  baseline test: acc={base_metrics['accuracy']:.4f}, "
+                           splits["y_tr"], splits["y_va"], class_names=class_names)
+    base_metrics = evaluate(baseline, splits["X_te"], splits["y_te"],
+                            class_names=class_names)
+    print(f"[Train] baseline test: acc={base_metrics['accuracy']:.4f}, "
           f"f1_macro={base_metrics['f1_macro']:.4f}, "
           f"auc_ovr={base_metrics['roc_auc_ovr']:.4f}")
 
-    print("\n" + "=" * 60)
-    n_trials = int(os.environ.get("APP_TRAIN_TRIALS", "30"))
-    print(f"[3/6] Optuna tune ({n_trials} trials × 5-fold CV)")
+    if trials is None:
+        trials = int(os.environ.get("APP_TRAIN_TRIALS", "30"))
+    print(f"[Train] Optuna tune ({trials} trials × 5-fold CV)")
     X_tune = pd.concat([splits["X_tr"], splits["X_va"]])
     y_tune = pd.concat([splits["y_tr"], splits["y_va"]])
-    best_params = tune_with_optuna(X_tune, y_tune, n_trials=n_trials)
+    best_params = tune_with_optuna(X_tune, y_tune, trials, class_names=class_names)
 
-    print("\n" + "=" * 60)
-    print("[4/6] Retrain with best params, final eval on test")
+    print("[Train] retrain with best params")
     final_model = train_model(splits["X_tr"], splits["X_va"],
-                              splits["y_tr"], splits["y_va"], **best_params)
-    print(f"  best_iter={final_model.best_iteration}, "
-          f"val mlogloss={final_model.best_score:.4f}")
-    metrics = evaluate(final_model, splits["X_te"], splits["y_te"])
-    print(f"  final test: acc={metrics['accuracy']:.4f}, "
+                              splits["y_tr"], splits["y_va"],
+                              class_names=class_names, **best_params)
+    metrics = evaluate(final_model, splits["X_te"], splits["y_te"],
+                       class_names=class_names)
+    print(f"[Train] final test: acc={metrics['accuracy']:.4f}, "
           f"f1_macro={metrics['f1_macro']:.4f}, "
           f"auc_ovr={metrics['roc_auc_ovr']:.4f}")
 
-    print("\n" + "=" * 60)
-    print("[5/6] Save model + metadata + metrics")
+    if generate_shap:
+        plot_confusion(np.array(metrics["confusion_matrix"]),
+                       class_names=class_names)
+        sample_X = splits["X_te"].sample(n=min(2000, len(splits["X_te"])),
+                                         random_state=42)
+        explain_with_shap(final_model, sample_X, class_names=class_names)
+
+    elapsed = time.time() - started
+
+    # 先归档当前 active(幂等:已归档则跳过),再覆盖写新 active,最后把新版本也复制进 versions/
+    archive_current_model()
+    created_at = datetime.now().isoformat(timespec="seconds")
+    version_id = derive_version_id(created_at)
     final_model.save_model(MODEL_PATH)
-    print(f"  → {MODEL_PATH}")
     metadata = {
-        "created_at": datetime.now().isoformat(timespec="seconds"),
+        "version_id": version_id,
+        "created_at": created_at,
         "model_type": "XGBClassifier",
         "objective": "multi:softprob",
-        "num_class": len(CLASS_NAMES),
-        "class_names": CLASS_NAMES,
+        "num_class": num_class,
+        "class_names": class_names,
         "feature_names": feature_names,
         "n_features": len(feature_names),
         "n_train_samples": int(len(splits["X_tr"]) + len(splits["X_va"])),
@@ -268,23 +299,34 @@ def main() -> None:
         "best_params": best_params,
         "baseline_test_metrics": {k: v for k, v in base_metrics.items()
                                   if not isinstance(v, (list, dict))},
-        "training_seconds": round(time.time() - started, 1),
+        "training_seconds": round(elapsed, 1),
     }
     METADATA_PATH.write_text(json.dumps(metadata, ensure_ascii=False, indent=2))
-    print(f"  → {METADATA_PATH}")
     METRICS_PATH.write_text(json.dumps(metrics, ensure_ascii=False, indent=2,
                                        default=float))
-    print(f"  → {METRICS_PATH}")
 
-    print("\n" + "=" * 60)
-    print("[6/6] SHAP explanation + confusion matrix")
-    plot_confusion(np.array(metrics["confusion_matrix"]))
-    sample_X = splits["X_te"].sample(n=min(2000, len(splits["X_te"])),
-                                     random_state=42)
-    explain_with_shap(final_model, sample_X)
+    vdir = unique_version_dir(version_id)
+    vdir.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(MODEL_PATH, vdir / MODEL_PATH.name)
+    shutil.copy2(METADATA_PATH, vdir / METADATA_PATH.name)
+    shutil.copy2(METRICS_PATH, vdir / METRICS_PATH.name)
 
-    elapsed = time.time() - started
-    print(f"\n[Done] total {elapsed:.1f}s. 模型与元数据已保存到 {MODEL_PATH.parent}")
+    print(f"[Train] saved active → {MODEL_PATH}")
+    print(f"[Train] archived version → {vdir}")
+    print(f"[Train] done in {elapsed:.1f}s, version_id={version_id}")
+    return metadata, metrics, version_id
+
+
+def main() -> None:
+    _setup_cjk_font()
+    print("=" * 60)
+    print("[1/2] Load data")
+    df = load_or_fetch()
+    print("=" * 60)
+    print("[2/2] Train (with SHAP explanation)")
+    metadata, metrics, version_id = run_training(df, generate_shap=True)
+    print(f"\n[Done] version_id={version_id}, "
+          f"模型与元数据已保存到 {MODEL_PATH.parent}")
 
 
 if __name__ == "__main__":

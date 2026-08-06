@@ -451,6 +451,197 @@ button {
 @media (max-width: 980px) {
   .main { grid-template-columns: 1fr; }
 }
+
+/* ============ 版本切换(顶栏) ============ */
+.topbar-right {
+  display: flex; align-items: center; gap: var(--s4);
+  flex-wrap: wrap;
+}
+.version-switch {
+  display: flex; align-items: center; gap: var(--s2);
+  padding: 4px 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  height: 38px;
+}
+.version-switch .vs-label {
+  font-size: 10px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-3);
+}
+.version-select {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  height: 28px;
+  cursor: pointer;
+  min-width: 200px;
+  max-width: 300px;
+}
+.version-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.version-select:disabled { opacity: .6; cursor: wait; }
+.vs-mini {
+  font-family: var(--font-mono);
+  font-size: 11px; color: var(--text-3);
+}
+.vs-error {
+  font-family: var(--font-mono);
+  font-size: 11px; color: var(--danger);
+  max-width: 200px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* ============ 管理面板(跨双列) ============ */
+.panel-wide { grid-column: 1 / -1; }
+.manage-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s5);
+  align-items: start;
+}
+@media (max-width: 1320px) { .manage-grid { gap: var(--s4); } }
+@media (max-width: 980px) { .manage-grid { grid-template-columns: 1fr; } }
+
+/* 上传区 */
+.upload-zone {
+  display: flex; align-items: center; gap: var(--s3);
+  padding: var(--s3) var(--s4);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  flex-wrap: wrap;
+}
+.upload-zone input[type=file] { display: none; }
+.file-name {
+  font-family: var(--font-mono);
+  font-size: 12px; color: var(--text-2);
+  flex: 1; min-width: 120px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.file-name.empty { color: var(--text-3); font-style: italic; }
+
+.upload-summary {
+  margin-top: var(--s3);
+  padding: var(--s3) var(--s4);
+  background: var(--success-soft);
+  border-left: 3px solid var(--success);
+  border-radius: var(--radius-sm);
+  font-size: 12.5px; color: var(--text-2);
+}
+.upload-summary .dist {
+  font-family: var(--font-mono);
+  font-size: 11.5px; color: var(--text-3);
+  margin-top: var(--s1);
+}
+
+/* 数据集列表 */
+.dataset-list {
+  margin-top: var(--s3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.dataset-row {
+  display: grid;
+  grid-template-columns: 1fr 70px 64px 64px;
+  gap: var(--s3);
+  align-items: center;
+  padding: var(--s2) var(--s3);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.dataset-row:last-child { border-bottom: none; }
+.dataset-row.training { background: var(--accent-bg); }
+.dataset-name {
+  font-family: var(--font-mono);
+  font-size: 12px; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.dataset-meta {
+  font-family: var(--font-mono);
+  font-size: 11px; color: var(--text-3);
+  margin-top: 2px;
+}
+.dataset-row .btn { height: 28px; padding: 4px 10px; font-size: 12px; }
+.trials-input {
+  width: 100%; padding: 4px 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 12px; color: var(--text);
+  text-align: center;
+  height: 28px;
+}
+.trials-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.trials-input:disabled { opacity: .55; cursor: not-allowed; }
+.dataset-empty {
+  padding: var(--s4);
+  text-align: center;
+  color: var(--text-3);
+  font-size: 12px;
+  background: var(--surface-2);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+}
+
+/* 训练结果 / 状态 */
+.train-result {
+  margin-top: var(--s3);
+  padding: var(--s3) var(--s4);
+  background: var(--accent-bg);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  font-size: 12.5px; color: var(--text-2);
+}
+.train-result code {
+  font-family: var(--font-mono);
+  background: white; padding: 1px 5px;
+  border-radius: 3px; border: 1px solid var(--border);
+  font-size: 12px; color: var(--accent); font-weight: 500;
+}
+.train-timer {
+  margin-top: var(--s3);
+  font-family: var(--font-mono);
+  font-size: 11.5px; color: var(--text-3);
+}
+
+/* 帮助文本 + 内联错误 */
+.helper-text {
+  font-size: 12px;
+  color: var(--text-3);
+  line-height: 1.7;
+  margin: 0 0 var(--s3);
+}
+.helper-text code {
+  font-family: var(--font-mono);
+  background: var(--surface-2);
+  padding: 1px 5px;
+  border-radius: 3px; border: 1px solid var(--border);
+  font-size: 12px; color: var(--text);
+}
+.field-error {
+  margin-top: var(--s3);
+  padding: var(--s2) var(--s3);
+  background: var(--danger-soft);
+  color: var(--danger);
+  border-left: 3px solid var(--danger);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+}
 </style>
 </head>
 <body>
@@ -467,22 +658,35 @@ button {
           <p>{{ info ? `${info.model_type} · ${info.objective} · ${info.n_features} 特征 · ${info.num_class} 类` : 'XGBoost 推理服务' }}</p>
         </div>
       </div>
-      <div class="metrics" v-if="info && info.test_metrics">
-        <div class="metric-badge">
-          <span class="metric-label">Accuracy</span>
-          <span class="metric-value">{{ fmtPct(info.test_metrics.accuracy) }}</span>
+      <div class="topbar-right" v-if="info">
+        <div class="version-switch" v-if="models">
+          <span class="vs-label">版本</span>
+          <select class="version-select" v-model="selectedVersion"
+                  :disabled="switching" @change="switchVersion">
+            <option v-for="v in models.versions" :key="v.version_id" :value="v.version_id">
+              {{ versionLabel(v) }}
+            </option>
+          </select>
+          <span v-if="switching" class="vs-mini">切换中…</span>
+          <span v-else-if="error.version" class="vs-error" :title="error.version">{{ error.version }}</span>
         </div>
-        <div class="metric-badge">
-          <span class="metric-label">F1 Macro</span>
-          <span class="metric-value">{{ fmtPct(info.test_metrics.f1_macro) }}</span>
-        </div>
-        <div class="metric-badge">
-          <span class="metric-label">ROC AUC</span>
-          <span class="metric-value">{{ fmt4(info.test_metrics.roc_auc_ovr) }}</span>
-        </div>
-        <div class="metric-badge" v-if="info.best_iteration != null">
-          <span class="metric-label">Best Iter</span>
-          <span class="metric-value muted">{{ info.best_iteration }}</span>
+        <div class="metrics" v-if="info.test_metrics">
+          <div class="metric-badge">
+            <span class="metric-label">Accuracy</span>
+            <span class="metric-value">{{ fmtPct(info.test_metrics.accuracy) }}</span>
+          </div>
+          <div class="metric-badge">
+            <span class="metric-label">F1 Macro</span>
+            <span class="metric-value">{{ fmtPct(info.test_metrics.f1_macro) }}</span>
+          </div>
+          <div class="metric-badge">
+            <span class="metric-label">ROC AUC</span>
+            <span class="metric-value">{{ fmt4(info.test_metrics.roc_auc_ovr) }}</span>
+          </div>
+          <div class="metric-badge" v-if="info.best_iteration != null">
+            <span class="metric-label">Best Iter</span>
+            <span class="metric-value muted">{{ info.best_iteration }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -625,6 +829,102 @@ button {
         <p>填写左侧特征,或点击「随机样本」后开始推理</p>
       </div>
     </section>
+
+    <!-- 训练数据管理 + 批量预测(跨双列) -->
+    <div class="panel-wide">
+      <div class="manage-grid">
+
+        <!-- Panel 2:训练数据管理 -->
+        <section class="panel">
+          <div class="toolbar">
+            <strong style="font-size:13px">训练数据管理</strong>
+          </div>
+          <div class="section">
+            <div class="section-head">上传新数据集</div>
+            <div class="upload-zone">
+              <input type="file" accept=".csv" ref="uploadFileInput" @change="onUploadFileChange">
+              <button class="btn" type="button"
+                      @click="$refs.uploadFileInput && $refs.uploadFileInput.click()"
+                      :disabled="loading.upload">选择 CSV…</button>
+              <span class="file-name" :class="{ empty: !uploadFile }">{{ uploadFile ? uploadFile.name : '未选择文件' }}</span>
+              <button class="btn btn-primary" @click="uploadDataset"
+                      :disabled="!uploadFile || loading.upload">
+                {{ loading.upload ? '上传中…' : '上传训练数据' }}
+              </button>
+            </div>
+            <div v-if="uploadResult" class="upload-summary">
+              <strong style="font-weight:600">{{ uploadResult.name }}</strong>
+              · {{ uploadResult.n_rows }} 行 · {{ uploadResult.n_features }} 特征 · {{ formatBytes(uploadResult.size_bytes) }}
+              <div class="dist">类别分布:{{ formatDist(uploadResult.class_distribution) }}</div>
+            </div>
+            <div v-if="error.upload" class="field-error">{{ error.upload }}</div>
+
+            <div class="section-head" style="margin-top:var(--s5)">
+              已有数据集 <span class="note">{{ datasets.length }} 个</span>
+            </div>
+            <div v-if="loading.datasetList && datasets.length === 0" class="dataset-empty">加载中…</div>
+            <div v-else-if="datasets.length === 0" class="dataset-empty">暂无数据集,请上传</div>
+            <div v-else class="dataset-list">
+              <div class="dataset-row" v-for="d in datasets" :key="d.name"
+                   :class="{ training: trainDataset === d.name && loading.train }">
+                <div style="min-width:0">
+                  <div class="dataset-name" :title="d.name">{{ d.name }}</div>
+                  <div class="dataset-meta">{{ formatBytes(d.size_bytes) }} · {{ formatDate(d.created_at) }}</div>
+                </div>
+                <input type="number" class="trials-input" v-model.number="trialsMap[d.name]"
+                       min="1" max="200" :disabled="loading.train" title="Optuna 试验次数">
+                <button class="btn btn-primary" @click="triggerTrain(d.name)" :disabled="loading.train">
+                  {{ (trainDataset === d.name && loading.train) ? '训练中' : '训练' }}
+                </button>
+                <button class="btn btn-ghost" @click="deleteDataset(d.name)"
+                        :disabled="loading.train || loading.deleting === d.name">
+                  {{ loading.deleting === d.name ? '删除中' : '删除' }}
+                </button>
+              </div>
+            </div>
+            <div v-if="loading.train" class="train-timer">
+              已耗时 {{ trainElapsed }}s · 正在训练「{{ trainDataset }}」
+            </div>
+            <div v-if="trainResult" class="train-result">
+              训练完成 · 新版本 <code>{{ trainResult.new_version_id }}</code> ·
+              accuracy {{ fmtPct(trainResult.accuracy) }} ·
+              f1_macro {{ fmtPct(trainResult.f1_macro) }} ·
+              roc_auc_ovr {{ fmt4(trainResult.roc_auc_ovr) }} ·
+              耗时 {{ trainResult.elapsed_seconds }}s
+            </div>
+            <div v-if="error.train" class="field-error">{{ error.train }}</div>
+          </div>
+        </section>
+
+        <!-- Panel 3:批量预测 -->
+        <section class="panel">
+          <div class="toolbar">
+            <strong style="font-size:13px">批量预测</strong>
+          </div>
+          <div class="section">
+            <p class="helper-text">
+              上传包含全部 <code>{{ info.n_features }}</code> 个特征列的 CSV(可含 target 列,将被忽略),下载带预测类别与三类概率的结果 CSV。
+            </p>
+            <div class="upload-zone">
+              <input type="file" accept=".csv" ref="batchFileInput" @change="onBatchFileChange">
+              <button class="btn" type="button"
+                      @click="$refs.batchFileInput && $refs.batchFileInput.click()"
+                      :disabled="loading.batch">选择 CSV…</button>
+              <span class="file-name" :class="{ empty: !batchFile }">{{ batchFile ? batchFile.name : '未选择文件' }}</span>
+              <button class="btn btn-primary" @click="batchPredict"
+                      :disabled="!batchFile || loading.batch">
+                {{ loading.batch ? '预测中…' : '批量预测并下载' }}
+              </button>
+            </div>
+            <div v-if="batchDone" class="train-result">
+              已生成并下载 <code>predictions.csv</code>
+            </div>
+            <div v-if="error.batch" class="field-error">{{ error.batch }}</div>
+          </div>
+        </section>
+
+      </div>
+    </div>
   </main>
 
   <div v-else-if="bootError" class="boot-error">
@@ -659,9 +959,24 @@ createApp({
     const features = reactive({});
     const sample = ref(null);
     const result = ref(null);
-    const loading = reactive({ info: false, sample: false, predict: false });
-    const error = reactive({ info: null, sample: null, predict: null });
+    const loading = reactive({ info: false, sample: false, predict: false, upload: false, datasetList: false, train: false, batch: false, deleting: '' });
+    const error = reactive({ info: null, sample: null, predict: null, version: null, upload: null, train: null, batch: null });
     const bootError = ref(null);
+
+    // 版本管理 / 数据集 / 训练 / 批量预测
+    const models = ref(null);
+    const datasets = ref([]);
+    const selectedVersion = ref('');
+    const switching = ref(false);
+    const trialsMap = reactive({});
+    const uploadFile = ref(null);
+    const uploadResult = ref(null);
+    const batchFile = ref(null);
+    const batchDone = ref(false);
+    const trainResult = ref(null);
+    const trainDataset = ref('');
+    const trainElapsed = ref(0);
+    let trainTimer = null;
 
     const continuousFeatures = computed(() => {
       if (!info.value) return [];
@@ -797,12 +1112,257 @@ createApp({
       }
     }
 
+    // ---------- 版本管理 / 数据集 / 训练 / 批量预测 ----------
+    async function fetchModels() {
+      const r = await fetch(`${API_BASE}/api/models`);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      models.value = await r.json();
+      if (models.value && models.value.active_version_id) {
+        selectedVersion.value = models.value.active_version_id;
+      }
+    }
+
+    async function fetchDatasets() {
+      loading.datasetList = true;
+      try {
+        const r = await fetch(`${API_BASE}/api/datasets`);
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        const res = await r.json();
+        datasets.value = res.datasets || [];
+        datasets.value.forEach(d => {
+          if (trialsMap[d.name] == null) trialsMap[d.name] = 5;
+        });
+      } catch (_) {
+        // 数据集列表失败不阻塞主流程
+      } finally {
+        loading.datasetList = false;
+      }
+    }
+
+    // 不同版本特征可能不同:清空旧 features,按新 schema 重建
+    function rebuildFeatures(newInfo) {
+      Object.keys(features).forEach(k => { delete features[k]; });
+      newInfo.feature_schema.forEach(f => { features[f.name] = f.default; });
+      sample.value = null;
+      result.value = null;
+      error.predict = null;
+      error.sample = null;
+    }
+
+    async function switchVersion() {
+      if (!selectedVersion.value || switching.value) return;
+      const newId = selectedVersion.value;
+      if (models.value && newId === models.value.active_version_id) return;
+      const prevId = (models.value && models.value.active_version_id) || '';
+      switching.value = true;
+      error.version = null;
+      try {
+        const r = await fetch(`${API_BASE}/api/models/switch`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ version_id: newId }),
+        });
+        if (!r.ok) {
+          let msg = `HTTP ${r.status}`;
+          try {
+            const d = (await r.json()).detail;
+            if (d) msg += ' · ' + (typeof d === 'string' ? d : JSON.stringify(d));
+          } catch (_) {}
+          throw new Error(msg);
+        }
+        await r.json();
+        const newInfo = await fetchInfo();
+        info.value = newInfo;
+        rebuildFeatures(newInfo);
+        await fetchModels();
+      } catch (e) {
+        selectedVersion.value = prevId;
+        error.version = e.message;
+      } finally {
+        switching.value = false;
+      }
+    }
+
+    function versionLabel(v) {
+      let label = v.version_id;
+      if (v.metrics && v.metrics.accuracy != null) {
+        label += ' · acc ' + (v.metrics.accuracy * 100).toFixed(1) + '%';
+      }
+      if (v.is_active) label += ' (当前)';
+      return label;
+    }
+
+    function onUploadFileChange(e) {
+      uploadFile.value = (e.target.files && e.target.files[0]) ? e.target.files[0] : null;
+      uploadResult.value = null;
+      error.upload = null;
+    }
+
+    async function uploadDataset() {
+      if (!uploadFile.value) return;
+      error.upload = null;
+      uploadResult.value = null;
+      loading.upload = true;
+      try {
+        const fd = new FormData();
+        fd.append('file', uploadFile.value);
+        const r = await fetch(`${API_BASE}/api/datasets`, { method: 'POST', body: fd });
+        if (!r.ok) {
+          let msg = `HTTP ${r.status}`;
+          try {
+            const d = (await r.json()).detail;
+            if (d) msg += ' · ' + (typeof d === 'string' ? d : JSON.stringify(d));
+          } catch (_) {}
+          throw new Error(msg);
+        }
+        uploadResult.value = await r.json();
+        await fetchDatasets();
+      } catch (e) {
+        error.upload = e.message;
+      } finally {
+        loading.upload = false;
+      }
+    }
+
+    async function deleteDataset(name) {
+      if (!confirm(`确认删除数据集「${name}」?此操作不可撤销。`)) return;
+      error.upload = null;
+      loading.deleting = name;
+      try {
+        const r = await fetch(`${API_BASE}/api/datasets/${encodeURIComponent(name)}`, { method: 'DELETE' });
+        if (!r.ok) {
+          let msg = `HTTP ${r.status}`;
+          try { const d = (await r.json()).detail; if (d) msg += ' · ' + d; } catch (_) {}
+          throw new Error(msg);
+        }
+        await fetchDatasets();
+      } catch (e) {
+        error.upload = e.message;
+      } finally {
+        loading.deleting = '';
+      }
+    }
+
+    async function triggerTrain(name) {
+      const raw = trialsMap[name];
+      const trials = (raw == null || raw === '') ? null : Number(raw);
+      if (trials != null && (isNaN(trials) || trials < 1 || trials > 200)) {
+        error.train = 'trials 必须为 1-200 之间的整数';
+        return;
+      }
+      error.train = null;
+      trainResult.value = null;
+      trainDataset.value = name;
+      trainElapsed.value = 0;
+      loading.train = true;
+      const start = Date.now();
+      trainTimer = setInterval(() => {
+        trainElapsed.value = Math.floor((Date.now() - start) / 1000);
+      }, 1000);
+      try {
+        const body = { dataset_name: name };
+        if (trials != null) body.trials = trials;
+        const r = await fetch(`${API_BASE}/api/train`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        if (!r.ok) {
+          let msg;
+          if (r.status === 409) {
+            msg = '已有训练任务在运行,请稍后再试';
+          } else {
+            msg = `HTTP ${r.status}`;
+            try {
+              const d = (await r.json()).detail;
+              if (d) msg += ' · ' + (typeof d === 'string' ? d : JSON.stringify(d));
+            } catch (_) {}
+          }
+          throw new Error(msg);
+        }
+        const res = await r.json();
+        trainResult.value = res;
+        // 活跃模型已变:刷新版本列表 + 重建特征表单
+        const newInfo = await fetchInfo();
+        info.value = newInfo;
+        rebuildFeatures(newInfo);
+        await fetchModels();
+      } catch (e) {
+        error.train = e.message;
+      } finally {
+        if (trainTimer) { clearInterval(trainTimer); trainTimer = null; }
+        loading.train = false;
+        trainDataset.value = '';
+      }
+    }
+
+    function onBatchFileChange(e) {
+      batchFile.value = (e.target.files && e.target.files[0]) ? e.target.files[0] : null;
+      batchDone.value = false;
+      error.batch = null;
+    }
+
+    async function batchPredict() {
+      if (!batchFile.value) return;
+      error.batch = null;
+      batchDone.value = false;
+      loading.batch = true;
+      try {
+        const fd = new FormData();
+        fd.append('file', batchFile.value);
+        const r = await fetch(`${API_BASE}/api/predict/batch`, { method: 'POST', body: fd });
+        const ct = r.headers.get('content-type') || '';
+        if (!r.ok && ct.includes('application/json')) {
+          const e = await r.json();
+          throw new Error(e.detail || `HTTP ${r.status}`);
+        }
+        if (!r.ok) {
+          throw new Error(`HTTP ${r.status}`);
+        }
+        const blob = await r.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'predictions.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        batchDone.value = true;
+      } catch (e) {
+        error.batch = e.message;
+      } finally {
+        loading.batch = false;
+      }
+    }
+
+    function formatBytes(n) {
+      if (n == null) return '—';
+      if (n < 1024) return n + ' B';
+      if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+      return (n / 1024 / 1024).toFixed(1) + ' MB';
+    }
+    function formatDate(s) {
+      if (!s) return '—';
+      const d = new Date(s);
+      if (isNaN(d.getTime())) return s;
+      const pad = x => String(x).padStart(2, '0');
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+    function formatDist(dist) {
+      if (!dist) return '—';
+      return Object.entries(dist).map(([k, v]) => `${k}:${v}`).join(' · ');
+    }
+
     // ---------- 启动:并行拉取 info + sample ----------
     onMounted(async () => {
       loading.info = true;
       // sample 用 catch 包一层,避免 info 失败时被 sample 的拒绝连累
       const infoP = fetchInfo();
       const sampleP = fetchSample().catch(e => ({ __error: e }));
+      // 版本列表 + 数据集列表失败不阻塞启动
+      const modelsP = fetchModels().catch(() => {});
+      const datasetsP = fetchDatasets();
       try {
         info.value = await infoP;
         // 先用 schema 默认值兜底
@@ -817,6 +1377,7 @@ createApp({
       } finally {
         loading.info = false;
       }
+      await Promise.all([modelsP, datasetsP]);
     });
 
     return {
@@ -825,6 +1386,14 @@ createApp({
       fmtPct, fmt4, fmt3, fmtNum, classColor, shortLabel,
       clampFeature, toggleBinary, contribPct,
       loadSample, resetForm, predict,
+      // 版本管理 / 数据集 / 训练 / 批量预测
+      models, datasets, selectedVersion, switching, trialsMap,
+      uploadFile, uploadResult, batchFile, batchDone,
+      trainResult, trainDataset, trainElapsed,
+      fetchModels, switchVersion, fetchDatasets,
+      uploadDataset, deleteDataset, triggerTrain, batchPredict,
+      onUploadFileChange, onBatchFileChange,
+      versionLabel, formatBytes, formatDate, formatDist,
     };
   }
 }).mount('#app');
