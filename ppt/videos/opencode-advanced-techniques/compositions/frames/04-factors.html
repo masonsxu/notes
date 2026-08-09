@@ -1,0 +1,55 @@
+<template>
+  <style>
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:400;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-400.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:500;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-500.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:700;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-700.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:900;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-900.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-400.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:500;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-500.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:700;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-700.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:800;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-800.woff2") format("woff2");}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    #root{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;}
+    #root .bg{position:absolute;inset:0;background:#0D1117;}
+    #root .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.022) 1px,transparent 1px);background-size:80px 80px;opacity:0.5;}
+    #root .kicker{position:absolute;left:96px;top:140px;font-family:"JetBrains Mono",monospace;font-size:26px;font-weight:500;letter-spacing:0.18em;color:#58A6FF;text-transform:uppercase;}
+    #root .chrome{position:absolute;right:96px;top:140px;font-family:"JetBrains Mono",monospace;font-size:22px;letter-spacing:0.16em;color:#8B949E;text-transform:uppercase;}
+    #root .lead{position:absolute;left:96px;top:232px;font-family:"Noto Sans SC",sans-serif;font-size:60px;font-weight:700;color:#E6EDF3;letter-spacing:-0.01em;}
+    #root .lead .em{color:#58A6FF;}
+    #root .trio{position:absolute;left:96px;right:96px;top:430px;display:flex;gap:40px;justify-content:center;}
+    #root .card{flex:1;max-width:540px;height:340px;background:#161B22;border:1px solid rgba(255,255,255,0.10);border-radius:14px;padding:36px 40px;display:flex;flex-direction:column;justify-content:center;gap:16px;}
+    #root .card .ix{font-family:"JetBrains Mono",monospace;font-size:30px;font-weight:700;color:#58A6FF;}
+    #root .card .nm{font-family:"Noto Sans SC",sans-serif;font-size:42px;font-weight:700;color:#E6EDF3;}
+    #root .card .ds{font-family:"Noto Sans SC",sans-serif;font-size:26px;color:#8B949E;line-height:1.4;}
+    #root .card .ch{font-family:"JetBrains Mono",monospace;font-size:20px;color:#58A6FF;letter-spacing:0.08em;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+  <div id="root" data-composition-id="04-factors" data-width="1920" data-height="1080" data-duration="7.172">
+    <div class="stage clip" id="fc-stage" data-start="0" data-duration="7.172" data-track-index="1">
+      <div class="bg"></div><div class="grid"></div>
+      <div class="kicker">产出结果</div>
+      <div class="chrome">三个因子</div>
+      <div class="lead">工具恒定 ——<span class="em"> 变量是三个因子</span></div>
+      <div class="trio">
+        <div class="card" id="fc-1"><div class="ix">因子 01</div><div class="nm">提问具体度</div><div class="ds">信息越具体，猜测越少</div><div class="ch">→ 第三章</div></div>
+        <div class="card" id="fc-2"><div class="ix">因子 02</div><div class="nm">配置覆盖度</div><div class="ds">术语与背景写入 AGENTS.md</div><div class="ch">→ 第四章</div></div>
+        <div class="card" id="fc-3"><div class="ix">因子 03</div><div class="nm">上下文管理</div><div class="ds">该记的记，该清的清</div><div class="ch">→ 第七章</div></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    gsap.set([".kicker",".chrome"],{opacity:0,y:-14});
+    gsap.set(".lead",{opacity:0,y:18});
+    gsap.set(["#fc-1","#fc-2","#fc-3"],{opacity:0,y:32});
+    window.__timelines=window.__timelines||{};
+    var tl=gsap.timeline({paused:true});
+    window.__timelines["04-factors"]=tl;
+    tl.to([".kicker",".chrome"],{opacity:1,y:0,duration:0.5,ease:"power3.out"},0.1);
+    tl.fromTo(".lead",{opacity:0,y:18},{opacity:1,y:0,duration:0.6,ease:"power3.out"},0.3);
+    tl.fromTo("#fc-1",{opacity:0,y:32},{opacity:1,y:0,duration:0.55,ease:"power3.out"},1.0);
+    tl.fromTo("#fc-2",{opacity:0,y:32},{opacity:1,y:0,duration:0.55,ease:"power3.out"},2.0);
+    tl.fromTo("#fc-3",{opacity:0,y:32},{opacity:1,y:0,duration:0.55,ease:"power3.out"},3.0);
+  </script>
+</template>

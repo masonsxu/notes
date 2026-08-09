@@ -1,0 +1,112 @@
+<template>
+  <style>
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:400;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-400.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:500;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-500.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:700;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-700.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:900;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-900.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-400.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:500;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-500.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:700;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-700.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:800;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-800.woff2") format("woff2");}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    #root{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;}
+    #root .bg{position:absolute;inset:0;background:#0D1117;}
+    #root .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.022) 1px,transparent 1px);background-size:80px 80px;opacity:0.5;}
+    #root .kicker{position:absolute;left:96px;top:130px;font-family:"JetBrains Mono",monospace;font-size:26px;font-weight:500;letter-spacing:0.18em;color:#2DD4BF;text-transform:uppercase;}
+    #root .chrome{position:absolute;right:96px;top:130px;font-family:"JetBrains Mono",monospace;font-size:22px;letter-spacing:0.16em;color:#8B949E;text-transform:uppercase;}
+    #root .lead{position:absolute;left:96px;top:210px;font-family:"Noto Sans SC",sans-serif;font-size:52px;font-weight:700;color:#E6EDF3;letter-spacing:-0.01em;}
+    #root .lead .em{color:#2DD4BF;}
+    #root .arch{position:absolute;left:96px;right:96px;top:340px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+    #root .anode{flex:0 0 auto;min-width:240px;padding:22px 26px;border:1px solid rgba(255,255,255,0.12);border-radius:12px;background:#161B22;text-align:center;}
+    #root .anode .mi{font-family:"JetBrains Mono",monospace;font-size:18px;color:#8B949E;letter-spacing:0.1em;}
+    #root .anode .lb{margin-top:6px;font-family:"Noto Sans SC",sans-serif;font-size:30px;font-weight:700;color:#E6EDF3;}
+    #root .anode.teal{border-color:rgba(45,212,191,0.55);box-shadow:0 0 30px rgba(45,212,191,0.16);}
+    #root .anode.teal .lb{color:#2DD4BF;}
+    #root .aconn{flex:1;height:2px;background:rgba(255,255,255,0.18);transform-origin:center;position:relative;}
+    #root .aconn.teal{background:rgba(45,212,191,0.6);}
+    #root .token{position:absolute;top:-30px;left:0;font-family:"JetBrains Mono",monospace;font-size:18px;color:#2DD4BF;background:rgba(45,212,191,0.10);border:1px solid rgba(45,212,191,0.4);border-radius:6px;padding:4px 10px;white-space:nowrap;}
+    #root .loopwrap{position:absolute;left:96px;right:96px;top:600px;}
+    #root .looptag{font-family:"JetBrains Mono",monospace;font-size:22px;letter-spacing:0.14em;color:#8B949E;text-transform:uppercase;}
+    #root .phases{margin-top:24px;display:flex;align-items:center;justify-content:space-between;gap:6px;position:relative;}
+    #root .phase{flex:0 0 auto;min-width:220px;padding:20px 24px;border:1px solid rgba(255,255,255,0.12);border-radius:12px;background:#0D1117;text-align:center;}
+    #root .phase .n{font-family:"JetBrains Mono",monospace;font-size:20px;color:#2DD4BF;}
+    #root .phase .t{margin-top:4px;font-family:"Noto Sans SC",sans-serif;font-size:30px;font-weight:700;color:#E6EDF3;}
+    #root .phase.on{border-color:rgba(45,212,191,0.6);box-shadow:0 0 28px rgba(45,212,191,0.22);}
+    #root .parrow{flex:0 0 auto;font-family:"JetBrains Mono",monospace;font-size:26px;color:#8B949E;}
+    #root .retsvg{position:absolute;left:0;right:0;top:96px;height:120px;pointer-events:none;}
+    #root .closer{position:absolute;right:0;top:120px;font-family:"Noto Sans SC",sans-serif;font-size:26px;font-weight:700;color:#2DD4BF;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+  <div id="root" data-composition-id="03-arch" data-width="1920" data-height="1080" data-duration="12.26">
+    <div class="stage clip" id="ar-stage" data-start="0" data-duration="12.26" data-track-index="1">
+      <div class="bg"></div><div class="grid"></div>
+      <div class="kicker">01 · 概念建立</div>
+      <div class="chrome">架构 · 工具执行层</div>
+      <div class="lead">大模型给<span class="em">意图</span>，宿主程序<span class="em">执行</span></div>
+
+      <div class="arch">
+        <div class="anode" id="ar-u"><div class="mi">01</div><div class="lb">用户</div></div>
+        <div class="aconn" id="ar-c1"></div>
+        <div class="anode" id="ar-m"><div class="mi">02</div><div class="lb">大模型</div></div>
+        <div class="aconn teal" id="ar-c2"><div class="token" id="ar-token">调用意图 ▸</div></div>
+        <div class="anode teal" id="ar-h"><div class="mi">03</div><div class="lb">宿主程序 opencode</div></div>
+        <div class="aconn teal" id="ar-c3"></div>
+        <div class="anode" id="ar-io"><div class="mi">04</div><div class="lb">文件系统 · 终端命令</div></div>
+      </div>
+
+      <div class="loopwrap" id="ar-loop">
+        <div class="looptag">▸ function calling 闭环</div>
+        <div class="phases">
+          <div class="phase" id="ar-p1"><div class="n">①</div><div class="t">推理</div></div>
+          <div class="parrow">→</div>
+          <div class="phase" id="ar-p2"><div class="n">②</div><div class="t">执行</div></div>
+          <div class="parrow">→</div>
+          <div class="phase" id="ar-p3"><div class="n">③</div><div class="t">观测</div></div>
+          <div class="parrow">→</div>
+          <div class="phase" id="ar-p4"><div class="n">④</div><div class="t">再推理</div></div>
+          <svg class="retsvg" viewBox="0 0 1728 120" preserveAspectRatio="none"><path id="ar-retpath" d="M1500,4 C1500,110 228,110 228,4" fill="none" stroke="rgba(45,212,191,0.55)" stroke-width="2" stroke-dasharray="10 8"/></svg>
+          <div class="closer" id="ar-closer">一个闭环</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    gsap.set([".kicker",".chrome"],{opacity:0,y:-14});
+    gsap.set(".lead",{opacity:0,y:18});
+    gsap.set(["#ar-u","#ar-m","#ar-c1"],{opacity:0});
+    gsap.set("#ar-token",{opacity:0,x:-40});
+    gsap.set(["#ar-h","#ar-c2"],{opacity:0});
+    gsap.set(["#ar-io","#ar-c3"],{opacity:0});
+    gsap.set(["#ar-c1","#ar-c2","#ar-c3"],{scaleX:0});
+    gsap.set("#ar-loop",{opacity:0});
+    gsap.set(["#ar-p1","#ar-p2","#ar-p3","#ar-p4"],{opacity:0,y:16});
+    gsap.set([".phase"],{className:"phase"});
+    gsap.set("#ar-retpath",{strokeDashoffset:600});
+    gsap.set("#ar-closer",{opacity:0});
+
+    window.__timelines=window.__timelines||{};
+    var tl=gsap.timeline({paused:true});
+    window.__timelines["03-arch"]=tl;
+
+    tl.to([".kicker",".chrome"],{opacity:1,y:0,duration:0.5,ease:"power3.out"},0.1);
+    tl.fromTo(".lead",{opacity:0,y:18},{opacity:1,y:0,duration:0.6,ease:"power3.out"},0.3);
+    // Scene 1 (0–3): 用户 → 大模型, 调用意图 travels to 宿主
+    tl.to("#ar-u",{opacity:1,duration:0.5,ease:"power2.out"},0.7);
+    tl.to("#ar-c1",{opacity:1,scaleX:1,duration:0.4,ease:"power2.out"},1.1);
+    tl.to("#ar-m",{opacity:1,duration:0.5,ease:"power2.out"},1.4);
+    tl.to("#ar-c2",{opacity:1,scaleX:1,duration:0.4,ease:"power2.out"},1.9);
+    tl.fromTo("#ar-token",{opacity:0,x:-40},{opacity:1,x:0,duration:0.9,ease:"power1.inOut"},2.0);
+    tl.to("#ar-h",{opacity:1,duration:0.5,ease:"power2.out"},2.7);
+    // Scene 2 (3–7): 宿主 → 文件系统/终端
+    tl.to("#ar-c3",{opacity:1,scaleX:1,duration:0.4,ease:"power2.out"},3.3);
+    tl.to("#ar-io",{opacity:1,duration:0.5,ease:"power2.out"},3.7);
+    tl.to("#ar-loop",{opacity:1,duration:0.5,ease:"power2.out"},4.4);
+    // Scene 3 (7–11.76): four phases light in sequence; loop return draws + marches
+    var ph=[["#ar-p1",7.2],["#ar-p2",8.1],["#ar-p3",9.0],["#ar-p4",9.9]];
+    ph.forEach(function(p){tl.to(p[0],{opacity:1,y:0,duration:0.5,ease:"power3.out"},p[1]); tl.set(p[0],{className:"phase on"},p[1]+0.35);});
+    tl.to("#ar-retpath",{strokeDashoffset:0,duration:1.2,ease:"power2.inOut"},10.4);
+    tl.to("#ar-closer",{opacity:1,duration:0.5,ease:"power2.out"},10.8);
+  </script>
+</template>

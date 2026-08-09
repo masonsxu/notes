@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #0D1117;
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="113.736"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div
+        id="el-01-hook"
+        class="scene"
+        data-composition-id="01-hook"
+        data-composition-src="compositions/frames/01-hook.html"
+        data-start="0"
+        data-duration="8.564"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-01-hook-voice"
+        src="audio/voice-01.mp3"
+        data-start="0"
+        data-duration="8.064"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-02-compare"
+        class="scene"
+        data-composition-id="02-compare"
+        data-composition-src="compositions/frames/02-compare.html"
+        data-start="8.064"
+        data-duration="7.46"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-02-compare-voice"
+        src="audio/voice-02.mp3"
+        data-start="8.064"
+        data-duration="6.96"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-03-arch"
+        class="scene"
+        data-composition-id="03-arch"
+        data-composition-src="compositions/frames/03-arch.html"
+        data-start="15.024000000000001"
+        data-duration="12.26"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-03-arch-voice"
+        src="audio/voice-03.mp3"
+        data-start="15.024000000000001"
+        data-duration="11.76"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-04-deliverable"
+        class="scene"
+        data-composition-id="04-deliverable"
+        data-composition-src="compositions/frames/04-deliverable.html"
+        data-start="26.784"
+        data-duration="9.236"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-04-deliverable-voice"
+        src="audio/voice-04.mp3"
+        data-start="26.784"
+        data-duration="8.736"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-05-scenarios"
+        class="scene"
+        data-composition-id="05-scenarios"
+        data-composition-src="compositions/frames/05-scenarios.html"
+        data-start="35.519999999999996"
+        data-duration="10.7"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-05-scenarios-voice"
+        src="audio/voice-05.mp3"
+        data-start="35.519999999999996"
+        data-duration="10.2"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-06-context"
+        class="scene"
+        data-composition-id="06-context"
+        data-composition-src="compositions/frames/06-context.html"
+        data-start="45.72"
+        data-duration="9.452"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-06-context-voice"
+        src="audio/voice-06.mp3"
+        data-start="45.72"
+        data-duration="8.952"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-07-plan-build"
+        class="scene"
+        data-composition-id="07-plan-build"
+        data-composition-src="compositions/frames/07-plan-build.html"
+        data-start="54.672"
+        data-duration="9.14"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-07-plan-build-voice"
+        src="audio/voice-07.mp3"
+        data-start="54.672"
+        data-duration="8.64"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-08-config"
+        class="scene"
+        data-composition-id="08-config"
+        data-composition-src="compositions/frames/08-config.html"
+        data-start="63.312"
+        data-duration="9.28"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-08-config-voice"
+        src="audio/voice-08.mp3"
+        data-start="63.312"
+        data-duration="8.88"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-09-stat"
+        class="scene"
+        data-composition-id="09-stat"
+        data-composition-src="compositions/frames/09-stat.html"
+        data-start="72.192"
+        data-duration="10.464"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-09-stat-voice"
+        src="audio/voice-09.mp3"
+        data-start="72.192"
+        data-duration="10.464"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-10-demo"
+        class="scene"
+        data-composition-id="10-demo"
+        data-composition-src="compositions/frames/10-demo.html"
+        data-start="82.65599999999999"
+        data-duration="12.308"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-10-demo-voice"
+        src="audio/voice-10.mp3"
+        data-start="82.65599999999999"
+        data-duration="11.808"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-11-checklist"
+        class="scene"
+        data-composition-id="11-checklist"
+        data-composition-src="compositions/frames/11-checklist.html"
+        data-start="94.464"
+        data-duration="11.012"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-11-checklist-voice"
+        src="audio/voice-11.mp3"
+        data-start="94.464"
+        data-duration="10.512"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-12-thesis"
+        class="scene"
+        data-composition-id="12-thesis"
+        data-composition-src="compositions/frames/12-thesis.html"
+        data-start="104.976"
+        data-duration="5.948"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-12-thesis-voice"
+        src="audio/voice-12.mp3"
+        data-start="104.976"
+        data-duration="5.448"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-13-cta"
+        class="scene"
+        data-composition-id="13-cta"
+        data-composition-src="compositions/frames/13-cta.html"
+        data-start="110.424"
+        data-duration="3.312"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-13-cta-voice"
+        src="audio/voice-13.mp3"
+        data-start="110.424"
+        data-duration="3.312"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <!-- captions -->
+      <div
+        id="el-captions"
+        class="scene"
+        data-composition-id="captions"
+        data-composition-src="compositions/captions.html"
+        data-start="0"
+        data-duration="113.736"
+        data-track-index="2"
+      ></div>
+
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+      // ── frame transitions (injected by transitions.mjs) ──
+      (function () { var tl = window.__timelines["main"];
+        tl.to("#el-01-hook", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 8.064);
+        tl.fromTo("#el-02-compare", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 8.064);
+        tl.to("#el-02-compare", { x: -1920, duration: 0.5, ease: "power3.inOut" }, 15.024);
+        tl.fromTo("#el-03-arch", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 15.024);
+        tl.to("#el-03-arch", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 26.784);
+        tl.fromTo("#el-04-deliverable", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 26.784);
+        tl.to("#el-04-deliverable", { x: -1920, duration: 0.5, ease: "power3.inOut" }, 35.52);
+        tl.fromTo("#el-05-scenarios", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 35.52);
+        tl.to("#el-05-scenarios", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 45.72);
+        tl.fromTo("#el-06-context", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 45.72);
+        tl.to("#el-06-context", { x: -1920, duration: 0.5, ease: "power3.inOut" }, 54.672);
+        tl.fromTo("#el-07-plan-build", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 54.672);
+        tl.to("#el-07-plan-build", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 63.312);
+        tl.fromTo("#el-08-config", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 63.312);
+        tl.to("#el-08-config", { scale: 2.5, opacity: 0, filter: "blur(8px)", duration: 0.4, ease: "power3.in" }, 72.192);
+        tl.fromTo("#el-09-stat", { scale: 0.5, opacity: 0, filter: "blur(8px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.4, ease: "power3.out" }, 72.192);
+        tl.to("#el-10-demo", { x: -1920, duration: 0.5, ease: "power3.inOut" }, 94.464);
+        tl.fromTo("#el-11-checklist", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 94.464);
+        tl.to("#el-11-checklist", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 104.976);
+        tl.fromTo("#el-12-thesis", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 104.976);
+        tl.to("#el-12-thesis", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 110.424);
+        tl.fromTo("#el-13-cta", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 110.424);
+        tl.to({}, { duration: 113.736 }, 0); // full-span anchor — main.duration() == composition total (Studio master duration)
+      })();
+    </script>
+  </body>
+</html>

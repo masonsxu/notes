@@ -1,0 +1,100 @@
+<template>
+  <style>
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:400;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-400.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:500;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-500.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:700;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-700.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:900;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-900.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-400.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:500;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-500.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:700;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-700.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:800;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-800.woff2") format("woff2");}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    #root{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;}
+    #root .bg{position:absolute;inset:0;background:#0D1117;}
+    #root .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.022) 1px,transparent 1px);background-size:80px 80px;opacity:0.5;}
+    #root .kicker{position:absolute;left:96px;top:140px;font-family:"JetBrains Mono",monospace;font-size:26px;font-weight:500;letter-spacing:0.18em;color:#2DD4BF;text-transform:uppercase;}
+    #root .chrome{position:absolute;right:96px;top:140px;font-family:"JetBrains Mono",monospace;font-size:22px;letter-spacing:0.16em;color:#8B949E;text-transform:uppercase;}
+    #root .lead{position:absolute;left:96px;top:232px;font-family:"Noto Sans SC",sans-serif;font-size:60px;font-weight:700;color:#E6EDF3;letter-spacing:-0.01em;}
+    #root .lead .em{color:#2DD4BF;}
+    #root .panels{position:absolute;left:96px;right:96px;top:360px;display:flex;gap:48px;perspective:1200px;}
+    #root .panel{flex:1;height:460px;background:#161B22;border:1px solid rgba(255,255,255,0.10);border-radius:14px;padding:40px 44px;position:relative;transform-style:preserve-3d;}
+    #root .panel.right{box-shadow:0 0 50px rgba(45,212,191,0.08);}
+    #root .ptag{font-family:"JetBrains Mono",monospace;font-size:22px;letter-spacing:0.14em;color:#8B949E;text-transform:uppercase;}
+    #root .pname{margin-top:8px;font-family:"Noto Sans SC",sans-serif;font-size:40px;font-weight:700;color:#E6EDF3;}
+    #root .pname.teal{color:#2DD4BF;}
+    #root .flow{margin-top:34px;display:flex;flex-direction:column;gap:14px;}
+    #root .node{display:flex;align-items:center;gap:14px;padding:16px 22px;border:1px solid rgba(255,255,255,0.12);border-radius:10px;background:#0D1117;font-family:"Noto Sans SC",sans-serif;font-size:28px;color:#E6EDF3;}
+    #root .node .mi{font-family:"JetBrains Mono",monospace;font-size:20px;color:#8B949E;width:34px;}
+    #root .node.teal{border-color:rgba(45,212,191,0.55);color:#2DD4BF;box-shadow:0 0 26px rgba(45,212,191,0.18);}
+    #root .node.mute{color:#8B949E;border-style:dashed;}
+    #root .conn{height:2px;margin-left:24px;background:linear-gradient(90deg,rgba(255,255,255,0.25),transparent);transform-origin:left;will-change:transform;}
+    #root .conn.teal{background:linear-gradient(90deg,rgba(45,212,191,0.8),rgba(45,212,191,0.2));}
+    #root .dead{position:absolute;right:34px;bottom:30px;font-family:"JetBrains Mono",monospace;font-size:20px;letter-spacing:0.1em;color:#8B949E;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+  <div id="root" data-composition-id="02-compare" data-width="1920" data-height="1080" data-duration="7.46">
+    <div class="stage clip" id="cp-stage" data-start="0" data-duration="7.46" data-track-index="1">
+      <div class="bg"></div><div class="grid"></div>
+      <div class="kicker">01 · 概念建立</div>
+      <div class="chrome">聊天应用 vs Code Agent</div>
+      <div class="lead">聊天止于文本 ——<span class="em"> Code Agent 多一层</span></div>
+
+      <div class="panels">
+        <div class="panel left" id="cp-left">
+          <div class="ptag">A</div>
+          <div class="pname">聊天应用</div>
+          <div class="flow">
+            <div class="node"><span class="mi">01</span>用户</div>
+            <div class="conn"></div>
+            <div class="node"><span class="mi">02</span>大模型</div>
+            <div class="conn"></div>
+            <div class="node mute"><span class="mi">03</span>文本（止于此）</div>
+          </div>
+          <div class="dead">无执行层</div>
+        </div>
+
+        <div class="panel right" id="cp-right">
+          <div class="ptag">B</div>
+          <div class="pname teal">Code Agent</div>
+          <div class="flow">
+            <div class="node"><span class="mi">01</span>用户</div>
+            <div class="conn"></div>
+            <div class="node"><span class="mi">02</span>大模型</div>
+            <div class="conn teal" id="cp-ct"></div>
+            <div class="node teal" id="cp-tool"><span class="mi">03</span>工具执行层</div>
+            <div class="conn teal" id="cp-ct2"></div>
+            <div class="node" id="cp-io"><span class="mi">04</span>文件系统 · 终端命令</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    gsap.set([".kicker",".chrome"],{opacity:0,y:-14});
+    gsap.set(".lead",{opacity:0,y:20});
+    gsap.set("#cp-left",{opacity:0,x:-120,rotationY:9});
+    gsap.set("#cp-right",{opacity:0,x:120,rotationY:-9});
+    gsap.set(["#cp-tool","#cp-io","#cp-ct","#cp-ct2"],{opacity:0});
+    gsap.set(["#cp-ct","#cp-ct2"],{scaleX:0});
+    gsap.set(".dead",{opacity:0});
+
+    window.__timelines=window.__timelines||{};
+    var tl=gsap.timeline({paused:true});
+    window.__timelines["02-compare"]=tl;
+
+    tl.to([".kicker",".chrome"],{opacity:1,y:0,duration:0.5,ease:"power3.out"},0.1);
+    tl.fromTo(".lead",{opacity:0,y:20},{opacity:1,y:0,duration:0.7,ease:"power3.out"},0.3);
+    tl.fromTo("#cp-left",{opacity:0,x:-120,rotationY:9},{opacity:1,x:0,rotationY:0,duration:0.8,ease:"power3.out"},0.7);
+    tl.fromTo("#cp-right",{opacity:0,x:120,rotationY:-9},{opacity:1,x:0,rotationY:0,duration:0.8,ease:"power3.out"},1.0);
+    tl.to(".dead",{opacity:1,duration:0.5,ease:"power2.out"},2.6);
+    // Scene 2 (2.5–5.0): tool layer reveals on the right
+    tl.to("#cp-ct",{opacity:1,scaleX:1,duration:0.4,ease:"power2.out"},2.9);
+    tl.fromTo("#cp-tool",{opacity:0,y:14},{opacity:1,y:0,duration:0.5,ease:"power3.out"},3.2);
+    tl.to("#cp-ct2",{opacity:1,scaleX:1,duration:0.4,ease:"power2.out"},3.7);
+    tl.fromTo("#cp-io",{opacity:0,y:14},{opacity:1,y:0,duration:0.5,ease:"power3.out"},4.0);
+    // Scene 3 (5.0–7.0): teal tool node glows; hold
+    tl.fromTo("#cp-tool",{boxShadow:"0 0 0px rgba(45,212,191,0.0)"},{boxShadow:"0 0 40px rgba(45,212,191,0.45)",duration:0.8,ease:"power2.out"},5.1);
+  </script>
+</template>

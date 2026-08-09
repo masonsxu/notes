@@ -1,0 +1,116 @@
+<template>
+  <style>
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:400;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-400.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:500;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-500.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:700;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-700.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:900;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-900.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-400.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:500;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-500.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:700;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-700.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:800;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-800.woff2") format("woff2");}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    #root{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;}
+    #root .bg{position:absolute;inset:0;background:#0D1117;}
+    #root .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.022) 1px,transparent 1px);background-size:80px 80px;opacity:0.5;}
+    #root .kicker{position:absolute;left:96px;top:120px;font-family:"JetBrains Mono",monospace;font-size:26px;font-weight:500;letter-spacing:0.18em;color:#58A6FF;text-transform:uppercase;}
+    #root .chrome{position:absolute;right:96px;top:120px;font-family:"JetBrains Mono",monospace;font-size:22px;letter-spacing:0.16em;color:#8B949E;text-transform:uppercase;}
+    #root .lead{position:absolute;left:96px;top:188px;font-family:"Noto Sans SC",sans-serif;font-size:46px;font-weight:700;color:#E6EDF3;letter-spacing:-0.01em;}
+    #root .lead .em{color:#58A6FF;}
+    #root .top{position:absolute;left:96px;right:96px;top:286px;display:flex;gap:36px;}
+    #root .term{flex:1;background:#0A0F14;border:1px solid rgba(255,255,255,0.12);border-radius:14px;overflow:hidden;}
+    #root .termbar{display:flex;align-items:center;gap:10px;padding:14px 20px;background:#11181E;border-bottom:1px solid rgba(255,255,255,0.08);}
+    #root .termbar .d{width:12px;height:12px;border-radius:50%;}#root .termbar .d.a{background:#58A6FF;}#root .termbar .d.b{background:#58A6FF;}#root .termbar .d.c{background:#8B949E;}
+    #root .termbar .fn{margin-left:12px;font-family:"JetBrains Mono",monospace;font-size:18px;color:#8B949E;}
+    #root .termbar .mode{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:16px;color:#58A6FF;border:1px solid rgba(88,166,255,0.4);border-radius:6px;padding:3px 10px;}
+    #root .termbody{padding:24px 26px;font-family:"JetBrains Mono",monospace;font-size:26px;line-height:1.7;color:#E6EDF3;}
+    #root .termbody .p{color:#58A6FF;}
+    #root .termbody .ln{white-space:pre-wrap;}
+    #root .termbody .ar{color:#58A6FF;}
+    #root .steps{flex:0 0 460px;display:flex;flex-direction:column;gap:16px;}
+    #root .steps .stt{font-family:"JetBrains Mono",monospace;font-size:20px;letter-spacing:0.14em;color:#8B949E;text-transform:uppercase;}
+    #root .step{display:flex;align-items:center;gap:16px;padding:18px 20px;border:1px solid rgba(255,255,255,0.12);border-radius:12px;background:#161B22;}
+    #root .step .bx{width:30px;height:30px;border-radius:8px;border:2px solid rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-family:"JetBrains Mono",monospace;font-size:18px;color:transparent;}
+    #root .step.done .bx{background:#58A6FF;border-color:#58A6FF;color:#0D1117;}
+    #root .step .lb{font-family:"Noto Sans SC",sans-serif;font-size:26px;color:#E6EDF3;}
+    #root .step.done .lb{color:#E6EDF3;}
+    #root .table{position:absolute;left:96px;right:96px;top:584px;background:#161B22;border:1px solid rgba(88,166,255,0.4);border-radius:14px;overflow:hidden;box-shadow:0 0 50px rgba(88,166,255,0.12);}
+    #root .table .th{display:flex;align-items:center;gap:14px;padding:12px 26px;background:#11181E;border-bottom:1px solid rgba(255,255,255,0.08);}
+    #root .table .th .fn{font-family:"JetBrains Mono",monospace;font-size:20px;color:#58A6FF;}
+    #root .table .th .dl{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:18px;color:#8B949E;}
+    #root .tbl{width:100%;border-collapse:collapse;font-family:"JetBrains Mono",monospace;font-size:24px;color:#E6EDF3;}
+    #root .tbl th{text-align:left;padding:10px 26px;color:#8B949E;font-weight:500;font-size:16px;letter-spacing:0.08em;border-bottom:1px solid rgba(255,255,255,0.08);}
+    #root .tbl td{padding:10px 26px;border-bottom:1px solid rgba(255,255,255,0.05);}
+    #root .tbl td.n{color:#58A6FF;font-weight:700;}
+    #root .tbl tr:last-child td{border-bottom:none;}
+    #root .nomore{position:absolute;left:96px;top:822px;font-family:"JetBrains Mono",monospace;font-size:22px;color:#8B949E;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+  <div id="root" data-composition-id="10-demo" data-width="1920" data-height="1080" data-duration="12.308">
+    <div class="stage clip" id="dm-stage" data-start="0" data-duration="12.308" data-track-index="1">
+      <div class="bg"></div><div class="grid"></div>
+      <div class="kicker">05 · 上手实践</div>
+      <div class="chrome">日志统计 Demo</div>
+      <div class="lead">一个真实任务 ——<span class="em"> Plan 到交付</span></div>
+
+      <div class="top">
+        <div class="term" id="dm-term">
+          <div class="termbar"><span class="d a"></span><span class="d b"></span><span class="d c"></span><span class="fn">plan · my-project</span><span class="mode">PLAN</span></div>
+          <div class="termbody">
+            <div class="ln" id="dm-l1"><span class="p">❯</span> 读所有 *.log</div>
+            <div class="ln" id="dm-l2"><span class="ar">  ▸</span> 提取 Error / 错误行</div>
+            <div class="ln" id="dm-l3"><span class="ar">  ▸</span> 按错误码统计频次</div>
+            <div class="ln" id="dm-l4"><span class="ar">  ▾</span> 输出 Markdown 表格</div>
+          </div>
+        </div>
+        <div class="steps" id="dm-steps">
+          <div class="stt">▸ 执行步骤</div>
+          <div class="step" id="dm-s1"><div class="bx">✓</div><div class="lb">cd 目录 + 启动</div></div>
+          <div class="step" id="dm-s2"><div class="bx">✓</div><div class="lb">Plan 提交指令</div></div>
+          <div class="step" id="dm-s3"><div class="bx">✓</div><div class="lb">用户审核</div></div>
+          <div class="step" id="dm-s4"><div class="bx">✓</div><div class="lb">Build 执行</div></div>
+        </div>
+      </div>
+
+      <div class="table" id="dm-table">
+        <div class="th"><span class="fn">error_summary.md</span><span class="dl">— Build 交付物</span></div>
+        <table class="tbl">
+          <tr><th>错误码</th><th>频次</th><th>来源文件</th></tr>
+          <tr><td>ERR_TIMEOUT</td><td class="n">42</td><td>run.log</td></tr>
+          <tr><td>ERR_VAL_58</td><td class="n">7</td><td>rc_w23.csv</td></tr>
+          <tr><td>ERR_OOR</td><td class="n">3</td><td>run.log</td></tr>
+        </table>
+      </div>
+      <div class="nomore" id="dm-nomore">全程不用复制粘贴日志</div>
+    </div>
+  </div>
+
+  <script>
+    gsap.set([".kicker",".chrome"],{opacity:0,y:-14});
+    gsap.set(".lead",{opacity:0,y:16});
+    gsap.set("#dm-term",{opacity:0,y:20});
+    gsap.set(["#dm-l1","#dm-l2","#dm-l3","#dm-l4"],{opacity:0,x:-12});
+    gsap.set("#dm-steps",{opacity:0});
+    gsap.set([".step"],{opacity:0,x:20});
+    gsap.set("#dm-table",{opacity:0,scale:0.94,y:20});
+    gsap.set("#dm-nomore",{opacity:0});
+    gsap.set([".step"],{className:"step"});
+
+    window.__timelines=window.__timelines||{};
+    var tl=gsap.timeline({paused:true});
+    window.__timelines["10-demo"]=tl;
+
+    tl.to([".kicker",".chrome"],{opacity:1,y:0,duration:0.5,ease:"power3.out"},0.1);
+    tl.fromTo(".lead",{opacity:0,y:16},{opacity:1,y:0,duration:0.6,ease:"power3.out"},0.3);
+    tl.fromTo("#dm-term",{opacity:0,y:20},{opacity:1,y:0,duration:0.6,ease:"power3.out"},0.6);
+    // Scene 1 (0–4): Plan instruction lines reveal
+    tl.to(["#dm-l1","#dm-l2","#dm-l3","#dm-l4"],{opacity:1,x:0,duration:0.4,ease:"power2.out",stagger:0.5},1.1);
+    // Scene 2 (4–8.5): steps check off
+    tl.to("#dm-steps",{opacity:1,duration:0.4,ease:"power2.out"},3.4);
+    var st=[["#dm-s1",3.7],["#dm-s2",4.9],["#dm-s3",6.1],["#dm-s4",7.3]];
+    st.forEach(function(s){tl.to(s[0],{opacity:1,x:0,duration:0.4,ease:"power3.out"},s[1]); tl.set(s[0],{className:"step done"},s[1]+0.3);});
+    // Scene 3 (8.5–11.8): deliverable table scales up; tag
+    tl.fromTo("#dm-table",{opacity:0,scale:0.94,y:20},{opacity:1,scale:1,y:0,duration:0.8,ease:"power3.out"},8.6);
+    tl.to("#dm-nomore",{opacity:1,duration:0.5,ease:"power2.out"},9.8);
+  </script>
+</template>

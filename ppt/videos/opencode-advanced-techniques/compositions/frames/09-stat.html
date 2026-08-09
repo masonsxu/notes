@@ -1,0 +1,92 @@
+<template>
+  <style>
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:400;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-400.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:500;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-500.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:700;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-700.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:900;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-900.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-400.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:500;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-500.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:700;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-700.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:800;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-800.woff2") format("woff2");}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    #root{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;}
+    #root .bg{position:absolute;inset:0;background:#0D1117;}
+    #root .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.022) 1px,transparent 1px);background-size:80px 80px;opacity:0.5;}
+    #root .kicker{position:absolute;left:96px;top:130px;font-family:"JetBrains Mono",monospace;font-size:26px;font-weight:500;letter-spacing:0.18em;color:#58A6FF;text-transform:uppercase;}
+    #root .chrome{position:absolute;right:96px;top:130px;font-family:"JetBrains Mono",monospace;font-size:22px;letter-spacing:0.16em;color:#8B949E;text-transform:uppercase;}
+    #root .lead{position:absolute;left:96px;top:206px;font-family:"Noto Sans SC",sans-serif;font-size:54px;font-weight:700;color:#E6EDF3;letter-spacing:-0.01em;}
+    #root .lead .em{color:#58A6FF;}
+    #root .rows{position:absolute;left:96px;right:96px;top:370px;display:flex;flex-direction:column;gap:34px;}
+    #root .row{display:grid;grid-template-columns:260px 1fr 150px;align-items:center;gap:30px;}
+    #root .row .name{font-family:"Noto Sans SC",sans-serif;font-size:36px;font-weight:700;color:#E6EDF3;}
+    #root .bars{position:relative;height:46px;}
+    #root .bar{position:absolute;left:0;top:0;height:46px;border-radius:8px;transform-origin:left;}
+    #root .bar.before{background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.14);}
+    #root .bar.after{background:linear-gradient(90deg,#58A6FF,rgba(88,166,255,0.5));box-shadow:0 0 24px rgba(88,166,255,0.4);}
+    #root .delta{font-family:"JetBrains Mono",monospace;font-size:30px;font-weight:700;color:#58A6FF;text-align:right;}
+    #root .ax{position:absolute;left:96px;right:96px;top:340px;display:flex;justify-content:space-between;font-family:"JetBrains Mono",monospace;font-size:18px;color:#8B949E;}
+    #root .ref{position:absolute;left:96px;top:760px;display:inline-flex;align-items:center;gap:14px;padding:16px 24px;border:1px dashed rgba(255,255,255,0.18);border-radius:10px;font-family:"JetBrains Mono",monospace;font-size:24px;color:#8B949E;}
+    #root .ref .d{width:12px;height:12px;border-radius:50%;background:#D29922;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+  <div id="root" data-composition-id="09-stat" data-width="1920" data-height="1080">
+    <div class="stage clip" id="st-stage" data-start="0" data-duration="10.464" data-track-index="1">
+      <div class="bg"></div><div class="grid"></div>
+      <div class="kicker">02 · 能力与场景</div>
+      <div class="chrome">工时对比 · 参考量级</div>
+      <div class="lead">重复规则化任务 ——<span class="em"> 工时下降最显著</span></div>
+      <div class="ax"><span>工时（相对）</span><span>← 用 opencode 后</span></div>
+
+      <div class="rows">
+        <div class="row" id="st-r1">
+          <div class="name">日志解析</div>
+          <div class="bars"><div class="bar before" id="st-b1b" style="width:100%"></div><div class="bar after" id="st-b1a" style="width:18%"></div></div>
+          <div class="delta" id="st-d1">↓ 显著</div>
+        </div>
+        <div class="row" id="st-r2">
+          <div class="name">陌生代码</div>
+          <div class="bars"><div class="bar before" id="st-b2b" style="width:100%"></div><div class="bar after" id="st-b2a" style="width:34%"></div></div>
+          <div class="delta" id="st-d2">↓ 明显</div>
+        </div>
+        <div class="row" id="st-r3">
+          <div class="name">文档排版</div>
+          <div class="bars"><div class="bar before" id="st-b3b" style="width:100%"></div><div class="bar after" id="st-b3a" style="width:26%"></div></div>
+          <div class="delta" id="st-d3">↓ 明显</div>
+        </div>
+      </div>
+
+      <div class="ref" id="st-ref"><span class="d"></span>量级参考 · 实际取决于任务复杂度与上下文规模</div>
+    </div>
+  </div>
+
+  <script>
+    gsap.set([".kicker",".chrome"],{opacity:0,y:-14});
+    gsap.set(".lead",{opacity:0,y:18});
+    gsap.set(".ax",{opacity:0});
+    gsap.set([".bar.before"],{scaleX:0});
+    gsap.set([".bar.after"],{scaleX:0});
+    gsap.set([".delta",".name"],{opacity:0});
+    gsap.set("#st-ref",{opacity:0});
+
+    window.__timelines=window.__timelines||{};
+    var tl=gsap.timeline({paused:true});
+    window.__timelines["09-stat"]=tl;
+
+    tl.to([".kicker",".chrome"],{opacity:1,y:0,duration:0.5,ease:"power3.out"},0.1);
+    tl.fromTo(".lead",{opacity:0,y:18},{opacity:1,y:0,duration:0.6,ease:"power3.out"},0.3);
+    tl.to(".ax",{opacity:1,duration:0.4,ease:"power2.out"},0.7);
+    // Scene 2 (1.5–8): each task — before bar then after bar shrinks; delta lands
+    function row(sel,bSel,aSel,dSel,base){
+      tl.to(sel+" .name",{opacity:1,duration:0.4,ease:"power2.out"},base);
+      tl.to(bSel,{scaleX:1,duration:0.5,ease:"power2.out"},base+0.2);
+      tl.to(aSel,{scaleX:1,duration:0.7,ease:"power3.out"},base+0.7);
+      tl.to(dSel,{opacity:1,duration:0.4,ease:"power2.out"},base+1.2);
+    }
+    row("#st-r1","#st-b1b","#st-b1a","#st-d1",1.7);
+    row("#st-r2","#st-b2b","#st-b2a","#st-d2",3.7);
+    row("#st-r3","#st-b3b","#st-b3a","#st-d3",5.7);
+    // Scene 3 (8–10.5): 量级参考 tag; hold
+    tl.to("#st-ref",{opacity:1,duration:0.5,ease:"power2.out"},8.2);
+  </script>
+</template>

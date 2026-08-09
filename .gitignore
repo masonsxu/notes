@@ -57,6 +57,16 @@ learning/**/mlruns/
 learning/xgboost/app/data/uploads/
 learning/xgboost/app/models/versions/
 
+# --- HyperFrames 视频项目 ---
+# 渲染输出、日志、快照、抓取素材均可重新生成,不进库
+ppt/videos/**/renders/
+ppt/videos/**/snapshots/
+ppt/videos/**/capture/
+ppt/videos/**/check.log
+ppt/videos/**/.media/
+# 字体由 Hyperframes 按需重新下载(单文件约 1MB,共约 9MB)
+ppt/videos/**/assets/fonts/
+
 # Jupyter
 .ipynb_checkpoints/
 

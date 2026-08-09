@@ -1,0 +1,91 @@
+<template>
+  <style>
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:400;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-400.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:500;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-500.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:700;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-700.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:900;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-900.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-400.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:500;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-500.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:700;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-700.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:800;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-800.woff2") format("woff2");}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    #root{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;}
+    #root .bg{position:absolute;inset:0;background:#0D1117;}
+    #root .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.022) 1px,transparent 1px);background-size:80px 80px;opacity:0.5;}
+    #root .kicker{position:absolute;left:96px;top:130px;font-family:"JetBrains Mono",monospace;font-size:26px;font-weight:500;letter-spacing:0.18em;color:#2DD4BF;text-transform:uppercase;}
+    #root .chrome{position:absolute;right:96px;top:130px;font-family:"JetBrains Mono",monospace;font-size:22px;letter-spacing:0.16em;color:#8B949E;text-transform:uppercase;}
+    #root .lead{position:absolute;left:96px;top:206px;font-family:"Noto Sans SC",sans-serif;font-size:54px;font-weight:700;color:#E6EDF3;letter-spacing:-0.01em;}
+    #root .lead .em{color:#2DD4BF;}
+    #root .card{position:absolute;left:96px;top:360px;width:980px;background:#161B22;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;}
+    #root .card .hd{display:flex;align-items:center;gap:14px;padding:20px 28px;border-bottom:1px solid rgba(255,255,255,0.08);background:#11181E;}
+    #root .card .hd .fn{font-family:"JetBrains Mono",monospace;font-size:26px;color:#2DD4BF;}
+    #root .card .hd .ds{font-family:"JetBrains Mono",monospace;font-size:18px;color:#8B949E;}
+    #root .segs{padding:12px 0;}
+    #root .seg{display:flex;gap:22px;align-items:flex-start;padding:20px 28px;border-bottom:1px solid rgba(255,255,255,0.05);}
+    #root .seg:last-child{border-bottom:none;}
+    #root .seg .n{font-family:"JetBrains Mono",monospace;font-size:30px;color:#2DD4BF;width:46px;flex:0 0 auto;}
+    #root .seg .bx{flex:1;}
+    #root .seg .h{font-family:"Noto Sans SC",sans-serif;font-size:30px;font-weight:700;color:#E6EDF3;}
+    #root .seg .c{margin-top:4px;font-family:"Noto Sans SC",sans-serif;font-size:22px;color:#8B949E;}
+    #root .perm{position:absolute;left:1120px;top:360px;width:704px;display:flex;flex-direction:column;gap:26px;}
+    #root .perm .pt{font-family:"JetBrains Mono",monospace;font-size:22px;letter-spacing:0.14em;color:#8B949E;text-transform:uppercase;}
+    #root .chip{padding:34px 38px;border:1px solid rgba(45,212,191,0.6);border-radius:16px;background:rgba(45,212,191,0.07);box-shadow:0 0 44px rgba(45,212,191,0.18);}
+    #root .chip .lab{font-family:"JetBrains Mono",monospace;font-size:22px;color:#2DD4BF;letter-spacing:0.08em;}
+    #root .chip .act{margin-top:12px;font-family:"Noto Sans SC",sans-serif;font-size:40px;font-weight:700;color:#E6EDF3;line-height:1.25;}
+    #root .chip .act .em{color:#2DD4BF;}
+    #root .perm .note{font-family:"Noto Sans SC",sans-serif;font-size:24px;color:#8B949E;line-height:1.5;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+  <div id="root" data-composition-id="08-config" data-width="1920" data-height="1080" data-duration="9.28">
+    <div class="stage clip" id="cf-stage" data-start="0" data-duration="9.28" data-track-index="1">
+      <div class="bg"></div><div class="grid"></div>
+      <div class="kicker">04 · 配置与会话</div>
+      <div class="chrome">AGENTS.md · 权限</div>
+      <div class="lead">写进<span class="em"> AGENTS.md</span> —— 写/执行前先问你</div>
+
+      <div class="card" id="cf-card">
+        <div class="hd"><span class="fn">AGENTS.md</span><span class="ds">— 四段式模板</span></div>
+        <div class="segs">
+          <div class="seg" id="cf-s1"><span class="n">①</span><div class="bx"><div class="h">角色与背景</div><div class="c">部门 / 岗位 · 专业身份 · 职责</div></div></div>
+          <div class="seg" id="cf-s2"><span class="n">②</span><div class="bx"><div class="h">领域术语</div><div class="c">术语定义，避免通用义误解</div></div></div>
+          <div class="seg" id="cf-s3"><span class="n">③</span><div class="bx"><div class="h">代码与输出规范</div><div class="c">语言 / 框架 · 健壮性 · 输出风格</div></div></div>
+          <div class="seg" id="cf-s4"><span class="n">④</span><div class="bx"><div class="h">安全与约束</div><div class="c">敏感环境先确认 · 红线</div></div></div>
+        </div>
+      </div>
+
+      <div class="perm" id="cf-perm">
+        <div class="pt">▸ 默认权限</div>
+        <div class="chip" id="cf-chip">
+          <div class="lab">写文件 / 执行命令</div>
+          <div class="act">→ 默认先<span class="em">请求批准 (ask)</span></div>
+        </div>
+        <div class="note" id="cf-note">可按工具精确配置：allow / ask / deny。</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    gsap.set([".kicker",".chrome"],{opacity:0,y:-14});
+    gsap.set(".lead",{opacity:0,y:18});
+    gsap.set("#cf-card",{opacity:0,y:24});
+    gsap.set(["#cf-s1","#cf-s2","#cf-s3","#cf-s4"],{opacity:0,x:-18});
+    gsap.set(["#cf-perm","#cf-chip","#cf-note"],{opacity:0});
+
+    window.__timelines=window.__timelines||{};
+    var tl=gsap.timeline({paused:true});
+    window.__timelines["08-config"]=tl;
+
+    tl.to([".kicker",".chrome"],{opacity:1,y:0,duration:0.5,ease:"power3.out"},0.1);
+    tl.fromTo(".lead",{opacity:0,y:18},{opacity:1,y:0,duration:0.6,ease:"power3.out"},0.3);
+    tl.fromTo("#cf-card",{opacity:0,y:24},{opacity:1,y:0,duration:0.6,ease:"power3.out"},0.6);
+    // Scene 1 (0–4): four segments assemble sequentially
+    tl.to(["#cf-s1","#cf-s2","#cf-s3","#cf-s4"],{opacity:1,x:0,duration:0.5,ease:"power3.out",stagger:0.6},1.0);
+    // Scene 2 (4–6.5): permission chip pops
+    tl.to("#cf-perm",{opacity:1,duration:0.4,ease:"power2.out"},4.2);
+    tl.fromTo("#cf-chip",{opacity:0,scale:0.9},{opacity:1,scale:1,duration:0.6,ease:"power3.out"},4.5);
+    tl.to("#cf-note",{opacity:1,duration:0.5,ease:"power2.out"},5.2);
+    // Scene 3 (6.5–8.9): chip glows; hold
+    tl.fromTo("#cf-chip",{boxShadow:"0 0 24px rgba(45,212,191,0.18)"},{boxShadow:"0 0 60px rgba(45,212,191,0.45)",duration:0.9,ease:"power2.out"},6.8);
+  </script>
+</template>

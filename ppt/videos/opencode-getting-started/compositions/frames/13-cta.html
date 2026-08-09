@@ -1,0 +1,52 @@
+<template>
+  <style>
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:400;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-400.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:500;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-500.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:700;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-700.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:900;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-900.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-400.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:500;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-500.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:700;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-700.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:800;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-800.woff2") format("woff2");}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    #root{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;}
+    #root .bg{position:absolute;inset:0;background:#0D1117;}
+    #root .glow{position:absolute;left:50%;top:54%;width:1100px;height:1100px;border-radius:50%;background:radial-gradient(circle,rgba(45,212,191,0.20),transparent 60%);pointer-events:none;}
+    #root .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:80px 80px;opacity:0.4;}
+    #root .word{position:absolute;left:0;right:0;top:250px;text-align:center;font-family:"JetBrains Mono",monospace;font-size:64px;font-weight:800;color:#2DD4BF;letter-spacing:-0.03em;}
+    #root .sign{position:absolute;left:0;right:0;top:470px;text-align:center;font-family:"Noto Sans SC",sans-serif;font-size:80px;font-weight:700;color:#E6EDF3;letter-spacing:-0.015em;line-height:1.25;}
+    #root .sign .em{color:#2DD4BF;}
+    #root .pill{position:absolute;left:50%;top:710px;transform:translateX(-50%);padding:24px 56px;background:#2DD4BF;color:#0D1117;border-radius:9999px;font-family:"JetBrains Mono",monospace;font-size:32px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;box-shadow:0 0 60px rgba(45,212,191,0.5);}
+    #root .foot{position:absolute;left:0;right:0;top:130px;text-align:center;font-family:"JetBrains Mono",monospace;font-size:22px;letter-spacing:0.18em;color:#8B949E;text-transform:uppercase;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+  <div id="root" data-composition-id="13-cta" data-width="1920" data-height="1080">
+    <div class="stage clip" id="ct-stage" data-start="0" data-duration="3.312" data-track-index="1">
+      <div class="bg"></div><div class="grid"></div>
+      <div class="glow" id="ct-glow"></div>
+      <div class="word" id="ct-word">opencode</div>
+      <div class="sign" id="ct-sign">今天，完成你的<br><span class="em">第一个真实任务</span></div>
+      <div class="pill" id="ct-pill">▸ 打开项目 · Plan → Build</div>
+      <div class="foot" id="ct-foot">opencode · 工具使用入门 — 完</div>
+    </div>
+  </div>
+
+  <script>
+    gsap.set("#ct-glow",{opacity:0,scale:0.8});
+    gsap.set(["#ct-word","#ct-sign"],{opacity:0,y:26});
+    gsap.set("#ct-pill",{opacity:0,scale:0.7,y:14});
+    gsap.set("#ct-foot",{opacity:0});
+
+    window.__timelines=window.__timelines||{};
+    var tl=gsap.timeline({paused:true});
+    window.__timelines["13-cta"]=tl;
+
+    tl.to("#ct-glow",{opacity:1,scale:1,duration:0.9,ease:"power2.out"},0);
+    tl.fromTo("#ct-word",{opacity:0,y:26},{opacity:1,y:0,duration:0.7,ease:"power3.out"},0.2);
+    tl.fromTo("#ct-sign",{opacity:0,y:26},{opacity:1,y:0,duration:0.8,ease:"power3.out"},0.5);
+    // Scene 2 (1.5–3.3): the CTA pill condenses in; final hold
+    tl.fromTo("#ct-pill",{opacity:0,scale:0.7,y:14},{opacity:1,scale:1,y:0,duration:0.7,ease:"power3.out"},1.5);
+    tl.to("#ct-foot",{opacity:1,duration:0.6,ease:"power2.out"},2.1);
+  </script>
+</template>

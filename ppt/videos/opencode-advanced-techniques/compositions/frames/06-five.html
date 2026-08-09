@@ -1,0 +1,59 @@
+<template>
+  <style>
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:400;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-400.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:500;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-500.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:700;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-700.woff2") format("woff2");}
+    @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:900;font-display:block;src:url("assets/fonts/noto-sans-sc-chinese-simplified-900.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-400.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:500;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-500.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:700;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-700.woff2") format("woff2");}
+    @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:800;font-display:block;src:url("assets/fonts/jetbrains-mono-latin-800.woff2") format("woff2");}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    #root{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;}
+    #root .bg{position:absolute;inset:0;background:#0D1117;}
+    #root .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.022) 1px,transparent 1px);background-size:80px 80px;opacity:0.5;}
+    #root .kicker{position:absolute;left:96px;top:140px;font-family:"JetBrains Mono",monospace;font-size:26px;font-weight:500;letter-spacing:0.18em;color:#58A6FF;text-transform:uppercase;}
+    #root .chrome{position:absolute;right:96px;top:140px;font-family:"JetBrains Mono",monospace;font-size:22px;letter-spacing:0.16em;color:#8B949E;text-transform:uppercase;}
+    #root .lead{position:absolute;left:96px;top:232px;font-family:"Noto Sans SC",sans-serif;font-size:58px;font-weight:700;color:#E6EDF3;letter-spacing:-0.01em;}
+    #root .lead .em{color:#58A6FF;}
+    #root .five{position:absolute;left:96px;right:96px;top:392px;display:grid;grid-template-columns:repeat(5,1fr);gap:24px;}
+    #root .seg{background:#161B22;border:1px solid rgba(255,255,255,0.10);border-radius:14px;padding:30px 28px;height:360px;display:flex;flex-direction:column;gap:14px;}
+    #root .seg .n{font-family:"JetBrains Mono",monospace;font-size:40px;font-weight:700;color:#58A6FF;}
+    #root .seg .h{font-family:"Noto Sans SC",sans-serif;font-size:34px;font-weight:700;color:#E6EDF3;}
+    #root .seg .d{font-family:"Noto Sans SC",sans-serif;font-size:22px;color:#8B949E;line-height:1.4;margin-top:auto;}
+    #root .note{position:absolute;left:96px;top:810px;font-family:"JetBrains Mono",monospace;font-size:24px;color:#8B949E;}
+    #root .note .em{color:#58A6FF;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+  <div id="root" data-composition-id="06-five" data-width="1920" data-height="1080" data-duration="8.78">
+    <div class="stage clip" id="fv-stage" data-start="0" data-duration="8.78" data-track-index="1">
+      <div class="bg"></div><div class="grid"></div>
+      <div class="kicker">03 · 提问方法</div>
+      <div class="chrome">五段式提问</div>
+      <div class="lead">把<span class="em"> 默认成立的前提</span> 显式写出</div>
+      <div class="five">
+        <div class="seg" id="fv-1"><div class="n">1</div><div class="h">背景</div><div class="d">场景 / 技术栈 / 已有条件</div></div>
+        <div class="seg" id="fv-2"><div class="n">2</div><div class="h">目标</div><div class="d">功能 / 验收标准</div></div>
+        <div class="seg" id="fv-3"><div class="n">3</div><div class="h">约束</div><div class="d">性能 / 兼容 / 安全</div></div>
+        <div class="seg" id="fv-4"><div class="n">4</div><div class="h">输入</div><div class="d">相关文件路径</div></div>
+        <div class="seg" id="fv-5"><div class="n">5</div><div class="h">输出</div><div class="d">格式 / 位置 / 是否测试</div></div>
+      </div>
+      <div class="note" id="fv-note">不必写满 —— <span class="em">缺哪段补哪段</span></div>
+    </div>
+  </div>
+
+  <script>
+    gsap.set([".kicker",".chrome"],{opacity:0,y:-14});
+    gsap.set(".lead",{opacity:0,y:18});
+    gsap.set(".seg",{opacity:0,y:28});
+    gsap.set("#fv-note",{opacity:0});
+    window.__timelines=window.__timelines||{};
+    var tl=gsap.timeline({paused:true});
+    window.__timelines["06-five"]=tl;
+    tl.to([".kicker",".chrome"],{opacity:1,y:0,duration:0.5,ease:"power3.out"},0.1);
+    tl.fromTo(".lead",{opacity:0,y:18},{opacity:1,y:0,duration:0.6,ease:"power3.out"},0.3);
+    tl.to(".seg",{opacity:1,y:0,duration:0.5,ease:"power3.out",stagger:0.55},1.0);
+    tl.to("#fv-note",{opacity:1,duration:0.5,ease:"power2.out"},4.6);
+  </script>
+</template>
