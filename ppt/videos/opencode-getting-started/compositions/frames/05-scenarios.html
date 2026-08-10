@@ -53,7 +53,8 @@
     tl.to([".kicker",".chrome"],{opacity:1,y:0,duration:0.5,ease:"power3.out"},0.1);
     tl.fromTo(".lead",{opacity:0,y:18},{opacity:1,y:0,duration:0.6,ease:"power3.out"},0.3);
     // Scene 2 (1.5–8.5): six cards assemble staggered, on VO cues
-    tl.to(".sc",{opacity:1,y:0,scale:1,duration:0.6,ease:"power3.out",stagger:0.5},1.6);
-    // Scene 3 (8.5–10.2): hold
+    tl.to(".sc",{opacity:1,y:0,scale:1,duration:0.6,ease:"power3.out",stagger:0.9},1.6);
+    // Scene 3 (8.5–10.2): subtle teal sweep highlights the grid; hold
+    tl.to(".sc",{borderColor:"rgba(45,212,191,0.55)",boxShadow:"0 0 26px rgba(45,212,191,0.14)",duration:0.5,ease:"power2.out",stagger:0.16},8.7);
   </script>
 </template>

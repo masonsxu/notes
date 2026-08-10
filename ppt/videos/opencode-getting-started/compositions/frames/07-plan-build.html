@@ -54,7 +54,9 @@
         <div class="arr" id="pb-arr1">→</div>
         <div class="fnode gate" id="pb-gate"><div class="mi">◆</div><div class="nm">确认门</div><div class="cap">用户审核</div></div>
         <div class="arr" id="pb-arr2">→</div>
-        <div class="fnode" id="pb-build"><div class="mi">04 · BUILD</div><div class="nm">执行</div><div class="cap">写入 · 命令 · 验证</div></div>
+        <div class="fnode" id="pb-build"><div class="mi">04 · BUILD</div><div class="nm">执行</div><div class="cap">写入 · 命令</div></div>
+        <div class="arr" id="pb-arr3">→</div>
+        <div class="fnode" id="pb-verify"><div class="mi">05 · VERIFY</div><div class="nm">验证</div><div class="cap">检查交付物</div></div>
       </div>
       <div class="nop" id="pb-nop">Plan 阶段不改动文件</div>
 
@@ -68,9 +70,9 @@
   <script>
     gsap.set([".kicker",".chrome"],{opacity:0,y:-14});
     gsap.set(".lead",{opacity:0,y:18});
-    gsap.set(["#pb-req","#pb-judge","#pb-plan","#pb-gate","#pb-build"],{opacity:0,y:24});
+    gsap.set(["#pb-req","#pb-judge","#pb-plan","#pb-gate","#pb-build","#pb-verify"],{opacity:0,y:24});
     gsap.set(".pchip",{opacity:0,x:-10});
-    gsap.set(["#pb-arr1","#pb-arr2"],{opacity:0});
+    gsap.set(["#pb-arr1","#pb-arr2","#pb-arr3"],{opacity:0});
     gsap.set("#pb-nop",{opacity:0});
     gsap.set(["#pb-r1","#pb-r2"],{opacity:0,y:18});
 
@@ -89,9 +91,11 @@
     // Scene 2 (4.5–6.5): 确认门 lights
     tl.to("#pb-arr1",{opacity:1,duration:0.3,ease:"power2.out"},4.6);
     tl.fromTo("#pb-gate",{opacity:0,y:24,scale:0.9},{opacity:1,y:0,scale:1,duration:0.6,ease:"power3.out"},4.9);
-    // Scene 3 (6.5–8.6): BUILD + rules; connector lights
-    tl.to("#pb-arr2",{opacity:1,duration:0.3,ease:"power2.out"},6.5);
+    // Scene 3 (6.5–8.6): BUILD → VERIFY flows; connectors light teal
+    tl.to("#pb-arr2",{opacity:1,color:"#2DD4BF",duration:0.3,ease:"power2.out"},6.5);
     tl.fromTo("#pb-build",{opacity:0,y:24},{opacity:1,y:0,duration:0.5,ease:"power3.out"},6.8);
+    tl.to("#pb-arr3",{opacity:1,color:"#2DD4BF",duration:0.3,ease:"power2.out"},7.1);
+    tl.fromTo("#pb-verify",{opacity:0,y:24},{opacity:1,y:0,duration:0.5,ease:"power3.out"},7.4);
     tl.to(["#pb-r1","#pb-r2"],{opacity:1,y:0,duration:0.5,ease:"power3.out",stagger:0.25},7.4);
   </script>
 </template>
