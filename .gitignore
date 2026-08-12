@@ -16,6 +16,7 @@ Desktop.ini
 # --- 工具 / IDE 本地状态 ---
 .omo/
 .playwright-mcp/
+.zcode/
 
 # --- Python ---
 __pycache__/
