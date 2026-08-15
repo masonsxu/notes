@@ -8,18 +8,24 @@
 
 > **怎么用这份文档**：现场演示时按 `---` 分隔逐节推进，每节是一页；课后它就是操作手册——所有指令、模板、清单都可以直接复制照做。
 
-> 这张图在说什么：全文六个部分。蓝色两节建立认知（原理），琥珀四节动手上手（实操）——先懂原理，再学操作，操作里的每个设计都能回到原理找到解释。
+> 这张图在说什么：全文六个部分，分两段——前两节建立认知（原理，蓝色组），后四节动手上手（实操，琥珀组）。先懂原理，再学操作；操作里的每个设计都能回到原理找到解释。符号约定全文通用：✓ 达成 / ✗ 缺失 / ⚠ 风险 / 🚪 确认门。
 
 ```mermaid
 flowchart LR
     classDef know fill:#DBEAFE,stroke:#2563EB,color:#1E40AF
     classDef act fill:#FEF3C7,stroke:#D97706,color:#92400E
 
-    P1["一<br/>为什么聊天框<br/>不够用"]:::know --> P2["二<br/>Agent 的原理"]:::know
-    P2 --> P3["三<br/>第一个五分钟"]:::act
-    P3 --> P4["四<br/>AGENTS.md"]:::act
-    P4 --> P5["五<br/>日常节奏与审核"]:::act
-    P5 --> P6["六<br/>哪些工作<br/>能交出去"]:::act
+    subgraph SG1["建立认知 · 原理"]
+        direction LR
+        P1["一<br/>为什么聊天框<br/>不够用"]:::know --> P2["二<br/>Agent 的原理"]:::know
+    end
+    subgraph SG2["动手上手 · 实操"]
+        direction LR
+        P3["三<br/>第一个五分钟"]:::act --> P4["四<br/>AGENTS.md"]:::act
+        P4 --> P5["五<br/>日常节奏与审核"]:::act
+        P5 --> P6["六<br/>哪些工作<br/>能交出去"]:::act
+    end
+    P2 --> P3
 ```
 
 ---
@@ -59,7 +65,7 @@ flowchart LR
     subgraph OC["opencode：到「成品文件」为止"]
         O1["你说一句话"]:::human --> O2["Agent 自己读文件"]:::agent
         O2 --> O3["统计 · 整理 · 核对"]:::agent
-        O3 --> O4["成品文件<br/>已在工作目录"]:::artifact
+        O3 --> O4["✓ 成品文件<br/>已在工作目录"]:::artifact
     end
     C3 -.->|"同样的任务，从这里接手"| O2
 ```
@@ -126,6 +132,27 @@ flowchart LR
 - **工具（tools）**：读写文件、执行命令、联网检索——agent 的"手"。
 - **循环（loop）**：agent 拿到任务后自主决定"下一步做什么"→ 行动 → 观察结果 → 再决定下一步，直到任务完成。
 
+> 这张图在说什么：左边是聊天应用的组成——只有大脑，没有手、不循环，所以只会"说"；右边是 agent 的组成——大脑、手、循环三件并列。虚线就是从 2.1 到 2.2 的那次跃迁：接上手、加上循环。
+
+```mermaid
+flowchart LR
+    classDef agent fill:#DBEAFE,stroke:#2563EB,color:#1E40AF
+    classDef risk fill:#FEE2E2,stroke:#DC2626,color:#991B1B
+
+    subgraph CHAT["聊天应用"]
+        direction TB
+        C1["🧠 大脑（LLM）<br/>只会「说」"]:::agent
+        C2["✗ 没有手<br/>✗ 不循环"]:::risk
+    end
+    subgraph AG["Agent（如 opencode）"]
+        direction TB
+        A1["🧠 大脑（LLM）"]:::agent
+        A2["手（工具）<br/>读写文件 · 执行命令"]:::agent
+        A3["🔄 循环<br/>思考 → 行动 → 观察"]:::agent
+    end
+    CHAT -.->|"接上手、加上循环"| AG
+```
+
 **opencode** 就是一个开源的 agent 工作台：把模型、工具、权限管理打包成一个可直接使用的软件。它有三种形态，本教程以桌面应用为主线：
 
 | 形态 | 适合谁 | 长什么样 |
@@ -163,7 +190,7 @@ sequenceDiagram
         end
     end
     note over T,U: 每次写文件、执行命令前，先经你确认（权限门禁）
-    A-->>U: 交付：error_report.md 已在工作目录
+    A-->>U: ✓ 交付：error_report.md 已在工作目录
 ```
 
 一句话指令的背后是十几次循环。你在界面上看到"正在读文件、正在跑脚本"，就是一轮轮循环的外显。
@@ -194,14 +221,14 @@ flowchart TB
         P3 --> P4{"方案对吗？"}:::human
         P4 -->|不对，补充或纠正| P2
     end
-    P4 -->|对，切到 build| GATE["确认门"]:::gate
+    P4 -->|对，切到 build| GATE["🚪 确认门"]:::gate
     subgraph B["build 模式：循环里放开「行动」"]
         direction LR
         B1["思考下一步"]:::agent --> B2["调用工具行动"]:::agent
         B2 --> B3["观察结果"]:::agent
         B3 --> B4{"完成？"}:::gate
         B4 -->|否| B1
-        B4 -->|是| B5["成品写入工作目录"]:::artifact
+        B4 -->|是| B5["✓ 成品写入工作目录"]:::artifact
     end
     GATE --> B1
 ```
@@ -292,20 +319,26 @@ opencode 是企业版部署，安装走内部流程，**不在公开网上下载
 
 ### 3.5 这五分钟里发生了什么
 
-> 这张图在说什么：整个过程你只出手三次（琥珀色）——开目录、下指令、确认方案；其余的读取、规划、执行、写文件（蓝色）全部由 agent 的循环完成。新手要建立的节奏感就是：什么时候轮到我。
+> 这张图在说什么：上下两条泳道是不对称的分工——上泳道是你的全部工作，只有三次出手；下泳道是 agent 循环承担的其余全部。虚线是交接：你的每次出手，把循环推进到下一段。新手要建立的节奏感就是：什么时候轮到我。
 
 ```mermaid
-flowchart LR
+flowchart TB
     classDef human fill:#FEF3C7,stroke:#D97706,color:#92400E
     classDef agent fill:#DBEAFE,stroke:#2563EB,color:#1E40AF
     classDef artifact fill:#F1F5F9,stroke:#64748B,color:#334155
 
-    Y1["你：打开工作目录"]:::human --> A1["Agent：读全部素材"]:::agent
-    A1 --> Y2["你：下指令"]:::human
-    Y2 --> A2["Agent：plan 说方案"]:::agent
-    A2 --> Y3["你：确认方案"]:::human
-    Y3 --> A3["Agent：build 执行"]:::agent
-    A3 --> A4["成品文件在工作目录"]:::artifact
+    subgraph YOU["你出手 · 共 3 次"]
+        direction LR
+        Y1["① 打开工作目录"]:::human --> Y2["② 下指令"]:::human --> Y3["③ 确认方案"]:::human
+    end
+    subgraph LOOP["Agent 循环 · 其余全部"]
+        direction LR
+        A1["读全部素材"]:::agent --> A2["plan 说方案"]:::agent
+        A2 --> A3["build 执行"]:::agent --> A4["✓ 写成成品文件"]:::artifact
+    end
+    Y1 -.->|"交给它"| A1
+    Y2 -.-> A2
+    Y3 -.->|"放行"| A3
 ```
 
 全程你没有复制过一段素材、没有写过一行代码、没有打开过命令行。
@@ -313,6 +346,26 @@ flowchart LR
 ### 3.6 五分钟之后：配齐另外两件工具
 
 跑通第一个任务后，补齐完整的工作环境。**三件套各司其职：opencode 干活，VS Code 是你看和改的工作台，Git 是让你放心放手的安全网**——agent 的产出全是文件，你需要一个好用的地方看和改它们；放开行动权限，你需要随时能看清改动、能退回去。
+
+> 这张图在说什么：三件工具围着同一个工作目录各司其职——opencode 往里写成品，你用 VS Code 打开看、改、审，Git 给每次任务拍存档、出问题回退。分清"谁对目录做什么"，三件套就分清了。
+
+```mermaid
+flowchart TB
+    classDef human fill:#FEF3C7,stroke:#D97706,color:#92400E
+    classDef agent fill:#DBEAFE,stroke:#2563EB,color:#1E40AF
+    classDef artifact fill:#F1F5F9,stroke:#64748B,color:#334155
+    classDef gate fill:#DCFCE7,stroke:#16A34A,color:#166534
+
+    OC["opencode<br/>干活：循环执行任务"]:::agent
+    D["📁 工作目录（项目）"]:::artifact
+    VS["VS Code<br/>看和改：编辑 · 预览 · diff"]:::human
+    GT["Git<br/>安全网：存档 · 回退"]:::gate
+
+    OC -->|"写成品 · 改文件"| D
+    VS <-->|"打开查看 · 修改 · 审 diff"| D
+    D -->|"每完成一个任务存档"| GT
+    GT -.->|"改坏了随时回退"| D
+```
 
 **VS Code：看和改文件的工作台**
 
@@ -359,6 +412,26 @@ flowchart LR
 2.1 讲过：模型不记忆，每轮对话从上下文重新开始。所以用 ChatGPT 时，每开一个新对话都要重新介绍——"我是做半导体测试的""bin 是什么意思""我们的文件格式是……"。
 
 **AGENTS.md** 就是解决这个重复的：一个放在项目目录里的"项目须知"文件，opencode 每次启动**自动读它**，整轮对话不再需要重复背景。
+
+> 这张图在说什么：左边是没有项目须知的循环——每轮对话手动介绍背景，换个对话全部重来；右边是一次写入、每轮自动注入的机制。写一次，永久生效。
+
+```mermaid
+flowchart TB
+    classDef human fill:#FEF3C7,stroke:#D97706,color:#92400E
+    classDef agent fill:#DBEAFE,stroke:#2563EB,color:#1E40AF
+    classDef risk fill:#FEE2E2,stroke:#DC2626,color:#991B1B
+    classDef gate fill:#DCFCE7,stroke:#16A34A,color:#166534
+
+    subgraph WITHOUT["没有 AGENTS.md"]
+        W1["⚠ 每轮新对话"]:::risk --> W2["你手动介绍背景<br/>术语 · 格式 · 红线"]:::human
+        W2 -.->|"换个对话，全部重来"| W1
+    end
+    subgraph WITH["有 AGENTS.md"]
+        G1["写一次<br/>（术语 · 格式 · 红线）"]:::human --> G2["每轮启动自动注入"]:::agent
+        G2 --> G3["✓ 对话直接开始，背景常在"]:::gate
+    end
+    WITHOUT -.->|"把背景写进项目须知"| WITH
+```
 
 ### 4.2 一键生成：`/init` + 四段模板
 

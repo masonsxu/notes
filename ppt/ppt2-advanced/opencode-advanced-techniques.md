@@ -8,7 +8,7 @@
 
 > **怎么用这份文档**：现场演示时按 `---` 分隔逐节推进；课后两个实战（2.7、3.7）可以直接照做——它们就是搭体系的操作手册。
 
-> 这张图在说什么：本篇两条主线——理念一把你的**记录**变成资产，理念二把你的**流程**变成资产；方法论底座决定两条线的产出质量，最终汇入团队共享。
+> 这张图在说什么：本篇两条主线——理念一把你的**记录**变成资产，理念二把你的**流程**变成资产；方法论底座决定两条线的产出质量，最终汇入团队共享。颜色与符号约定沿用入门篇：琥珀 = 人、蓝 = agent、灰 = 文件、绿 = 通过、红 = 风险；✓ 达成 / ✗ 缺失 / ⚠ 风险 / 🚪 确认门。
 
 ```mermaid
 flowchart LR
@@ -41,7 +41,7 @@ flowchart LR
 
 **体系化**改变的是三样东西：**记录的格式、沉淀的位置、复用的方式**。
 
-> 这张图在说什么：没有体系时，每次任务都从零开始，重复交代、反复返工；建立体系后，格式、规范、经验都沉淀为项目里的资产，新任务一句话启动。两者的差距不在工具版本，在有没有体系。
+> 这张图在说什么：左右两侧各有三个并列的病因 / 资产——它们是并列关系，不是先后步骤；各自汇聚出底部的后果 / 效果。差距不在工具版本，在这两组之间。
 
 ```mermaid
 flowchart LR
@@ -49,12 +49,18 @@ flowchart LR
     classDef gate fill:#DCFCE7,stroke:#16A34A,color:#166534
 
     subgraph BAD["没有体系：每次从零开始"]
-        B1["提问临时想"]:::risk --> B2["规范靠记忆"]:::risk
-        B2 --> B3["经验留在脑子里"]:::risk --> B4["重复交代 · 反复返工"]:::risk
+        B1["提问临时想"]:::risk
+        B2["规范靠记忆"]:::risk
+        B3["经验留在脑子里"]:::risk
+        B4["⚠ 重复交代 · 反复返工"]:::risk
+        B1 & B2 & B3 -->|"三因同源"| B4
     end
     subgraph GOOD["建立体系：资产可复用"]
-        G1["记录有格式"]:::gate --> G2["规范在项目里"]:::gate
-        G2 --> G3["经验沉淀成 skill"]:::gate --> G4["新任务一句话启动"]:::gate
+        G1["记录有格式"]:::gate
+        G2["规范在项目里"]:::gate
+        G3["经验沉淀成 skill"]:::gate
+        G4["✓ 新任务一句话启动"]:::gate
+        G1 & G2 & G3 -->|"三资产同出"| G4
     end
     B4 -.->|"差距在体系，不在工具"| G4
 ```
@@ -169,7 +175,7 @@ flowchart TD
 
 ### 2.6 记录是随生态升值的资产
 
-> 这张图在说什么：你沉淀的 Markdown 记录（灰色）不需要变动；模型与 agent 持续升级（蓝色），同一批记录的产出质量（绿色）自动提升。记录不贬值，反而随生态升值——这是 Word 时代的文档不具备的性质。
+> 这张图在说什么：两个分组是两个时点——同一份 Markdown 记录（灰色）分别交给今天和一年后的模型（蓝色），产出质量（绿色）自动上升。你什么都不用做；记录不贬值，反而随生态升值，这是 Word 时代的文档不具备的性质。
 
 ```mermaid
 flowchart LR
@@ -178,10 +184,14 @@ flowchart LR
     classDef gate fill:#DCFCE7,stroke:#16A34A,color:#166534
 
     R["你沉淀的 Markdown 记录<br/>（不变）"]:::artifact
-    R --> M1["今天的模型与 agent"]:::agent
-    R --> M2["一年后的模型与 agent<br/>（你什么都不用做）"]:::agent
-    M1 --> O1["今天的周报质量"]:::gate
-    M2 --> O2["更高的周报质量"]:::gate
+    subgraph NOW["今天"]
+        M1["当前的模型与 agent"]:::agent --> O1["当前的周报质量"]:::gate
+    end
+    subgraph FUTURE["一年后"]
+        M2["升级后的模型与 agent"]:::agent --> O2["✓ 更高的周报质量"]:::gate
+    end
+    R --> M1
+    R --> M2
 ```
 
 模型换代、上下文窗口变长、工具变强——每次升级，同一批记录的产出自动变好。所以**记录本身就是资产**，而且是最早开始记、复利时间最长。这也是"从今天开始"的理由。
@@ -228,6 +238,28 @@ flowchart LR
 - 新问题出现，人工要做的事更多，经验只能自己写成 SOP 文档；
 - SOP 是给**人**看的——新人接手还是要从头教，机器执行不了；
 - 团队里每个人的经验各自存放，无法形成有效共享。
+
+> 这张图在说什么：同一批输入走两条路——人工路径的工作量随文件数线性增长，口径变更等于全部重做；skill 路径把工作量压成一句话，口径变更只是一次剧本修改。这张图就是第三部分要建立的路径。
+
+```mermaid
+flowchart TB
+    classDef human fill:#FEF3C7,stroke:#D97706,color:#92400E
+    classDef agent fill:#DBEAFE,stroke:#2563EB,color:#1E40AF
+    classDef artifact fill:#F1F5F9,stroke:#64748B,color:#334155
+    classDef risk fill:#FEE2E2,stroke:#DC2626,color:#991B1B
+    classDef gate fill:#DCFCE7,stroke:#16A34A,color:#166534
+
+    IN["30 个文件 × 每个约 20 分钟"]:::artifact
+    subgraph MAN["纯人工"]
+        M1["逐个：打开 → 统计 → 截图 → 写结论"]:::human --> M2["⚠ 口径一变，30 个全部重做"]:::risk
+    end
+    subgraph AS["agent + skill"]
+        S1["一句话触发"]:::human --> S2["循环批量跑完<br/>diff 审核 + 汇总表"]:::agent
+        S2 --> S3["✓ 口径一变，改一句 skill"]:::gate
+    end
+    IN --> MAN
+    IN --> AS
+```
 
 大批量的手动操作，**必须换自动化方法**。
 
@@ -282,6 +314,23 @@ flowchart LR
 **Skill**：一份用自然语言写的"行动脚本"——触发条件 + 步骤 + 输入输出规范 + 已知的坑。agent 执行时把它装进上下文，循环按脚本走；平时不加载、不占上下文，触发才生效。
 
 用入门篇的循环理解：skill 就是**预先写好的循环剧本**——agent 不再每次现场决定怎么做，而是按你沉淀过的流程执行。
+
+> 这张图在说什么：skill 有两种状态——平时它是项目里的一个普通文件，不消耗任何上下文；触发时才被装进上下文，循环从"现场发挥"切换成"按剧本走"。
+
+```mermaid
+flowchart LR
+    classDef artifact fill:#F1F5F9,stroke:#64748B,color:#334155
+    classDef agent fill:#DBEAFE,stroke:#2563EB,color:#1E40AF
+    classDef gate fill:#DCFCE7,stroke:#16A34A,color:#166534
+
+    subgraph IDLE["平时"]
+        I1["SKILL.md 静静躺在项目里"]:::artifact --- I2["不占上下文"]:::gate
+    end
+    subgraph TRIG["触发时"]
+        T1["装入上下文"]:::agent --> T2["循环按剧本执行<br/>步骤 · 口径 · 坑都在剧本里"]:::agent
+    end
+    I1 -.->|"匹配到触发场景"| T1
+```
 
 与 SOP 文档的本质区别：**SOP 给人看，skill 给 agent 执行**。一个 SKILL.md 骨架长这样：
 
@@ -370,11 +419,11 @@ flowchart TB
 
     subgraph M["模糊指令"]
         M1["「帮我处理这批数据」"]:::risk --> M2["agent 只能猜：<br/>哪个文件 · 什么口径 · 什么格式"]:::risk
-        M2 --> M3["通用回答 · 反复追问 · 多轮返工"]:::risk
+        M2 --> M3["⚠ 通用回答 · 反复追问 · 多轮返工"]:::risk
     end
     subgraph S["具体指令：五段式"]
         S1["背景 · 目标 · 约束<br/>输入 · 输出"]:::gate --> S2["每一段都在压缩猜测空间"]:::gate
-        S2 --> S3["一次到位，产出直接可审"]:::gate
+        S2 --> S3["✓ 一次到位，产出直接可审"]:::gate
     end
 ```
 
@@ -480,7 +529,7 @@ flowchart LR
         R2 --> G2{"你确认"}:::human
         G2 -->|调整| R2
     end
-    G2 -->|通过| GATE["确认门"]:::gate
+    G2 -->|通过| GATE["🚪 确认门"]:::gate
     subgraph AFTER["确认门后：返工 = 重做文件，成本陡升"]
         B["build：写文件 · 跑命令"]:::agent --> DONE["交付"]:::artifact
     end
