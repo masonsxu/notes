@@ -1,5 +1,7 @@
 # 全局规则 — 工程执行基线
 
+> 适用环境：Windows + opencode（放至 `%USERPROFILE%\.config\opencode\AGENTS.md` 全局生效）。命令默认 PowerShell 语法。
+>
 > 本文件定义不可妥协的硬约束。项目级 `CLAUDE.md` / `AGENTS.md` 优先。**每一条规则必须有明确的存在理由，否则删掉。**
 
 ---
@@ -20,10 +22,11 @@
 
 | 场景 | 必须用 | 禁止 |
 |------|--------|------|
-| Python | `uv add` / `uv run` | pip / poetry / conda |
+| Python | `uv add` / `uv run`；任何脚本执行必须 `uv run python <script>`，工具用 `uvx` | pip / poetry / conda；直接 `python` / `python3` / `py` |
 | 前端 | `bun install` / `bun run` | npm / yarn / pnpm |
-| 容器 | `podman compose`（空格） | docker / docker-compose |
-| Go 诊断 | `go build -o /dev/null ./...` | — |
+| Go 诊断 | `go build -o NUL ./...`（Windows 设备名） | — |
+
+> Python 强制 uv 的理由：Windows 常见多解释器共存（Store 版/官方版/WSL），直接调用 `python` 版本不可控；`uv run` 锁定解释器与依赖。
 
 **代码探索**（涉及现有内部库/API 时）：
 
@@ -61,7 +64,34 @@ If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is 
 
 ---
 
-## 五、冲突仲裁
+## 五、设计 Skill 编排（frontend-design + ui-ux-pro-max）
+
+两个 skill 位于 opencode 全局 skill 目录（`%USERPROFILE%\.config\opencode\skills\`，每 skill 一个子目录 + `SKILL.md`）。触发条件重叠，配色/字体/风格轴上主张相反（推导 vs 数据库检索），无编排规则会导致产出方向不稳定。
+
+**分工**：
+
+| Skill | 职责 | 使用场景 |
+|---|---|---|
+| frontend-design | 视觉方向独特性：token 计划 → 反模板自评 → 建码 | 全新页面/站点、需视觉身份的任务 |
+| ui-ux-pro-max | 系统完整性：UX 准则、交互模式、交付检查清单 | 组件开发、UX/无障碍审查、交付门 |
+
+**串联模型**（大型新 UI 任务三阶段）：
+
+1. 定方向：frontend-design 主导（4–6 色 token + 字体配对 + signature 元素 + 自评）
+2. 查规则：ui-ux-pro-max 检索模式（UX 准则、组件规格、`--stack` 指引），不主导视觉方向
+3. 交付门：ui-ux-pro-max 的 PRE-DELIVERY CHECKLIST（对比度 4.5:1、键盘焦点可见、`prefers-reduced-motion`、375/768/1024/1440px 断点）+ frontend-design 的克制自评（移除一处装饰）
+
+**冲突轴仲裁**：配色 / 字体 / 风格三轴同一时间只由一个 skill 主导——新项目由 frontend-design 定方向；已有设计系统的项目由 ui-ux-pro-max 供规格；项目级规则已锁定字体/配色时，两者推荐一律让位于项目级 `AGENTS.md`。
+
+**检索脚本要点**（ui-ux-pro-max，PowerShell）：
+
+- 全路径调用，不依赖 cwd：`uv run python "$env:USERPROFILE\.config\opencode\skills\ui-ux-pro-max\scripts\search.py" "<query>" --domain <style|color|ux|typography|chart|...> [--stack <react|shadcn|vue|...>]`
+- `ux` 域按准则关键词命中（`keyboard` / `contrast` / `forms`），产品关键词（`portfolio`）不命中
+- 返回 0 结果时显式声明"无数据库匹配"，禁止静默降级编造
+
+---
+
+## 六、冲突仲裁
 
 1. 用户指令（最高，执行前**显式指出冲突**）
 2. 项目级 `CLAUDE.md` / `AGENTS.md`
