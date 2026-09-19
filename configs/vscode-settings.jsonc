@@ -1,0 +1,108 @@
+{
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnPaste": false,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    },
+    "editor.formatOnType": true
+  },
+  "files.exclude": {
+    "**/node_modules": true
+  },
+  "workbench.colorTheme": "GitHub Dark",
+  "git.autoStash": true,
+  "remote.SSH.path": "C:\\Program Files\\Git\\usr\\bin\\ssh.exe",
+  "remote.autoForwardPortsSource": "hybrid",
+  "settingsSync.ignoredSettings": [
+    "background.customImages"
+  ],
+  "update.enableWindowsBackgroundUpdates": true,
+  "extensions.autoUpdate": "onlyEnabledExtensions",
+  "update.showReleaseNotes": false,
+  "GitCommitPlugin.Templates": [
+    {
+      "templateName": "Angular",
+      "templateContent": "<icon><space><type>(<scope>):<space><subject><enter><body><enter><footer>"
+    },
+    {
+      "templateName": "git-cz",
+      "templateContent": "<type>:<space><icon><space><scope><subject><enter><body><enter><footer>",
+      "default": true
+    }
+  ],
+  "editor.fontSize": 16,
+  "editor.lineHeight": 22,
+  "editor.tabSize": 4,
+  "editor.insertSpaces": false,
+  "editor.rulers": [
+    80,
+    120
+  ],
+  "editor.minimap.enabled": true,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+  "editor.renderWhitespace": "boundary",
+  "editor.trimAutoWhitespace": true,
+  "editor.fontFamily": "'JetBrains Mono','LXGW WenKai Mono'",
+  "editor.fontLigatures": true,
+  "editor.guides.indentation": true,
+  "editor.guides.highlightActiveIndentation": true,
+  "editor.linkedEditing": true,
+  "editor.renderControlCharacters": true,
+  "editor.wordWrap": "on",
+  "editor.unicodeHighlight.allowedLocales": {
+    "zh-hans": true,
+    "zh-hant": true
+  },
+  "telemetry.telemetryLevel": "off",
+  "extensions.autoCheckUpdates": true,
+  "git.confirmSync": false,
+  "gitlens.currentLine.enabled": false,
+  "gitlens.hovers.currentLine.over": "line",
+  "settingsSync.ignoredExtensions": [
+    "hbitmpcoder.thriftformat",
+    "zxh404.vscode-proto3",
+    "augment.vscode-augment",
+    "ms-vscode.copilot-mermaid-diagram",
+    "tomoki1207.pdf",
+    "saoudrizwan.claude-dev",
+    "docker.docker",
+    "ms-vscode-remote.remote-wsl"
+  ],
+  "diffEditor.ignoreTrimWhitespace": false,
+  "workbench.startupEditor": "none",
+  "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[dockercompose]": {
+    "editor.defaultFormatter": "docker.docker"
+  },
+  "gitlens.ai.model": "vscode",
+  "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "path": "bash",
+      "icon": "terminal-bash"
+    },
+    "zsh": {
+      "path": "/usr/sbin/zsh"
+    },
+    "fish": {
+      "path": "fish"
+    },
+    "tmux": {
+      "path": "tmux",
+      "icon": "terminal-tmux"
+    },
+    "pwsh": {
+      "path": "pwsh",
+      "icon": "terminal-powershell"
+    }
+  },
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "terminal.integrated.fontFamily": "Hack Nerd Font Mono"
+}

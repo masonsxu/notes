@@ -1,0 +1,73 @@
+# --- OS / Editor ---
+.DS_Store
+.DS_Store?
+Icon?
+._*
+.AppleDouble
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+
+# --- 工具 / IDE 本地状态 ---
+.omo/
+.playwright-mcp/
+.zcode/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# --- 虚拟环境 ---
+.venv/
+venv/
+env/
+
+# --- uv ---
+# uv.lock 需要提交(锁定依赖版本);只忽略临时缓存
+.uv/
+
+# --- ML / 数据科学 ---
+# 学习脚本生成的图表、中间产物,只忽略约定的输出目录,避免误伤 PPT 等图片资产
+code/**/output/
+code/**/outputs/
+code/**/runs/
+code/**/mlruns/
+learning/**/output/
+learning/**/outputs/
+learning/**/runs/
+learning/**/mlruns/
+
+# 大数据集 / 模型权重,本地存放不进库(按需在具体项目下加更精确的规则)
+*.h5
+*.parquet
+*.feather
+*.ckpt
+*.pt
+*.onnx
+
+# --- HyperFrames 视频项目 ---
+# 渲染输出、日志、快照、抓取素材均可重新生成,不进库
+ppt/videos/**/renders/
+ppt/videos/**/snapshots/
+ppt/videos/**/capture/
+ppt/videos/**/check.log
+ppt/videos/**/.media/
+# 字体由 Hyperframes 按需重新下载(单文件约 1MB,共约 9MB)
+ppt/videos/**/assets/fonts/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Optuna / SHAP / 训练日志
+optuna.db
+optuna-journal*
+*.sqlite
+*.sqlite3
