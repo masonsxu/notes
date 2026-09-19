@@ -1,0 +1,41 @@
+# Notes
+
+> 个人知识仓库:opencode 课程讲义与 PPT 维护手册、HBM 先进封装 + 测试数据智能调研材料(全量脱敏)、AI 编码代理全局规则方案。内容以中文为主,Markdown/HTML 混合,面向人与 LLM 代理双端阅读。
+
+本仓库为纯文档知识库,无业务代码(`main.py`、`pyproject.toml`、`code/` 仅为脚手架)。LLM 代理使用约定:
+
+- 阅读顺序:本文件 → [AGENTS.md](AGENTS.md)(硬约束,任何写入操作前必读)→ 按主题挑选文件。
+- 敏感信息:`ref/` 材料的落地主体为"公司(封测/OSAT 定位)",其身份信息只存在于对话,永不写入文件、提交信息与分支名;规则见 [AGENTS.md](AGENTS.md),脱敏基线见 [ref/hbm3e-hbm4e/数据核对与落地评估报告.md](ref/hbm3e-hbm4e/数据核对与落地评估报告.md) §4.1。
+- 数字引用纪律:`ref/` 中行业数字分"官方确认 / 业界口径 / 传闻"三档,上会规则见 [ref/hbm3e-hbm4e/README.md](ref/hbm3e-hbm4e/README.md);引用前回溯 `sources/` 证据层。
+- 所有链接为仓库相对路径,以本文件所在目录为根。
+
+## 核心材料:HBM 先进封装 + 测试数据智能
+
+- [ref/hbm3e-hbm4e/README.md](ref/hbm3e-hbm4e/README.md): 四维度导读(调研/学习/技术/汇报)与材料总览,读其他文件前先看这份
+- [ref/hbm3e-hbm4e/HBM3E_HBM4E_工艺调研.md](ref/hbm3e-hbm4e/HBM3E_HBM4E_工艺调研.md): 调研底稿,规格/工艺/时间线/竞争格局,附逐项可信度分级
+- [ref/hbm3e-hbm4e/HBM先进封装工艺图解.html](ref/hbm3e-hbm4e/HBM先进封装工艺图解.html): 九步封装链路可视化,WOW/DOW、键合三工艺、KGD→KGSD、3E/4E 对照
+- [ref/hbm3e-hbm4e/先进封装测试数据分析报告.html](ref/hbm3e-hbm4e/先进封装测试数据分析报告.html): 测试数据分析方法论,数据管道、PAT/DPAT、良率模型、WM-811K、自适应闭环、逃逸经济学
+- [ref/hbm3e-hbm4e/测试数据立项论证.html](ref/hbm3e-hbm4e/测试数据立项论证.html): PART 00,痛点量化、量级推导、Build vs Buy、ADR、90 天 MVP、ROI 三档、决策清单 D-01~D-10
+- [ref/hbm3e-hbm4e/测试数据组织架构.html](ref/hbm3e-hbm4e/测试数据组织架构.html): PART 01,三部门六小组、团队拓扑、RACI、编制 16→28→42
+- [ref/hbm3e-hbm4e/测试数据平台系统架构.html](ref/hbm3e-hbm4e/测试数据平台系统架构.html): PART 02,五层架构、湖仓 medallion、三区部署、组件基线(2026-09)、SLO
+- [ref/hbm3e-hbm4e/未来蓝图与落地路线.html](ref/hbm3e-hbm4e/未来蓝图与落地路线.html): PART 03,L1–L5 能力阶梯、18 个月四阶段甘特、里程碑 M1–M6、三条 KPI
+- [ref/hbm3e-hbm4e/数据核对与落地评估报告.md](ref/hbm3e-hbm4e/数据核对与落地评估报告.md): 2026-09-19 全量核对留痕、落地判定、答辩七问、遗留待核、来源清单
+
+## 讲义:opencode 系列
+
+- [ppt/ppt1-intro/opencode-getting-started.md](ppt/ppt1-intro/opencode-getting-started.md): 第 1 讲·入门讲义,mermaid 图表内嵌
+- [ppt/ppt2-workshop/opencode-advanced-practice.md](ppt/ppt2-workshop/opencode-advanced-practice.md): 第 2 讲·进阶与实战,60 分钟课 + 课后完整手册
+- [ppt/ppt2-workshop/materials/README.md](ppt/ppt2-workshop/materials/README.md): 第 2 讲练习素材包入口
+- [README.md](README.md): 仓库根导读,PPT 的生成与维护(build.js + pptxgenjs,改脚本重生成、产物不手改)
+
+## 笔记与方案
+
+- [inbox/global-rules-v2.md](inbox/global-rules-v2.md): AI 编码代理全局规则 v2 完整快照(渐进式披露:AGENTS.md + Skills),可用于跨机再部署
+- [inbox/README.md](inbox/README.md): inbox 说明,含 v1 方案删除原因
+- [ideas/2026/predc-bin-feature-analysis.md](ideas/2026/predc-bin-feature-analysis.md): 晶圆 bin 特征分析练手稿(LightGBM/SHAP),notebook 结构生成脚本,数据为 mock
+- [log/2026/06.md](log/2026/06.md): 2026-06 月志(占位)
+
+## Optional
+
+- [ref/hbm3e-hbm4e/sources/](ref/hbm3e-hbm4e/sources/): 10 份厂商新闻稿与媒体原始摘录,`ref/` 调研的证据层,核对数字时按文件名日期回溯
+- [ppt/ppt2-workshop/materials/reference/](ppt/ppt2-workshop/materials/reference/): workshop 参考材料(report-w31-w34、AGENTS 参考)
