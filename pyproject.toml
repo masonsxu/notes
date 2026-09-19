@@ -1,7 +1,7 @@
 [project]
 name = "notes"
 version = "0.1.0"
-description = "Add your description here"
+description = "notes 知识库的 Python 练手环境（uv）"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

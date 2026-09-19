@@ -1,0 +1,22 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "sync": {
+      "inputs": ["$TURBO_DEFAULT$", "../../notes/**", "../../reports/**"],
+      "outputs": ["docs/gen/**", "docs/public/files/**", "docs/.vitepress/gen/**"]
+    },
+    "build": {
+      "dependsOn": ["sync", "^build"],
+      "outputs": ["dist/**"]
+    },
+    "dev": {
+      "dependsOn": ["sync"],
+      "cache": false,
+      "persistent": true
+    },
+    "preview": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

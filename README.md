@@ -1,41 +1,40 @@
 # Notes
 
-个人笔记、代码片段、技术参考。
+个人知识仓库 monorepo：Markdown 材料 + 自包含 HTML 报告 + VitePress 浏览站点。
 
-## opencode 系列课程
+## 结构
 
-| 篇目 | 讲义 | 配套 |
-| --- | --- | --- |
-| 理念开篇 | — | `ppt/ai-agent-evolution/` PPTX（build.js 生成） |
-| 第 1 讲 · 入门 | `ppt/ppt1-intro/opencode-getting-started.md`（图表内嵌 mermaid） | 同目录 `opencode-入门.pptx`（build.js 生成） |
-| 第 2 讲 · 进阶与实战（60 分钟课 + 课后完整手册） | `ppt/ppt2-workshop/opencode-advanced-practice.md`（图表内嵌 mermaid） | 同目录 `opencode-进阶与实战.pptx`（build.js 生成）＋ 练习素材包 `materials/` |
-
-### PPT 的生成与维护
-
-每份 PPT 目录里放一个自包含的 `build.js`（[pptxgenjs](https://pptxgenjs.com/) 脚本），运行后在本目录输出同名 `.pptx`——**改脚本 → 跑脚本 → 重新生成**，产物不手改。
-
-```bash
-# 依赖：bun（本机直接可用全局 pptxgenjs；缺了就装一次）
-bun add -g pptxgenjs
-
-# 重新生成某一讲（覆盖旧 .pptx）
-cd ppt/ppt1-intro && bun build.js
-
-# 三份全部重新生成
-for d in ppt/ai-agent-evolution ppt/ppt1-intro ppt/ppt2-workshop; do (cd "$d" && bun build.js); done
+```
+notes/     Markdown 材料库（调研底稿、核对留痕、证据摘录、想法、月志）
+reports/   HTML 报告库（工程蓝图主题，自包含可直开，主题域分子目录）
+templates/ report.html 报告模板（新报告起点）
+apps/site/ VitePress 站点（浏览入口，消费顶层 notes/ 与 reports/）
 ```
 
-维护要点：
+LLM 代理请从根目录 [llms.txt](llms.txt) 进入；写入操作前必读 [AGENTS.md](AGENTS.md)。
 
-- **内容以讲义 `.md` 为源头**。先改讲义，再把对应文字同步进 `build.js`；每页幻灯片是按 `// ===== S7 大模型 =====` 顺序注释的独立代码块，增删页时同步改顶部的 `TOTAL` 总页数（页脚计数用）。
-- **两讲共用一套设计系统**：`build.js` 顶部的颜色/字体常量（`OR`/`ORB` 主橙、`INK`/`MUT` 文字灰、`F` 微软雅黑、`MONO` Consolas）。换主题色或字体只动常量，不要在页面代码里写死色值。
-- **常用辅助函数**：`T()` 单行文本、`PG()` 多段文本（颜色写在每段的 `o.c`，内部映射为 pptxgenjs 的 `color`）、`card()` 圆角卡、`arrow()` 箭头、`chip()` 标签、`term()` 深色终端卡（贯穿两讲的母题）。演讲者备注用 `s.addNotes()`。
-- **理念开篇的脚本**（`ai-agent-evolution/build.js`）额外依赖 `react` / `react-icons` / `sharp`（渲染图标）；第 1、2 讲的脚本只依赖 `pptxgenjs`，形状与图表全部原生绘制。
-- **预览校验**（可选）：
+## 常用命令
 
-  ```bash
-  soffice --headless --convert-to pdf --outdir /tmp opencode-入门.pptx
-  pdftoppm -png -r 100 /tmp/opencode-入门.pdf /tmp/page
-  ```
+包管理器固定 pnpm（工作区内禁用 bun/npm/yarn），本机经 mise 提供：
 
-  注意本机 LibreOffice 会把微软雅黑替换为替代字体，预览有轻微字宽差异属正常；最终效果以装有微软雅黑的 PowerPoint / WPS 放映为准。
+```bash
+pnpm install            # 安装根 turbo + apps/site 依赖
+pnpm dev                # 站点开发（sync 监听 notes/ 与 reports/ 变更 + vitepress dev）
+pnpm build              # sync 物化内容 + vitepress 构建，产物在 apps/site/dist/
+pnpm preview            # 预览构建产物
+```
+
+## 新增 HTML 报告
+
+1. 复制 `templates/report.html` 到 `reports/<主题域>/<名称>.html`；
+2. 替换标题与占位内容（色板 token 在 `:root`，勿改变量名）；
+3. `pnpm build` —— sync.mjs 自动生成嵌入页、报告库总览与侧栏，零登记；
+4. 更新 `llms.txt` 索引（规则见 AGENTS.md）。
+
+## 新增 Markdown 材料
+
+放入 `notes/<主题域>/`，站点下次构建自动渲染；如需进侧栏与 llms.txt，见 AGENTS.md 约定。
+
+## 历史
+
+2026-09-19 仓库删除重建（原历史与远程已删除）；同日完成 monorepo 化。旧结构（含已删除的 ppt/）封存于分支 `archive/pre-monorepo`。
