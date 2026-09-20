@@ -8,12 +8,12 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --color-paper: #f3f6fa; --color-paper-2: #ffffff;
-      --color-ink: #14263c; --color-muted: #45586c; --color-soft: #6c7f92;
-      --color-rule: rgba(20,38,60,0.12);
-      --color-accent: #0c6e9e; --color-accent-tint: rgba(12,110,158,0.12);
-      --color-link: #2f66b0; --color-mustard: #9a6a10;
-      --color-sage: #23764b; --color-dusty: #4a708f;
+      --color-paper: #faf7f2; --color-paper-2: #ffffff;
+      --color-ink: #1c1917; --color-muted: #57534e; --color-soft: #6f665f;
+      --color-rule: rgba(28,25,23,0.12);
+      --color-accent: #c2410c; --color-accent-tint: rgba(194,65,12,0.12);
+      --color-link: #4e6e81; --color-mustard: #a16207;
+      --color-sage: #5c7444; --color-dusty: #4e6e81;
       --font-sans: 'Geist', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
       --font-serif: 'Instrument Serif', 'Noto Serif SC', 'Songti SC', serif;
       --font-mono: 'Geist Mono', 'PingFang SC', ui-monospace, Menlo, monospace;
@@ -45,7 +45,7 @@
     .cards.three { grid-template-columns: 1fr 1.05fr 1.12fr; }
     .cards.five { grid-template-columns: repeat(5, 1fr); }
     .card { min-width: 0; background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 6px; padding: 1.1rem 1.2rem 1.15rem; }
-    .card.focal { border-color: rgba(12,110,158,0.55); }
+    .card.focal { border-color: rgba(194,65,12,0.55); }
     .card-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem; }
     .card-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
     .card-dot.ink { background: var(--color-ink); } .card-dot.muted { background: var(--color-muted); }
@@ -56,11 +56,11 @@
     .card h3 .h3-mono { font-family: var(--font-mono); font-weight: 500; font-size: 0.68rem; color: var(--color-soft); letter-spacing: 0.08em; }
     .card ul { list-style: none; color: var(--color-muted); font-size: 0.8rem; line-height: 1.6; }
     .card ul li { margin-bottom: 0.35rem; padding-left: 0.9rem; position: relative; }
-    .card ul li::before { content: '—'; position: absolute; left: 0; color: rgba(20,38,60,0.28); font-size: 0.72rem; }
+    .card ul li::before { content: '—'; position: absolute; left: 0; color: rgba(28,25,23,0.28); font-size: 0.72rem; }
     .card ul li strong { color: var(--color-ink); font-weight: 600; }
     .callout { border-left: 2px solid var(--color-accent); padding: 0.35rem 0 0.35rem 1rem; margin-top: 1.25rem; font-family: var(--font-serif); font-size: 1.05rem; line-height: 1.6; color: var(--color-muted); max-width: 62ch; }
     .cred { display: grid; grid-template-columns: 1fr 1.35fr; gap: 1rem; margin-top: 1.25rem; }
-    .footer { margin-top: 2.25rem; padding-top: 1.25rem; border-top: 1px solid rgba(20,38,60,0.10); font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em; color: var(--color-soft); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+    .footer { margin-top: 2.25rem; padding-top: 1.25rem; border-top: 1px solid rgba(28,25,23,0.10); font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em; color: var(--color-soft); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
     .motion-ready [data-motion-item] { opacity: .12; transform: translateY(8px); transform-box: fill-box; transform-origin: center; transition: opacity var(--motion-step) var(--motion-ease), transform var(--motion-step) var(--motion-ease); }
     .motion-ready [data-motion-item].is-visible,
     .motion-ready[data-frame="end"] [data-motion-item],
@@ -68,7 +68,7 @@
     [data-motion-controls] { display: none; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--color-rule); }
     .motion-ready [data-motion-controls] { display: flex; }
     [data-motion-controls][hidden] { display: none !important; }
-    [data-motion-controls] button { min-width: 44px; min-height: 44px; padding: 8px 12px; border: 1px solid rgba(20,38,60,0.30); border-radius: 4px; color: var(--color-ink); background: var(--color-paper-2); font: 600 12px/1 var(--font-sans); cursor: pointer; }
+    [data-motion-controls] button { min-width: 44px; min-height: 44px; padding: 8px 12px; border: 1px solid rgba(28,25,23,0.30); border-radius: 4px; color: var(--color-ink); background: var(--color-paper-2); font: 600 12px/1 var(--font-sans); cursor: pointer; }
     [data-motion-controls] button:hover { border-color: var(--color-accent); }
     [data-motion-controls] button:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
     [data-motion-controls] button:disabled { cursor: not-allowed; opacity: .45; }
@@ -143,60 +143,60 @@
           <desc id="bp-desc">L1 统计基线、L2 平台化、L3 ML 规模化、L4 自适应闭环四级阶梯逐级升高，L5 自主优化以虚线表示 2028 年后的北极星方向。</desc>
           <rect width="1120" height="520" fill="#ffffff"/>
 
-          <line x1="24" y1="456" x2="1096" y2="456" stroke="rgba(20,38,60,0.30)" stroke-width="1"/>
+          <line x1="24" y1="456" x2="1096" y2="456" stroke="rgba(28,25,23,0.30)" stroke-width="1"/>
 
           <!-- L1 -->
           <g data-motion-item data-step="1" aria-label="Step 1: L1 统计基线">
             <rect x="28" y="368" width="200" height="88" rx="6" fill="#ffffff"/>
-            <rect x="28" y="368" width="200" height="88" rx="6" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.30)" stroke-width="1"/>
-            <text x="44" y="394" fill="#6c7f92" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="0.12em">L1 · M1–M6</text>
-            <text x="44" y="418" fill="#14263c" font-size="13" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">统计基线</text>
-            <text x="44" y="440" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">PAT/DPAT 落标 · 数据全接入</text>
+            <rect x="28" y="368" width="200" height="88" rx="6" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.30)" stroke-width="1"/>
+            <text x="44" y="394" fill="#6f665f" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="0.12em">L1 · M1–M6</text>
+            <text x="44" y="418" fill="#1c1917" font-size="13" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">统计基线</text>
+            <text x="44" y="440" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">PAT/DPAT 落标 · 数据全接入</text>
           </g>
           <!-- L2 -->
           <g data-motion-item data-step="2" aria-label="Step 2: L2 平台化">
             <rect x="244" y="320" width="200" height="136" rx="6" fill="#ffffff"/>
-            <rect x="244" y="320" width="200" height="136" rx="6" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.30)" stroke-width="1"/>
-            <text x="260" y="346" fill="#6c7f92" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="0.12em">L2 · M4–M12</text>
-            <text x="260" y="370" fill="#14263c" font-size="13" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">平台化</text>
-            <text x="260" y="392" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">湖仓 + 宽表 + 看板</text>
-            <text x="260" y="406" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">T+1 SLO 达成（PART 02）</text>
+            <rect x="244" y="320" width="200" height="136" rx="6" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.30)" stroke-width="1"/>
+            <text x="260" y="346" fill="#6f665f" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="0.12em">L2 · M4–M12</text>
+            <text x="260" y="370" fill="#1c1917" font-size="13" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">平台化</text>
+            <text x="260" y="392" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">湖仓 + 宽表 + 看板</text>
+            <text x="260" y="406" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">T+1 SLO 达成（PART 02）</text>
           </g>
           <!-- L3 -->
           <g data-motion-item data-step="3" aria-label="Step 3: L3 ML 规模化">
             <rect x="460" y="272" width="200" height="184" rx="6" fill="#ffffff"/>
-            <rect x="460" y="272" width="200" height="184" rx="6" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.30)" stroke-width="1"/>
-            <text x="476" y="298" fill="#6c7f92" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="0.12em">L3 · M10–M15</text>
-            <text x="476" y="322" fill="#14263c" font-size="13" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">ML 规模化</text>
-            <text x="476" y="344" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">晶圆图识别 · 异常检测</text>
-            <text x="476" y="358" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">虚拟量测试点 · MRB 门槛</text>
-            <text x="476" y="372" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">WM-811K 基线 ≥98%</text>
+            <rect x="460" y="272" width="200" height="184" rx="6" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.30)" stroke-width="1"/>
+            <text x="476" y="298" fill="#6f665f" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="0.12em">L3 · M10–M15</text>
+            <text x="476" y="322" fill="#1c1917" font-size="13" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">ML 规模化</text>
+            <text x="476" y="344" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">晶圆图识别 · 异常检测</text>
+            <text x="476" y="358" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">虚拟量测试点 · MRB 门槛</text>
+            <text x="476" y="372" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">WM-811K 基线 ≥98%</text>
           </g>
           <!-- L4（焦点） -->
           <g data-motion-item data-step="4" aria-label="Step 4: L4 自适应闭环">
             <rect x="676" y="224" width="200" height="232" rx="6" fill="#ffffff"/>
-            <rect x="676" y="224" width="200" height="232" rx="6" fill="rgba(12,110,158,0.12)" stroke="#0c6e9e" stroke-width="1"/>
-            <text x="692" y="250" fill="#0c6e9e" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="0.12em">L4 · M13–M18</text>
-            <text x="692" y="274" fill="#14263c" font-size="13" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">自适应闭环</text>
-            <text x="692" y="296" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">双预测器试点（Pan 2024 路线）</text>
-            <text x="692" y="310" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">参数回写 ATE · 灰度放行</text>
-            <text x="692" y="324" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">品质 MRB 把关 · 可回退</text>
-            <text x="692" y="346" fill="#0c6e9e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">18 个月承诺边界</text>
+            <rect x="676" y="224" width="200" height="232" rx="6" fill="rgba(194,65,12,0.12)" stroke="#c2410c" stroke-width="1"/>
+            <text x="692" y="250" fill="#c2410c" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="0.12em">L4 · M13–M18</text>
+            <text x="692" y="274" fill="#1c1917" font-size="13" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">自适应闭环</text>
+            <text x="692" y="296" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">双预测器试点（Pan 2024 路线）</text>
+            <text x="692" y="310" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">参数回写 ATE · 灰度放行</text>
+            <text x="692" y="324" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">品质 MRB 把关 · 可回退</text>
+            <text x="692" y="346" fill="#c2410c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">18 个月承诺边界</text>
           </g>
           <!-- L5（北极星，虚线） -->
           <g data-motion-item data-step="5" aria-label="Step 5: L5 自主优化北极星">
             <rect x="892" y="176" width="204" height="280" rx="6" fill="#ffffff"/>
-            <rect x="892" y="176" width="204" height="280" rx="6" fill="rgba(20,38,60,0.02)" stroke="rgba(20,38,60,0.35)" stroke-width="1" stroke-dasharray="5,4"/>
-            <text x="908" y="202" fill="#6c7f92" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="0.12em">L5 · 2028+</text>
-            <text x="908" y="226" fill="#45586c" font-size="13" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">自主优化（北极星）</text>
-            <text x="908" y="248" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">跨厂区联邦学习</text>
-            <text x="908" y="262" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">生成式 AI 分析助手</text>
-            <text x="908" y="276" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">测试流程自主调优</text>
-            <text x="908" y="298" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">方向而非承诺 · 不入 KPI</text>
+            <rect x="892" y="176" width="204" height="280" rx="6" fill="rgba(28,25,23,0.02)" stroke="rgba(28,25,23,0.35)" stroke-width="1" stroke-dasharray="5,4"/>
+            <text x="908" y="202" fill="#6f665f" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="0.12em">L5 · 2028+</text>
+            <text x="908" y="226" fill="#57534e" font-size="13" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">自主优化（北极星）</text>
+            <text x="908" y="248" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">跨厂区联邦学习</text>
+            <text x="908" y="262" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">生成式 AI 分析助手</text>
+            <text x="908" y="276" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">测试流程自主调优</text>
+            <text x="908" y="298" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">方向而非承诺 · 不入 KPI</text>
           </g>
 
-          <line x1="24" y1="484" x2="1096" y2="484" stroke="rgba(20,38,60,0.12)" stroke-width="0.8"/>
-          <text x="24" y="506" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.1em">阶梯示意：横轴为时间与投入走向，纵轴高度为能力等级（非等比例尺）· 每级定义与任务见下方甘特</text>
+          <line x1="24" y1="484" x2="1096" y2="484" stroke="rgba(28,25,23,0.12)" stroke-width="0.8"/>
+          <text x="24" y="506" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.1em">阶梯示意：横轴为时间与投入走向，纵轴高度为能力等级（非等比例尺）· 每级定义与任务见下方甘特</text>
         </svg>
       </div>
 
@@ -227,66 +227,66 @@
           <rect width="1120" height="640" fill="#ffffff"/>
 
           <!-- 时间轴 -->
-          <g fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">
+          <g fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">
             <text x="200" y="56">2026-10</text><text x="335" y="56">2027-01</text><text x="470" y="56">2027-04</text>
             <text x="605" y="56">2027-07</text><text x="740" y="56">2027-10</text><text x="875" y="56">2028-01</text><text x="1010" y="56">2028-03</text>
           </g>
-          <g stroke="rgba(20,38,60,0.08)" stroke-width="0.8">
+          <g stroke="rgba(28,25,23,0.08)" stroke-width="0.8">
             <line x1="200" y1="64" x2="200" y2="560"/><line x1="335" y1="64" x2="335" y2="560"/><line x1="470" y1="64" x2="470" y2="560"/>
             <line x1="605" y1="64" x2="605" y2="560"/><line x1="740" y1="64" x2="740" y2="560"/><line x1="875" y1="64" x2="875" y2="560"/><line x1="1010" y1="64" x2="1010" y2="560"/>
           </g>
-          <line x1="200" y1="64" x2="200" y2="560" stroke="rgba(20,38,60,0.25)" stroke-width="1"/>
+          <line x1="200" y1="64" x2="200" y2="560" stroke="rgba(28,25,23,0.25)" stroke-width="1"/>
 
           <!-- 阶段分区 -->
-          <rect x="24" y="72" width="1072" height="120" rx="6" fill="rgba(20,38,60,0.02)" stroke="rgba(20,38,60,0.10)" stroke-width="0.8"/>
-          <text x="32" y="88" fill="#6c7f92" font-size="7" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">P1 摸底与基线 · M1–M6</text>
-          <rect x="24" y="196" width="1072" height="120" rx="6" fill="rgba(20,38,60,0.02)" stroke="rgba(20,38,60,0.10)" stroke-width="0.8"/>
-          <text x="32" y="212" fill="#6c7f92" font-size="7" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">P2 平台化 · M4–M12</text>
-          <rect x="24" y="320" width="1072" height="120" rx="6" fill="rgba(20,38,60,0.02)" stroke="rgba(20,38,60,0.10)" stroke-width="0.8"/>
-          <text x="32" y="336" fill="#6c7f92" font-size="7" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">P3 ML 规模化 · M10–M15</text>
-          <rect x="24" y="444" width="1072" height="120" rx="6" fill="rgba(20,38,60,0.02)" stroke="rgba(20,38,60,0.10)" stroke-width="0.8"/>
-          <text x="32" y="460" fill="#6c7f92" font-size="7" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">P4 自适应闭环 · M13–M18</text>
+          <rect x="24" y="72" width="1072" height="120" rx="6" fill="rgba(28,25,23,0.02)" stroke="rgba(28,25,23,0.10)" stroke-width="0.8"/>
+          <text x="32" y="88" fill="#6f665f" font-size="7" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">P1 摸底与基线 · M1–M6</text>
+          <rect x="24" y="196" width="1072" height="120" rx="6" fill="rgba(28,25,23,0.02)" stroke="rgba(28,25,23,0.10)" stroke-width="0.8"/>
+          <text x="32" y="212" fill="#6f665f" font-size="7" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">P2 平台化 · M4–M12</text>
+          <rect x="24" y="320" width="1072" height="120" rx="6" fill="rgba(28,25,23,0.02)" stroke="rgba(28,25,23,0.10)" stroke-width="0.8"/>
+          <text x="32" y="336" fill="#6f665f" font-size="7" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">P3 ML 规模化 · M10–M15</text>
+          <rect x="24" y="444" width="1072" height="120" rx="6" fill="rgba(28,25,23,0.02)" stroke="rgba(28,25,23,0.10)" stroke-width="0.8"/>
+          <text x="32" y="460" fill="#6f665f" font-size="7" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">P4 自适应闭环 · M13–M18</text>
 
           <!-- P1 任务 -->
-          <rect x="200" y="88" width="135" height="24" rx="4" fill="rgba(69,88,108,0.15)" stroke="#45586c" stroke-width="1"/>
-          <text x="208" y="105" fill="#14263c" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">数据源盘点</text>
-          <rect x="245" y="128" width="135" height="24" rx="4" fill="rgba(69,88,108,0.15)" stroke="#45586c" stroke-width="1"/>
-          <text x="253" y="145" fill="#14263c" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">接入管道</text>
-          <rect x="335" y="168" width="135" height="24" rx="4" fill="rgba(69,88,108,0.15)" stroke="#45586c" stroke-width="1"/>
-          <text x="343" y="185" fill="#14263c" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">PAT 基线落标</text>
+          <rect x="200" y="88" width="135" height="24" rx="4" fill="rgba(87,83,78,0.15)" stroke="#57534e" stroke-width="1"/>
+          <text x="208" y="105" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">数据源盘点</text>
+          <rect x="245" y="128" width="135" height="24" rx="4" fill="rgba(87,83,78,0.15)" stroke="#57534e" stroke-width="1"/>
+          <text x="253" y="145" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">接入管道</text>
+          <rect x="335" y="168" width="135" height="24" rx="4" fill="rgba(87,83,78,0.15)" stroke="#57534e" stroke-width="1"/>
+          <text x="343" y="185" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">PAT 基线落标</text>
 
           <!-- P2 任务 -->
-          <rect x="380" y="212" width="225" height="24" rx="4" fill="rgba(69,88,108,0.15)" stroke="#45586c" stroke-width="1"/>
-          <text x="388" y="229" fill="#14263c" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">湖仓与计算底座</text>
-          <rect x="425" y="252" width="225" height="24" rx="4" fill="rgba(69,88,108,0.15)" stroke="#45586c" stroke-width="1"/>
-          <text x="433" y="269" fill="#14263c" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">数据治理与分级</text>
-          <rect x="515" y="292" width="225" height="24" rx="4" fill="rgba(69,88,108,0.15)" stroke="#45586c" stroke-width="1"/>
-          <text x="523" y="309" fill="#14263c" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">die 级宽表与看板</text>
+          <rect x="380" y="212" width="225" height="24" rx="4" fill="rgba(87,83,78,0.15)" stroke="#57534e" stroke-width="1"/>
+          <text x="388" y="229" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">湖仓与计算底座</text>
+          <rect x="425" y="252" width="225" height="24" rx="4" fill="rgba(87,83,78,0.15)" stroke="#57534e" stroke-width="1"/>
+          <text x="433" y="269" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">数据治理与分级</text>
+          <rect x="515" y="292" width="225" height="24" rx="4" fill="rgba(87,83,78,0.15)" stroke="#57534e" stroke-width="1"/>
+          <text x="523" y="309" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">die 级宽表与看板</text>
 
           <!-- P3 任务 -->
-          <rect x="605" y="336" width="135" height="24" rx="4" fill="rgba(69,88,108,0.15)" stroke="#45586c" stroke-width="1"/>
-          <text x="613" y="353" fill="#14263c" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">特征仓上线</text>
-          <rect x="650" y="376" width="180" height="24" rx="4" fill="rgba(69,88,108,0.15)" stroke="#45586c" stroke-width="1"/>
-          <text x="658" y="393" fill="#14263c" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">晶圆图识别上线</text>
-          <rect x="695" y="416" width="180" height="24" rx="4" fill="rgba(69,88,108,0.15)" stroke="#45586c" stroke-width="1"/>
-          <text x="703" y="433" fill="#14263c" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">异常检测 / VM 试点</text>
+          <rect x="605" y="336" width="135" height="24" rx="4" fill="rgba(87,83,78,0.15)" stroke="#57534e" stroke-width="1"/>
+          <text x="613" y="353" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">特征仓上线</text>
+          <rect x="650" y="376" width="180" height="24" rx="4" fill="rgba(87,83,78,0.15)" stroke="#57534e" stroke-width="1"/>
+          <text x="658" y="393" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">晶圆图识别上线</text>
+          <rect x="695" y="416" width="180" height="24" rx="4" fill="rgba(87,83,78,0.15)" stroke="#57534e" stroke-width="1"/>
+          <text x="703" y="433" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">异常检测 / VM 试点</text>
 
           <!-- P4 任务 -->
-          <rect x="740" y="460" width="135" height="24" rx="4" fill="rgba(69,88,108,0.15)" stroke="#45586c" stroke-width="1"/>
-          <text x="748" y="477" fill="#14263c" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">预测器试点</text>
-          <rect x="830" y="500" width="180" height="24" rx="4" fill="rgba(12,110,158,0.15)" stroke="#0c6e9e" stroke-width="1"/>
-          <text x="838" y="517" fill="#0c6e9e" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">灰度放行与评测</text>
-          <rect x="920" y="540" width="90" height="24" rx="4" fill="rgba(69,88,108,0.15)" stroke="#45586c" stroke-width="1"/>
-          <text x="928" y="557" fill="#14263c" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">全面推广</text>
+          <rect x="740" y="460" width="135" height="24" rx="4" fill="rgba(87,83,78,0.15)" stroke="#57534e" stroke-width="1"/>
+          <text x="748" y="477" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">预测器试点</text>
+          <rect x="830" y="500" width="180" height="24" rx="4" fill="rgba(194,65,12,0.15)" stroke="#c2410c" stroke-width="1"/>
+          <text x="838" y="517" fill="#c2410c" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">灰度放行与评测</text>
+          <rect x="920" y="540" width="90" height="24" rx="4" fill="rgba(87,83,78,0.15)" stroke="#57534e" stroke-width="1"/>
+          <text x="928" y="557" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">全面推广</text>
 
           <!-- 图例 -->
-          <line x1="24" y1="584" x2="1096" y2="584" stroke="rgba(20,38,60,0.12)" stroke-width="0.8"/>
-          <text x="24" y="612" fill="#6c7f92" font-size="8" font-weight="500" font-family="'Geist Mono',monospace" letter-spacing="0.14em">LEGEND</text>
-          <rect x="96" y="602" width="16" height="12" rx="3" fill="rgba(69,88,108,0.15)" stroke="#45586c" stroke-width="1"/>
-          <text x="120" y="612" fill="#45586c" font-size="9" font-family="'Geist','PingFang SC',sans-serif">任务（起止为项目月，设计假设）</text>
-          <rect x="352" y="602" width="16" height="12" rx="3" fill="rgba(12,110,158,0.15)" stroke="#0c6e9e" stroke-width="1"/>
-          <text x="376" y="612" fill="#45586c" font-size="9" font-family="'Geist','PingFang SC',sans-serif">关键路径末端 · 灰度放行</text>
-          <text x="568" y="612" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">阶段有意重叠：平台在基线收尾前启动，ML 在湖仓可用后进场</text>
+          <line x1="24" y1="584" x2="1096" y2="584" stroke="rgba(28,25,23,0.12)" stroke-width="0.8"/>
+          <text x="24" y="612" fill="#6f665f" font-size="8" font-weight="500" font-family="'Geist Mono',monospace" letter-spacing="0.14em">LEGEND</text>
+          <rect x="96" y="602" width="16" height="12" rx="3" fill="rgba(87,83,78,0.15)" stroke="#57534e" stroke-width="1"/>
+          <text x="120" y="612" fill="#57534e" font-size="9" font-family="'Geist','PingFang SC',sans-serif">任务（起止为项目月，设计假设）</text>
+          <rect x="352" y="602" width="16" height="12" rx="3" fill="rgba(194,65,12,0.15)" stroke="#c2410c" stroke-width="1"/>
+          <text x="376" y="612" fill="#57534e" font-size="9" font-family="'Geist','PingFang SC',sans-serif">关键路径末端 · 灰度放行</text>
+          <text x="568" y="612" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">阶段有意重叠：平台在基线收尾前启动，ML 在湖仓可用后进场</text>
         </svg>
       </div>
     </section>
@@ -304,53 +304,53 @@
           <desc id="ms-desc">2026 年 10 月至 2028 年 3 月的时间线上，M1 至 M6 六个里程碑交替标注于轴上下，M3 与 M6 为主要里程碑。</desc>
           <rect width="1120" height="400" fill="#ffffff"/>
 
-          <line x1="96" y1="200" x2="1024" y2="200" stroke="rgba(20,38,60,0.30)" stroke-width="1"/>
-          <g stroke="rgba(20,38,60,0.25)" stroke-width="1">
+          <line x1="96" y1="200" x2="1024" y2="200" stroke="rgba(28,25,23,0.30)" stroke-width="1"/>
+          <g stroke="rgba(28,25,23,0.25)" stroke-width="1">
             <line x1="96" y1="194" x2="96" y2="206"/><line x1="251" y1="194" x2="251" y2="206"/><line x1="405" y1="194" x2="405" y2="206"/>
             <line x1="560" y1="194" x2="560" y2="206"/><line x1="715" y1="194" x2="715" y2="206"/><line x1="869" y1="194" x2="869" y2="206"/><line x1="1024" y1="194" x2="1024" y2="206"/>
           </g>
-          <g fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">
+          <g fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">
             <text x="96" y="228">2026-10</text><text x="251" y="228">2027-01</text><text x="405" y="228">2027-04</text>
             <text x="560" y="228">2027-07</text><text x="715" y="228">2027-10</text><text x="869" y="228">2028-01</text><text x="1024" y="228">2028-03</text>
           </g>
 
           <!-- M1 上 -->
-          <circle cx="251" cy="200" r="4" fill="#45586c"/>
-          <line x1="251" y1="196" x2="251" y2="140" stroke="rgba(20,38,60,0.18)" stroke-width="1"/>
-          <text x="251" y="92" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">M1 · 数据全接入</text>
-          <text x="251" y="110" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">M3 · 2027-01 · 源覆盖率 100%</text>
+          <circle cx="251" cy="200" r="4" fill="#57534e"/>
+          <line x1="251" y1="196" x2="251" y2="140" stroke="rgba(28,25,23,0.18)" stroke-width="1"/>
+          <text x="251" y="92" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">M1 · 数据全接入</text>
+          <text x="251" y="110" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">M3 · 2027-01 · 源覆盖率 100%</text>
 
           <!-- M2 下 -->
-          <circle cx="405" cy="200" r="4" fill="#45586c"/>
-          <line x1="405" y1="204" x2="405" y2="256" stroke="rgba(20,38,60,0.18)" stroke-width="1"/>
-          <text x="405" y="288" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">M2 · PAT 全覆盖</text>
-          <text x="405" y="306" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">M6 · 2027-04 · AEC-Q001 参数全落标</text>
+          <circle cx="405" cy="200" r="4" fill="#57534e"/>
+          <line x1="405" y1="204" x2="405" y2="256" stroke="rgba(28,25,23,0.18)" stroke-width="1"/>
+          <text x="405" y="288" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">M2 · PAT 全覆盖</text>
+          <text x="405" y="306" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">M6 · 2027-04 · AEC-Q001 参数全落标</text>
 
           <!-- M3 上（主要） -->
-          <circle cx="560" cy="200" r="6" fill="#0c6e9e"/>
-          <line x1="560" y1="194" x2="560" y2="132" stroke="rgba(12,110,158,0.5)" stroke-width="1"/>
-          <text x="560" y="84" fill="#0c6e9e" font-size="13" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">M3 · 平台上线</text>
-          <text x="560" y="102" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">M9 · 2027-07 · T+1 SLO 达成</text>
+          <circle cx="560" cy="200" r="6" fill="#c2410c"/>
+          <line x1="560" y1="194" x2="560" y2="132" stroke="rgba(194,65,12,0.5)" stroke-width="1"/>
+          <text x="560" y="84" fill="#c2410c" font-size="13" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">M3 · 平台上线</text>
+          <text x="560" y="102" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">M9 · 2027-07 · T+1 SLO 达成</text>
 
           <!-- M4 下 -->
-          <circle cx="715" cy="200" r="4" fill="#45586c"/>
-          <line x1="715" y1="204" x2="715" y2="256" stroke="rgba(20,38,60,0.18)" stroke-width="1"/>
-          <text x="715" y="288" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">M4 · 首个 ML 模型上线</text>
-          <text x="715" y="306" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">M12 · 2027-10 · 晶圆图识别精度 ≥98%</text>
+          <circle cx="715" cy="200" r="4" fill="#57534e"/>
+          <line x1="715" y1="204" x2="715" y2="256" stroke="rgba(28,25,23,0.18)" stroke-width="1"/>
+          <text x="715" y="288" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">M4 · 首个 ML 模型上线</text>
+          <text x="715" y="306" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">M12 · 2027-10 · 晶圆图识别精度 ≥98%</text>
 
           <!-- M5 上 -->
-          <circle cx="869" cy="200" r="4" fill="#45586c"/>
-          <line x1="869" y1="196" x2="869" y2="140" stroke="rgba(20,38,60,0.18)" stroke-width="1"/>
-          <text x="869" y="92" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">M5 · 闭环灰度</text>
-          <text x="869" y="110" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">M15 · 2028-01 · 灰度域测试时长 −10%</text>
+          <circle cx="869" cy="200" r="4" fill="#57534e"/>
+          <line x1="869" y1="196" x2="869" y2="140" stroke="rgba(28,25,23,0.18)" stroke-width="1"/>
+          <text x="869" y="92" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">M5 · 闭环灰度</text>
+          <text x="869" y="110" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">M15 · 2028-01 · 灰度域测试时长 −10%</text>
 
           <!-- M6 下（主要） -->
-          <circle cx="1024" cy="200" r="6" fill="#0c6e9e"/>
-          <line x1="1024" y1="206" x2="1024" y2="264" stroke="rgba(12,110,158,0.5)" stroke-width="1"/>
-          <text x="1004" y="296" fill="#0c6e9e" font-size="13" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">M6 · 全面推广</text>
-          <text x="1004" y="314" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">M18 · 2028-03 · 逃逸 DPPM −30%</text>
+          <circle cx="1024" cy="200" r="6" fill="#c2410c"/>
+          <line x1="1024" y1="206" x2="1024" y2="264" stroke="rgba(194,65,12,0.5)" stroke-width="1"/>
+          <text x="1004" y="296" fill="#c2410c" font-size="13" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">M6 · 全面推广</text>
+          <text x="1004" y="314" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">M18 · 2028-03 · 逃逸 DPPM −30%</text>
 
-          <text x="96" y="368" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.1em">时间轴按项目月等距（M1 = 2026-10）· KPI 幅度为设计假设，立项时以实测基线重校</text>
+          <text x="96" y="368" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.1em">时间轴按项目月等距（M1 = 2026-10）· KPI 幅度为设计假设，立项时以实测基线重校</text>
         </svg>
       </div>
     </section>
@@ -459,7 +459,7 @@
       </div>
       <div class="footer">
         <span>测试数据智能 · 全系列四篇：00 立项论证 · 01 组织 · 02 架构 · 03 蓝图 · 前作《测试数据分析》《工艺图解》</span>
-        <span>diagram-design 暗色皮肤 · 2026-09-19</span>
+        <span>diagram-design 暖纸皮肤 · 2026-09-19</span>
       </div>
     </section>
 

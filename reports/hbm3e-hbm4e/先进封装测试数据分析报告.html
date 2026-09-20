@@ -11,17 +11,17 @@
     :root {
       --color-paper:       #ffffff;
       --color-paper-2:     #ffffff;
-      --color-ink:         #14263c;
-      --color-muted:       #45586c;
-      --color-soft:        #6c7f92;
-      --color-rule:        rgba(20,38,60,0.12);
-      --color-accent:      #0c6e9e;
-      --color-accent-tint: rgba(12,110,158,0.12);
-      --color-link:        #2f66b0;
-      --color-mustard:     #9a6a10;
-      --color-sage:        #23764b;
-      --color-dusty:       #4a708f;
-      --color-rust:        #ad4a30;
+      --color-ink:         #1c1917;
+      --color-muted:       #57534e;
+      --color-soft:        #6f665f;
+      --color-rule:        rgba(28,25,23,0.12);
+      --color-accent:      #c2410c;
+      --color-accent-tint: rgba(194,65,12,0.12);
+      --color-link:        #4e6e81;
+      --color-mustard:     #a16207;
+      --color-sage:        #5c7444;
+      --color-dusty:       #4e6e81;
+      --color-rust:        #9a3412;
       --font-sans:   'Geist', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
       --font-serif:  'Instrument Serif', 'Noto Serif SC', 'Songti SC', serif;
       --font-mono:   'Geist Mono', 'PingFang SC', ui-monospace, Menlo, monospace;
@@ -112,7 +112,7 @@
       border-radius: 6px;
       padding: 1.1rem 1.2rem 1.15rem;
     }
-    .card.focal { border-color: rgba(12,110,158,0.55); }
+    .card.focal { border-color: rgba(194,65,12,0.55); }
     .card-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem; }
     .card-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
     .card-dot.ink   { background: var(--color-ink); }
@@ -131,25 +131,25 @@
     .card ul li { margin-bottom: 0.35rem; padding-left: 0.9rem; position: relative; }
     .card ul li::before {
       content: '—'; position: absolute; left: 0;
-      color: rgba(20,38,60,0.28); font-size: 0.72rem;
+      color: rgba(28,25,23,0.28); font-size: 0.72rem;
     }
     .card ul li strong { color: var(--color-ink); font-weight: 600; }
 
     .formula-strip { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem; }
     .fchip {
       font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-muted);
-      border: 1px solid rgba(20,38,60,0.18); border-radius: 4px;
+      border: 1px solid rgba(28,25,23,0.18); border-radius: 4px;
       padding: 0.5rem 0.85rem; line-height: 1.5;
     }
     .fchip strong { color: var(--color-ink); font-weight: 600; }
-    .fchip.acc { color: var(--color-accent); border-color: rgba(12,110,158,0.5); }
+    .fchip.acc { color: var(--color-accent); border-color: rgba(194,65,12,0.5); }
 
     .diff { width: 100%; border-collapse: collapse; background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 6px; overflow: hidden; }
-    .diff th, .diff td { text-align: left; padding: 0.66rem 0.9rem; border-bottom: 1px solid rgba(20,38,60,0.08); vertical-align: top; }
+    .diff th, .diff td { text-align: left; padding: 0.66rem 0.9rem; border-bottom: 1px solid rgba(28,25,23,0.08); vertical-align: top; }
     .diff thead th {
       font-family: var(--font-mono); font-size: 0.62rem; font-weight: 600;
       letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-soft);
-      background: rgba(20,38,60,0.04); border-bottom: 1px solid rgba(20,38,60,0.14);
+      background: rgba(28,25,23,0.04); border-bottom: 1px solid rgba(28,25,23,0.14);
     }
     .diff td { font-size: 0.78rem; line-height: 1.55; color: var(--color-muted); }
     .diff td.el { font-weight: 600; color: var(--color-ink); font-size: 0.78rem; white-space: nowrap; }
@@ -166,7 +166,7 @@
     .cred ul li a:hover { text-decoration: underline; }
     .footer {
       margin-top: 2.25rem; padding-top: 1.25rem;
-      border-top: 1px solid rgba(20,38,60,0.10);
+      border-top: 1px solid rgba(28,25,23,0.10);
       font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em;
       color: var(--color-soft);
       display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
@@ -199,7 +199,7 @@
     [data-motion-controls][hidden] { display: none !important; }
     [data-motion-controls] button {
       min-width: 44px; min-height: 44px; padding: 8px 12px;
-      border: 1px solid rgba(20,38,60,0.30); border-radius: 4px;
+      border: 1px solid rgba(28,25,23,0.30); border-radius: 4px;
       color: var(--color-ink); background: var(--color-paper-2);
       font: 600 12px/1 var(--font-sans); cursor: pointer;
     }
@@ -295,120 +295,120 @@
           <desc id="tda-flow-desc">从 ATE 采集、数据标准、特征工程、模型层到决策与回流的五层管道，含标准锚点与闭环回流。</desc>
           <defs>
             <marker id="tda-flow-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-              <polygon points="0 0, 8 3, 0 6" fill="#45586c"/>
+              <polygon points="0 0, 8 3, 0 6" fill="#57534e"/>
             </marker>
             <marker id="tda-flow-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-              <polygon points="0 0, 8 3, 0 6" fill="#0c6e9e"/>
+              <polygon points="0 0, 8 3, 0 6" fill="#c2410c"/>
             </marker>
           </defs>
           <rect width="1120" height="496" fill="#ffffff"/>
 
           <!-- 连接器 -->
-          <line x1="224" y1="196" x2="248" y2="196" stroke="#45586c" stroke-width="1.2" marker-end="url(#tda-flow-arrow)"/>
-          <line x1="440" y1="196" x2="464" y2="196" stroke="#45586c" stroke-width="1.2" marker-end="url(#tda-flow-arrow)"/>
-          <line x1="656" y1="196" x2="680" y2="196" stroke="#45586c" stroke-width="1.2" marker-end="url(#tda-flow-arrow)"/>
-          <line x1="872" y1="196" x2="896" y2="196" stroke="#45586c" stroke-width="1.2" marker-end="url(#tda-flow-arrow)"/>
+          <line x1="224" y1="196" x2="248" y2="196" stroke="#57534e" stroke-width="1.2" marker-end="url(#tda-flow-arrow)"/>
+          <line x1="440" y1="196" x2="464" y2="196" stroke="#57534e" stroke-width="1.2" marker-end="url(#tda-flow-arrow)"/>
+          <line x1="656" y1="196" x2="680" y2="196" stroke="#57534e" stroke-width="1.2" marker-end="url(#tda-flow-arrow)"/>
+          <line x1="872" y1="196" x2="896" y2="196" stroke="#57534e" stroke-width="1.2" marker-end="url(#tda-flow-arrow)"/>
           <path d="M 992 296 V 324 Q 992 332 984 332 H 784 Q 776 332 776 324 V 296"
-                fill="none" stroke="#0c6e9e" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#tda-flow-arrow-accent)"/>
+                fill="none" stroke="#c2410c" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#tda-flow-arrow-accent)"/>
           <rect x="816" y="324" width="36" height="16" rx="2" fill="#ffffff"/>
-          <text x="834" y="336" fill="#0c6e9e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle" letter-spacing="0.08em">回流</text>
+          <text x="834" y="336" fill="#c2410c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle" letter-spacing="0.08em">回流</text>
           <path data-motion-item data-step="5" data-motion-decorative aria-hidden="true" focusable="false" pathLength="1" class="draw-path"
                 d="M 992 296 V 324 Q 992 332 984 332 H 784 Q 776 332 776 324 V 296"/>
 
           <!-- S1 -->
           <g data-motion-item data-step="1" aria-label="Step 1: ATE 采集层">
-            <rect x="32" y="96" width="192" height="200" rx="6" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.20)" stroke-width="1"/>
-            <rect x="44" y="108" width="20" height="16" rx="8" fill="rgba(20,38,60,0.12)"/>
-            <text x="54" y="120" fill="#45586c" font-size="9" font-weight="600" font-family="'Geist Mono',monospace" text-anchor="middle">1</text>
-            <text x="128" y="144" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">ATE 采集层</text>
-            <text x="128" y="166" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">WT 晶圆测试 · FT 终测</text>
-            <text x="128" y="180" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">KGSD 堆叠后测试</text>
-            <text x="128" y="194" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">逐 die 参数向量 + 版图坐标</text>
-            <text x="128" y="208" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">失效 bin · 测试条件</text>
-            <rect x="44" y="232" width="168" height="40" rx="4" fill="rgba(47,102,176,0.10)" stroke="rgba(47,102,176,0.45)" stroke-width="0.8"/>
-            <text x="52" y="246" fill="#2f66b0" font-size="7" font-family="'Geist Mono',monospace" letter-spacing="0.08em">FORMAT</text>
-            <text x="52" y="262" fill="#45586c" font-size="8" font-family="'Geist Mono',monospace">STDF v4 二进制记录</text>
+            <rect x="32" y="96" width="192" height="200" rx="6" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.20)" stroke-width="1"/>
+            <rect x="44" y="108" width="20" height="16" rx="8" fill="rgba(28,25,23,0.12)"/>
+            <text x="54" y="120" fill="#57534e" font-size="9" font-weight="600" font-family="'Geist Mono',monospace" text-anchor="middle">1</text>
+            <text x="128" y="144" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">ATE 采集层</text>
+            <text x="128" y="166" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">WT 晶圆测试 · FT 终测</text>
+            <text x="128" y="180" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">KGSD 堆叠后测试</text>
+            <text x="128" y="194" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">逐 die 参数向量 + 版图坐标</text>
+            <text x="128" y="208" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">失效 bin · 测试条件</text>
+            <rect x="44" y="232" width="168" height="40" rx="4" fill="rgba(78,110,129,0.10)" stroke="rgba(78,110,129,0.45)" stroke-width="0.8"/>
+            <text x="52" y="246" fill="#4e6e81" font-size="7" font-family="'Geist Mono',monospace" letter-spacing="0.08em">FORMAT</text>
+            <text x="52" y="262" fill="#57534e" font-size="8" font-family="'Geist Mono',monospace">STDF v4 二进制记录</text>
           </g>
           <!-- S2 -->
           <g data-motion-item data-step="2" aria-label="Step 2: 数据标准层">
-            <rect x="248" y="96" width="192" height="200" rx="6" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.20)" stroke-width="1"/>
-            <rect x="260" y="108" width="20" height="16" rx="8" fill="rgba(20,38,60,0.12)"/>
-            <text x="270" y="120" fill="#45586c" font-size="9" font-weight="600" font-family="'Geist Mono',monospace" text-anchor="middle">2</text>
-            <text x="344" y="144" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">数据标准层</text>
-            <text x="344" y="166" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">STDF：ATE 记录事实标准</text>
-            <text x="344" y="180" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">E142：晶圆图 XML Schema</text>
-            <text x="344" y="194" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">wafer / frame / strip / tray</text>
-            <text x="344" y="208" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">host ↔ 设备 ↔ MES 传输</text>
-            <rect x="260" y="232" width="168" height="40" rx="4" fill="rgba(47,102,176,0.10)" stroke="rgba(47,102,176,0.45)" stroke-width="0.8"/>
-            <text x="268" y="246" fill="#2f66b0" font-size="7" font-family="'Geist Mono',monospace" letter-spacing="0.08em">STANDARD</text>
-            <text x="268" y="262" fill="#45586c" font-size="8" font-family="'Geist Mono',monospace">STDF + SEMI E142</text>
+            <rect x="248" y="96" width="192" height="200" rx="6" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.20)" stroke-width="1"/>
+            <rect x="260" y="108" width="20" height="16" rx="8" fill="rgba(28,25,23,0.12)"/>
+            <text x="270" y="120" fill="#57534e" font-size="9" font-weight="600" font-family="'Geist Mono',monospace" text-anchor="middle">2</text>
+            <text x="344" y="144" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">数据标准层</text>
+            <text x="344" y="166" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">STDF：ATE 记录事实标准</text>
+            <text x="344" y="180" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">E142：晶圆图 XML Schema</text>
+            <text x="344" y="194" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">wafer / frame / strip / tray</text>
+            <text x="344" y="208" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">host ↔ 设备 ↔ MES 传输</text>
+            <rect x="260" y="232" width="168" height="40" rx="4" fill="rgba(78,110,129,0.10)" stroke="rgba(78,110,129,0.45)" stroke-width="0.8"/>
+            <text x="268" y="246" fill="#4e6e81" font-size="7" font-family="'Geist Mono',monospace" letter-spacing="0.08em">STANDARD</text>
+            <text x="268" y="262" fill="#57534e" font-size="8" font-family="'Geist Mono',monospace">STDF + SEMI E142</text>
           </g>
           <!-- S3 -->
           <g data-motion-item data-step="3" aria-label="Step 3: 特征工程层">
-            <rect x="464" y="96" width="192" height="200" rx="6" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.20)" stroke-width="1"/>
-            <rect x="476" y="108" width="20" height="16" rx="8" fill="rgba(20,38,60,0.12)"/>
-            <text x="486" y="120" fill="#45586c" font-size="9" font-weight="600" font-family="'Geist Mono',monospace" text-anchor="middle">3</text>
-            <text x="560" y="144" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">特征工程层</text>
-            <text x="560" y="166" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">逐 die 参数向量（n 维）</text>
-            <text x="560" y="180" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">空间特征：邻居良率/聚簇</text>
-            <text x="560" y="194" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">批次上下文：批/机台/时间</text>
-            <text x="560" y="208" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">图形张量：晶圆图栅格化</text>
-            <rect x="476" y="232" width="168" height="40" rx="4" fill="rgba(47,102,176,0.10)" stroke="rgba(47,102,176,0.45)" stroke-width="0.8"/>
-            <text x="484" y="246" fill="#2f66b0" font-size="7" font-family="'Geist Mono',monospace" letter-spacing="0.08em">FEATURE</text>
-            <text x="484" y="262" fill="#45586c" font-size="8" font-family="'Geist Mono',monospace">表格 + 张量双模态</text>
+            <rect x="464" y="96" width="192" height="200" rx="6" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.20)" stroke-width="1"/>
+            <rect x="476" y="108" width="20" height="16" rx="8" fill="rgba(28,25,23,0.12)"/>
+            <text x="486" y="120" fill="#57534e" font-size="9" font-weight="600" font-family="'Geist Mono',monospace" text-anchor="middle">3</text>
+            <text x="560" y="144" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">特征工程层</text>
+            <text x="560" y="166" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">逐 die 参数向量（n 维）</text>
+            <text x="560" y="180" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">空间特征：邻居良率/聚簇</text>
+            <text x="560" y="194" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">批次上下文：批/机台/时间</text>
+            <text x="560" y="208" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">图形张量：晶圆图栅格化</text>
+            <rect x="476" y="232" width="168" height="40" rx="4" fill="rgba(78,110,129,0.10)" stroke="rgba(78,110,129,0.45)" stroke-width="0.8"/>
+            <text x="484" y="246" fill="#4e6e81" font-size="7" font-family="'Geist Mono',monospace" letter-spacing="0.08em">FEATURE</text>
+            <text x="484" y="262" fill="#57534e" font-size="8" font-family="'Geist Mono',monospace">表格 + 张量双模态</text>
           </g>
           <!-- S4 -->
           <g data-motion-item data-step="4" aria-label="Step 4: 模型层">
-            <rect x="680" y="96" width="192" height="200" rx="6" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.20)" stroke-width="1"/>
-            <rect x="692" y="108" width="20" height="16" rx="8" fill="rgba(20,38,60,0.12)"/>
-            <text x="702" y="120" fill="#45586c" font-size="9" font-weight="600" font-family="'Geist Mono',monospace" text-anchor="middle">4</text>
-            <text x="776" y="144" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">模型层</text>
-            <text x="776" y="166" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">统计筛查：PAT/DPAT/GDBN</text>
-            <text x="776" y="180" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">无监督异常：iForest/AE</text>
-            <text x="776" y="194" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">有监督预测：CNN/GPR</text>
-            <text x="776" y="208" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">调度优化：ILP / LP</text>
-            <rect x="692" y="232" width="168" height="40" rx="4" fill="rgba(47,102,176,0.10)" stroke="rgba(47,102,176,0.45)" stroke-width="0.8"/>
-            <text x="700" y="246" fill="#2f66b0" font-size="7" font-family="'Geist Mono',monospace" letter-spacing="0.08em">MODEL</text>
-            <text x="700" y="262" fill="#45586c" font-size="8" font-family="'Geist Mono',monospace">统计 + 机器学习混用</text>
+            <rect x="680" y="96" width="192" height="200" rx="6" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.20)" stroke-width="1"/>
+            <rect x="692" y="108" width="20" height="16" rx="8" fill="rgba(28,25,23,0.12)"/>
+            <text x="702" y="120" fill="#57534e" font-size="9" font-weight="600" font-family="'Geist Mono',monospace" text-anchor="middle">4</text>
+            <text x="776" y="144" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">模型层</text>
+            <text x="776" y="166" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">统计筛查：PAT/DPAT/GDBN</text>
+            <text x="776" y="180" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">无监督异常：iForest/AE</text>
+            <text x="776" y="194" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">有监督预测：CNN/GPR</text>
+            <text x="776" y="208" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">调度优化：ILP / LP</text>
+            <rect x="692" y="232" width="168" height="40" rx="4" fill="rgba(78,110,129,0.10)" stroke="rgba(78,110,129,0.45)" stroke-width="0.8"/>
+            <text x="700" y="246" fill="#4e6e81" font-size="7" font-family="'Geist Mono',monospace" letter-spacing="0.08em">MODEL</text>
+            <text x="700" y="262" fill="#57534e" font-size="8" font-family="'Geist Mono',monospace">统计 + 机器学习混用</text>
           </g>
           <!-- S5 -->
           <g data-motion-item data-step="5" aria-label="Step 5: 决策与回流层">
-            <rect x="896" y="96" width="192" height="200" rx="6" fill="rgba(12,110,158,0.12)" stroke="#0c6e9e" stroke-width="1"/>
-            <rect x="908" y="108" width="20" height="16" rx="8" fill="rgba(12,110,158,0.22)"/>
-            <text x="918" y="120" fill="#0c6e9e" font-size="9" font-weight="600" font-family="'Geist Mono',monospace" text-anchor="middle">5</text>
-            <text x="992" y="144" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">决策与回流</text>
-            <text x="992" y="166" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">接受 / 剔除 / 复测</text>
-            <text x="992" y="180" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">自适应：跳项 · 改限 · 改流</text>
-            <text x="992" y="194" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">SPC + 漂移监控</text>
-            <text x="992" y="208" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">判定回流 → 模型迭代</text>
-            <rect x="908" y="232" width="168" height="40" rx="4" fill="rgba(47,102,176,0.10)" stroke="rgba(47,102,176,0.45)" stroke-width="0.8"/>
-            <text x="916" y="246" fill="#2f66b0" font-size="7" font-family="'Geist Mono',monospace" letter-spacing="0.08em">ACTION</text>
-            <text x="916" y="262" fill="#45586c" font-size="8" font-family="'Geist Mono',monospace">四类判定 + 闭环</text>
+            <rect x="896" y="96" width="192" height="200" rx="6" fill="rgba(194,65,12,0.12)" stroke="#c2410c" stroke-width="1"/>
+            <rect x="908" y="108" width="20" height="16" rx="8" fill="rgba(194,65,12,0.22)"/>
+            <text x="918" y="120" fill="#c2410c" font-size="9" font-weight="600" font-family="'Geist Mono',monospace" text-anchor="middle">5</text>
+            <text x="992" y="144" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">决策与回流</text>
+            <text x="992" y="166" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">接受 / 剔除 / 复测</text>
+            <text x="992" y="180" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">自适应：跳项 · 改限 · 改流</text>
+            <text x="992" y="194" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">SPC + 漂移监控</text>
+            <text x="992" y="208" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">判定回流 → 模型迭代</text>
+            <rect x="908" y="232" width="168" height="40" rx="4" fill="rgba(78,110,129,0.10)" stroke="rgba(78,110,129,0.45)" stroke-width="0.8"/>
+            <text x="916" y="246" fill="#4e6e81" font-size="7" font-family="'Geist Mono',monospace" letter-spacing="0.08em">ACTION</text>
+            <text x="916" y="262" fill="#57534e" font-size="8" font-family="'Geist Mono',monospace">四类判定 + 闭环</text>
           </g>
 
           <!-- 标准锚点 -->
-          <text x="24" y="392" fill="#6c7f92" font-size="8" font-weight="500" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">标准锚点 · STANDARDS</text>
-          <g font-family="'Geist Mono','PingFang SC',monospace" font-size="8" fill="#45586c" text-anchor="middle">
-            <rect x="24" y="404" width="256" height="28" rx="4" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.18)" stroke-width="0.8"/>
+          <text x="24" y="392" fill="#6f665f" font-size="8" font-weight="500" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">标准锚点 · STANDARDS</text>
+          <g font-family="'Geist Mono','PingFang SC',monospace" font-size="8" fill="#57534e" text-anchor="middle">
+            <rect x="24" y="404" width="256" height="28" rx="4" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.18)" stroke-width="0.8"/>
             <text x="152" y="422">AEC-Q001 · PAT 离群剔除</text>
-            <rect x="296" y="404" width="256" height="28" rx="4" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.18)" stroke-width="0.8"/>
+            <rect x="296" y="404" width="256" height="28" rx="4" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.18)" stroke-width="0.8"/>
             <text x="424" y="422">AEC-Q002 · SYL / SBL 批次限</text>
-            <rect x="568" y="404" width="256" height="28" rx="4" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.18)" stroke-width="0.8"/>
+            <rect x="568" y="404" width="256" height="28" rx="4" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.18)" stroke-width="0.8"/>
             <text x="696" y="422">IEEE 1838-2019 · 3D 测试访问</text>
-            <rect x="840" y="404" width="256" height="28" rx="4" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.18)" stroke-width="0.8"/>
+            <rect x="840" y="404" width="256" height="28" rx="4" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.18)" stroke-width="0.8"/>
             <text x="968" y="422">STDF · SEMI E142 数据接口</text>
           </g>
 
-          <line x1="24" y1="452" x2="1096" y2="452" stroke="rgba(20,38,60,0.12)" stroke-width="0.8"/>
-          <text x="24" y="478" fill="#6c7f92" font-size="8" font-weight="500" font-family="'Geist Mono',monospace" letter-spacing="0.14em">LEGEND</text>
-          <rect x="96" y="466" width="16" height="12" rx="2" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.20)" stroke-width="1"/>
-          <text x="120" y="476" fill="#45586c" font-size="9" font-family="'Geist','PingFang SC',sans-serif">管道阶段</text>
-          <line x1="216" y1="472" x2="236" y2="472" stroke="#45586c" stroke-width="1.2" marker-end="url(#tda-flow-arrow)"/>
-          <text x="246" y="476" fill="#45586c" font-size="9" font-family="'Geist','PingFang SC',sans-serif">数据流</text>
-          <line x1="316" y1="472" x2="336" y2="472" stroke="#0c6e9e" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#tda-flow-arrow-accent)"/>
-          <text x="346" y="476" fill="#45586c" font-size="9" font-family="'Geist','PingFang SC',sans-serif">判定回流</text>
-          <rect x="424" y="466" width="16" height="12" rx="2" fill="rgba(47,102,176,0.10)" stroke="rgba(47,102,176,0.45)" stroke-width="0.8"/>
-          <text x="448" y="476" fill="#45586c" font-size="9" font-family="'Geist','PingFang SC',sans-serif">格式 / 要点</text>
+          <line x1="24" y1="452" x2="1096" y2="452" stroke="rgba(28,25,23,0.12)" stroke-width="0.8"/>
+          <text x="24" y="478" fill="#6f665f" font-size="8" font-weight="500" font-family="'Geist Mono',monospace" letter-spacing="0.14em">LEGEND</text>
+          <rect x="96" y="466" width="16" height="12" rx="2" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.20)" stroke-width="1"/>
+          <text x="120" y="476" fill="#57534e" font-size="9" font-family="'Geist','PingFang SC',sans-serif">管道阶段</text>
+          <line x1="216" y1="472" x2="236" y2="472" stroke="#57534e" stroke-width="1.2" marker-end="url(#tda-flow-arrow)"/>
+          <text x="246" y="476" fill="#57534e" font-size="9" font-family="'Geist','PingFang SC',sans-serif">数据流</text>
+          <line x1="316" y1="472" x2="336" y2="472" stroke="#c2410c" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#tda-flow-arrow-accent)"/>
+          <text x="346" y="476" fill="#57534e" font-size="9" font-family="'Geist','PingFang SC',sans-serif">判定回流</text>
+          <rect x="424" y="466" width="16" height="12" rx="2" fill="rgba(78,110,129,0.10)" stroke="rgba(78,110,129,0.45)" stroke-width="0.8"/>
+          <text x="448" y="476" fill="#57534e" font-size="9" font-family="'Geist','PingFang SC',sans-serif">格式 / 要点</text>
         </svg>
       </div>
 
@@ -438,31 +438,31 @@
           <desc id="tda-pat-desc">左侧为参数分布与静态三西格马限、动态限的对比及离群点；右侧为晶圆图坏邻域剔除示意；底部为三个筛查机制公式。</desc>
           <defs>
             <marker id="tda-pat-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-              <polygon points="0 0, 8 3, 0 6" fill="#0c6e9e"/>
+              <polygon points="0 0, 8 3, 0 6" fill="#c2410c"/>
             </marker>
           </defs>
           <rect width="1120" height="464" fill="#ffffff"/>
 
-          <text x="60" y="52" fill="#6c7f92" font-size="8" font-weight="500" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">参数分布 · 静态限 vs 动态限（示意）</text>
-          <path d="M 60 296 C 180 288 214 84 300 84 C 386 84 420 288 540 296" fill="none" stroke="#45586c" stroke-width="1.4"/>
-          <line x1="60" y1="308" x2="540" y2="308" stroke="rgba(20,38,60,0.22)" stroke-width="1"/>
-          <line x1="180" y1="60" x2="180" y2="308" stroke="rgba(20,38,60,0.35)" stroke-width="1" stroke-dasharray="4,3"/>
-          <line x1="420" y1="60" x2="420" y2="308" stroke="rgba(20,38,60,0.35)" stroke-width="1" stroke-dasharray="4,3"/>
-          <text x="180" y="326" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">μ₀ − 3σ₀</text>
-          <text x="420" y="326" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">μ₀ + 3σ₀</text>
-          <line x1="216" y1="66" x2="216" y2="308" stroke="#0c6e9e" stroke-width="1"/>
-          <line x1="456" y1="66" x2="456" y2="308" stroke="#0c6e9e" stroke-width="1"/>
-          <text x="216" y="344" fill="#0c6e9e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">x̂ − k·s（动态）</text>
-          <text x="456" y="344" fill="#0c6e9e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">x̂ + k·s（动态）</text>
-          <line x1="300" y1="84" x2="300" y2="308" stroke="rgba(20,38,60,0.18)" stroke-width="1" stroke-dasharray="2,4"/>
-          <text x="300" y="362" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">批次中位数 x̂</text>
-          <circle cx="488" cy="286" r="4" fill="#0c6e9e"/>
-          <line x1="488" y1="280" x2="488" y2="252" stroke="#0c6e9e" stroke-width="0.8"/>
-          <text x="488" y="244" fill="#0c6e9e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">离群 die → 剔除</text>
-          <text x="300" y="384" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle" letter-spacing="0.1em">DPAT 随批次重算限值 · 漂移被跟随</text>
+          <text x="60" y="52" fill="#6f665f" font-size="8" font-weight="500" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">参数分布 · 静态限 vs 动态限（示意）</text>
+          <path d="M 60 296 C 180 288 214 84 300 84 C 386 84 420 288 540 296" fill="none" stroke="#57534e" stroke-width="1.4"/>
+          <line x1="60" y1="308" x2="540" y2="308" stroke="rgba(28,25,23,0.22)" stroke-width="1"/>
+          <line x1="180" y1="60" x2="180" y2="308" stroke="rgba(28,25,23,0.35)" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="420" y1="60" x2="420" y2="308" stroke="rgba(28,25,23,0.35)" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="180" y="326" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">μ₀ − 3σ₀</text>
+          <text x="420" y="326" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">μ₀ + 3σ₀</text>
+          <line x1="216" y1="66" x2="216" y2="308" stroke="#c2410c" stroke-width="1"/>
+          <line x1="456" y1="66" x2="456" y2="308" stroke="#c2410c" stroke-width="1"/>
+          <text x="216" y="344" fill="#c2410c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">x̂ − k·s（动态）</text>
+          <text x="456" y="344" fill="#c2410c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">x̂ + k·s（动态）</text>
+          <line x1="300" y1="84" x2="300" y2="308" stroke="rgba(28,25,23,0.18)" stroke-width="1" stroke-dasharray="2,4"/>
+          <text x="300" y="362" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">批次中位数 x̂</text>
+          <circle cx="488" cy="286" r="4" fill="#c2410c"/>
+          <line x1="488" y1="280" x2="488" y2="252" stroke="#c2410c" stroke-width="0.8"/>
+          <text x="488" y="244" fill="#c2410c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">离群 die → 剔除</text>
+          <text x="300" y="384" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle" letter-spacing="0.1em">DPAT 随批次重算限值 · 漂移被跟随</text>
 
-          <text x="640" y="52" fill="#6c7f92" font-size="8" font-weight="500" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">晶圆图空间筛查 · GDBN（示意）</text>
-          <g fill="rgba(20,38,60,0.08)" stroke="rgba(20,38,60,0.18)" stroke-width="0.8">
+          <text x="640" y="52" fill="#6f665f" font-size="8" font-weight="500" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">晶圆图空间筛查 · GDBN（示意）</text>
+          <g fill="rgba(28,25,23,0.08)" stroke="rgba(28,25,23,0.18)" stroke-width="0.8">
             <rect x="640" y="72" width="24" height="24"/><rect x="666" y="72" width="24" height="24"/><rect x="692" y="72" width="24" height="24"/><rect x="718" y="72" width="24" height="24"/><rect x="744" y="72" width="24" height="24"/><rect x="770" y="72" width="24" height="24"/><rect x="796" y="72" width="24" height="24"/><rect x="822" y="72" width="24" height="24"/><rect x="848" y="72" width="24" height="24"/><rect x="874" y="72" width="24" height="24"/>
             <rect x="640" y="98" width="24" height="24"/><rect x="666" y="98" width="24" height="24"/><rect x="692" y="98" width="24" height="24"/><rect x="718" y="98" width="24" height="24"/><rect x="744" y="98" width="24" height="24"/><rect x="770" y="98" width="24" height="24"/><rect x="796" y="98" width="24" height="24"/><rect x="822" y="98" width="24" height="24"/><rect x="848" y="98" width="24" height="24"/><rect x="874" y="98" width="24" height="24"/>
             <rect x="640" y="124" width="24" height="24"/><rect x="666" y="124" width="24" height="24"/><rect x="692" y="124" width="24" height="24"/><rect x="718" y="124" width="24" height="24"/><rect x="744" y="124" width="24" height="24"/><rect x="770" y="124" width="24" height="24"/><rect x="796" y="124" width="24" height="24"/><rect x="822" y="124" width="24" height="24"/><rect x="848" y="124" width="24" height="24"/><rect x="874" y="124" width="24" height="24"/>
@@ -470,28 +470,28 @@
             <rect x="640" y="176" width="24" height="24"/><rect x="666" y="176" width="24" height="24"/><rect x="692" y="176" width="24" height="24"/><rect x="718" y="176" width="24" height="24"/><rect x="744" y="176" width="24" height="24"/><rect x="770" y="176" width="24" height="24"/><rect x="796" y="176" width="24" height="24"/><rect x="822" y="176" width="24" height="24"/><rect x="848" y="176" width="24" height="24"/><rect x="874" y="176" width="24" height="24"/>
             <rect x="640" y="202" width="24" height="24"/><rect x="666" y="202" width="24" height="24"/><rect x="692" y="202" width="24" height="24"/><rect x="718" y="202" width="24" height="24"/><rect x="744" y="202" width="24" height="24"/><rect x="770" y="202" width="24" height="24"/><rect x="796" y="202" width="24" height="24"/><rect x="822" y="202" width="24" height="24"/><rect x="848" y="202" width="24" height="24"/><rect x="874" y="202" width="24" height="24"/>
           </g>
-          <g fill="#9a6a10" fill-opacity="0.75">
+          <g fill="#a16207" fill-opacity="0.75">
             <rect x="796" y="124" width="24" height="24"/><rect x="822" y="124" width="24" height="24"/><rect x="848" y="124" width="24" height="24"/>
             <rect x="796" y="150" width="24" height="24"/><rect x="822" y="150" width="24" height="24"/><rect x="848" y="150" width="24" height="24"/>
           </g>
-          <rect x="666" y="202" width="24" height="24" fill="#9a6a10" fill-opacity="0.45"/>
-          <rect x="792" y="120" width="60" height="58" rx="4" fill="none" stroke="#0c6e9e" stroke-width="1.2" stroke-dasharray="4,3"/>
-          <text x="900" y="140" fill="#0c6e9e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">坏邻域内的</text>
-          <text x="900" y="154" fill="#0c6e9e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">「好 die」→ 一并剔除</text>
-          <text x="900" y="176" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">单颗坏 die（左下）</text>
-          <text x="900" y="190" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">→ 常规 PAT 即捕获</text>
-          <text x="758" y="252" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">10 × 6 die 阵列 · Good Die Bad Neighborhood</text>
+          <rect x="666" y="202" width="24" height="24" fill="#a16207" fill-opacity="0.45"/>
+          <rect x="792" y="120" width="60" height="58" rx="4" fill="none" stroke="#c2410c" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <text x="900" y="140" fill="#c2410c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">坏邻域内的</text>
+          <text x="900" y="154" fill="#c2410c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">「好 die」→ 一并剔除</text>
+          <text x="900" y="176" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">单颗坏 die（左下）</text>
+          <text x="900" y="190" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">→ 常规 PAT 即捕获</text>
+          <text x="758" y="252" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">10 × 6 die 阵列 · Good Die Bad Neighborhood</text>
 
           <g font-family="'Geist Mono','PingFang SC',monospace" font-size="8" text-anchor="middle">
-            <rect x="24" y="400" width="352" height="44" rx="4" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.18)" stroke-width="0.8"/>
-            <text x="200" y="418" fill="#14263c" font-weight="600">PAT · AEC-Q001</text>
-            <text x="200" y="434" fill="#45586c">按批次样本统计计算限值（x̄±kσ，k 由统计方法与样本量确定）</text>
-            <rect x="392" y="400" width="352" height="44" rx="4" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.18)" stroke-width="0.8"/>
-            <text x="568" y="418" fill="#14263c" font-weight="600">DPAT · 动态重算</text>
-            <text x="568" y="434" fill="#45586c">逐批 μ ± kσ，用中位数/MAD 抵抗批内漂移</text>
-            <rect x="760" y="400" width="336" height="44" rx="4" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.18)" stroke-width="0.8"/>
-            <text x="928" y="418" fill="#14263c" font-weight="600">SYL / SBL · AEC-Q002</text>
-            <text x="928" y="434" fill="#45586c">统计良率限 + bin 分布限，批级监控</text>
+            <rect x="24" y="400" width="352" height="44" rx="4" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.18)" stroke-width="0.8"/>
+            <text x="200" y="418" fill="#1c1917" font-weight="600">PAT · AEC-Q001</text>
+            <text x="200" y="434" fill="#57534e">按批次样本统计计算限值（x̄±kσ，k 由统计方法与样本量确定）</text>
+            <rect x="392" y="400" width="352" height="44" rx="4" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.18)" stroke-width="0.8"/>
+            <text x="568" y="418" fill="#1c1917" font-weight="600">DPAT · 动态重算</text>
+            <text x="568" y="434" fill="#57534e">逐批 μ ± kσ，用中位数/MAD 抵抗批内漂移</text>
+            <rect x="760" y="400" width="336" height="44" rx="4" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.18)" stroke-width="0.8"/>
+            <text x="928" y="418" fill="#1c1917" font-weight="600">SYL / SBL · AEC-Q002</text>
+            <text x="928" y="434" fill="#57534e">统计良率限 + bin 分布限，批级监控</text>
           </g>
         </svg>
       </div>
@@ -510,33 +510,33 @@
           <desc id="tda-yield-desc">横轴为裸片面积乘缺陷密度，纵轴为良率，对比 Poisson、Murphy、Seeds、负二项四条标准良率模型曲线。</desc>
           <rect width="1120" height="480" fill="#ffffff"/>
 
-          <g stroke="rgba(20,38,60,0.08)" stroke-width="0.8">
+          <g stroke="rgba(28,25,23,0.08)" stroke-width="0.8">
             <line x1="96" y1="64" x2="996" y2="64"/><line x1="96" y1="144" x2="996" y2="144"/><line x1="96" y1="224" x2="996" y2="224"/><line x1="96" y1="304" x2="996" y2="304"/>
           </g>
-          <line x1="96" y1="384" x2="996" y2="384" stroke="rgba(20,38,60,0.30)" stroke-width="1"/>
-          <line x1="96" y1="64" x2="96" y2="384" stroke="rgba(20,38,60,0.30)" stroke-width="1"/>
-          <g fill="#6c7f92" font-size="8" font-family="'Geist Mono',monospace" text-anchor="end">
+          <line x1="96" y1="384" x2="996" y2="384" stroke="rgba(28,25,23,0.30)" stroke-width="1"/>
+          <line x1="96" y1="64" x2="96" y2="384" stroke="rgba(28,25,23,0.30)" stroke-width="1"/>
+          <g fill="#6f665f" font-size="8" font-family="'Geist Mono',monospace" text-anchor="end">
             <text x="88" y="68">1.00</text><text x="88" y="148">0.75</text><text x="88" y="228">0.50</text><text x="88" y="308">0.25</text><text x="88" y="388">0</text>
           </g>
-          <g fill="#6c7f92" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">
+          <g fill="#6f665f" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">
             <text x="96" y="402">0</text><text x="246" y="402">0.5</text><text x="396" y="402">1.0</text><text x="546" y="402">1.5</text><text x="696" y="402">2.0</text><text x="846" y="402">2.5</text><text x="996" y="402">3.0</text>
           </g>
-          <text x="546" y="426" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle" letter-spacing="0.1em">A·D（裸片面积 × 缺陷密度）</text>
-          <text x="60" y="228" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle" transform="rotate(-90 60 228)">Y 良率</text>
+          <text x="546" y="426" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle" letter-spacing="0.1em">A·D（裸片面积 × 缺陷密度）</text>
+          <text x="60" y="228" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle" transform="rotate(-90 60 228)">Y 良率</text>
 
-          <polyline points="96,64 171,135 246,190 321,233 396,266 471,292 546,313 621,328 696,341 771,350 846,358 921,364 996,368" fill="none" stroke="#4a708f" stroke-width="1.6"/>
-          <polyline points="96,64 171,134 246,186 321,226 396,256 471,280 546,298 621,313 696,324 771,333 846,341 921,347 996,352" fill="none" stroke="#23764b" stroke-width="1.6"/>
-          <polyline points="96,64 171,190 246,226 321,249 396,266 471,279 546,290 621,299 696,306 771,313 846,318 921,323 996,327" fill="none" stroke="#ad4a30" stroke-width="1.6"/>
-          <polyline points="96,64 171,131 246,179 321,215 396,242 471,263 546,279 621,293 696,304 771,313 846,321 921,327 996,333" fill="none" stroke="#0c6e9e" stroke-width="2"/>
+          <polyline points="96,64 171,135 246,190 321,233 396,266 471,292 546,313 621,328 696,341 771,350 846,358 921,364 996,368" fill="none" stroke="#4e6e81" stroke-width="1.6"/>
+          <polyline points="96,64 171,134 246,186 321,226 396,256 471,280 546,298 621,313 696,324 771,333 846,341 921,347 996,352" fill="none" stroke="#5c7444" stroke-width="1.6"/>
+          <polyline points="96,64 171,190 246,226 321,249 396,266 471,279 546,290 621,299 696,306 771,313 846,318 921,323 996,327" fill="none" stroke="#9a3412" stroke-width="1.6"/>
+          <polyline points="96,64 171,131 246,179 321,215 396,242 471,263 546,279 621,293 696,304 771,313 846,321 921,327 996,333" fill="none" stroke="#c2410c" stroke-width="2"/>
 
           <g font-family="'Geist Mono','PingFang SC',monospace" font-size="8">
-            <rect x="620" y="72" width="380" height="76" rx="4" fill="rgba(255,255,255,0.85)" stroke="rgba(20,38,60,0.18)" stroke-width="0.8"/>
-            <line x1="632" y1="90" x2="652" y2="90" stroke="#0c6e9e" stroke-width="2"/><text x="660" y="94" fill="#0c6e9e">负二项（Stapper） Y=(1+AD/α)⁻ᾱ</text>
-            <line x1="632" y1="108" x2="652" y2="108" stroke="#4a708f" stroke-width="1.6"/><text x="660" y="112" fill="#45586c">Poisson  Y=e^(−AD)</text>
-            <line x1="632" y1="126" x2="652" y2="126" stroke="#23764b" stroke-width="1.6"/><text x="660" y="130" fill="#45586c">Murphy  Y=[(1−e^(−AD))/AD]²</text>
-            <line x1="632" y1="144" x2="652" y2="144" stroke="#ad4a30" stroke-width="1.6"/><text x="660" y="148" fill="#45586c">Seeds  Y=e^(−√(AD))</text>
+            <rect x="620" y="72" width="380" height="76" rx="4" fill="rgba(255,255,255,0.85)" stroke="rgba(28,25,23,0.18)" stroke-width="0.8"/>
+            <line x1="632" y1="90" x2="652" y2="90" stroke="#c2410c" stroke-width="2"/><text x="660" y="94" fill="#c2410c">负二项（Stapper） Y=(1+AD/α)⁻ᾱ</text>
+            <line x1="632" y1="108" x2="652" y2="108" stroke="#4e6e81" stroke-width="1.6"/><text x="660" y="112" fill="#57534e">Poisson  Y=e^(−AD)</text>
+            <line x1="632" y1="126" x2="652" y2="126" stroke="#5c7444" stroke-width="1.6"/><text x="660" y="130" fill="#57534e">Murphy  Y=[(1−e^(−AD))/AD]²</text>
+            <line x1="632" y1="144" x2="652" y2="144" stroke="#9a3412" stroke-width="1.6"/><text x="660" y="148" fill="#57534e">Seeds  Y=e^(−√(AD))</text>
           </g>
-          <text x="96" y="448" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">曲线按公式逐点绘制（α=2）；负二项刻画缺陷聚集，α→∞ 退化为 Poisson——工业界最常用（Stapper 1987 / Cunningham 1990, IEEE TSM）。</text>
+          <text x="96" y="448" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">曲线按公式逐点绘制（α=2）；负二项刻画缺陷聚集，α→∞ 退化为 Poisson——工业界最常用（Stapper 1987 / Cunningham 1990, IEEE TSM）。</text>
         </svg>
       </div>
 
@@ -562,121 +562,121 @@
           <desc id="tda-wm-desc">九宫格展示 Center、Donut、Edge-Loc、Edge-Ring、Loc、Near-full、Random、Scratch、None 九类晶圆图失败模式，坏 die 以暖色标注。</desc>
           <defs>
             <pattern id="tda-dies" width="12" height="15" patternUnits="userSpaceOnUse">
-              <rect width="12" height="15" fill="rgba(20,38,60,0.05)"/>
-              <rect x="1" y="1" width="9" height="6" fill="rgba(20,38,60,0.10)" rx="1"/>
-              <rect x="1" y="8" width="9" height="6" fill="rgba(20,38,60,0.10)" rx="1"/>
+              <rect width="12" height="15" fill="rgba(28,25,23,0.05)"/>
+              <rect x="1" y="1" width="9" height="6" fill="rgba(28,25,23,0.10)" rx="1"/>
+              <rect x="1" y="8" width="9" height="6" fill="rgba(28,25,23,0.10)" rx="1"/>
             </pattern>
           </defs>
           <rect width="1120" height="736" fill="#ffffff"/>
 
-          <g font-family="'Geist Mono','PingFang SC',monospace" font-size="8" fill="#45586c" text-anchor="middle">
-            <rect x="28" y="80" width="248" height="32" rx="4" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.18)" stroke-width="0.8"/>
+          <g font-family="'Geist Mono','PingFang SC',monospace" font-size="8" fill="#57534e" text-anchor="middle">
+            <rect x="28" y="80" width="248" height="32" rx="4" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.18)" stroke-width="0.8"/>
             <text x="152" y="100">811,457 张晶圆图</text>
-            <rect x="300" y="80" width="248" height="32" rx="4" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.18)" stroke-width="0.8"/>
+            <rect x="300" y="80" width="248" height="32" rx="4" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.18)" stroke-width="0.8"/>
             <text x="424" y="100">46,393 个批次</text>
-            <rect x="572" y="80" width="248" height="32" rx="4" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.18)" stroke-width="0.8"/>
+            <rect x="572" y="80" width="248" height="32" rx="4" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.18)" stroke-width="0.8"/>
             <text x="696" y="100">172,950 张专家标注</text>
-            <rect x="844" y="80" width="248" height="32" rx="4" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.18)" stroke-width="0.8"/>
+            <rect x="844" y="80" width="248" height="32" rx="4" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.18)" stroke-width="0.8"/>
             <text x="968" y="100">9 类失败模式</text>
           </g>
 
           <!-- Row 1: Center / Donut / Edge-Loc -->
           <g>
-            <circle cx="100" cy="182" r="52" fill="url(#tda-dies)" stroke="rgba(20,38,60,0.35)" stroke-width="1"/>
-            <rect x="82" y="167" width="36" height="18" rx="2" fill="#9a6a10" fill-opacity="0.75"/>
-            <text x="176" y="168" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">Center</text>
-            <text x="176" y="186" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">中心聚簇 · 工艺热点</text>
-            <text x="176" y="200" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（光刻/沉积局部异常）</text>
+            <circle cx="100" cy="182" r="52" fill="url(#tda-dies)" stroke="rgba(28,25,23,0.35)" stroke-width="1"/>
+            <rect x="82" y="167" width="36" height="18" rx="2" fill="#a16207" fill-opacity="0.75"/>
+            <text x="176" y="168" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">Center</text>
+            <text x="176" y="186" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">中心聚簇 · 工艺热点</text>
+            <text x="176" y="200" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（光刻/沉积局部异常）</text>
           </g>
           <g>
-            <circle cx="468" cy="182" r="52" fill="url(#tda-dies)" stroke="rgba(20,38,60,0.35)" stroke-width="1"/>
-            <g fill="#9a6a10" fill-opacity="0.75">
+            <circle cx="468" cy="182" r="52" fill="url(#tda-dies)" stroke="rgba(28,25,23,0.35)" stroke-width="1"/>
+            <g fill="#a16207" fill-opacity="0.75">
               <rect x="462" y="146" width="12" height="9"/><rect x="480" y="152" width="12" height="9"/><rect x="488" y="168" width="12" height="9"/>
               <rect x="480" y="186" width="12" height="9"/><rect x="462" y="194" width="12" height="9"/><rect x="444" y="186" width="12" height="9"/>
               <rect x="436" y="168" width="12" height="9"/><rect x="444" y="152" width="12" height="9"/>
             </g>
-            <text x="544" y="168" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">Donut</text>
-            <text x="544" y="186" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">环形 · 边缘工艺效应</text>
-            <text x="544" y="200" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（刻蚀均匀性）</text>
+            <text x="544" y="168" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">Donut</text>
+            <text x="544" y="186" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">环形 · 边缘工艺效应</text>
+            <text x="544" y="200" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（刻蚀均匀性）</text>
           </g>
           <g>
-            <circle cx="836" cy="182" r="52" fill="url(#tda-dies)" stroke="rgba(20,38,60,0.35)" stroke-width="1"/>
-            <g fill="#9a6a10" fill-opacity="0.75">
+            <circle cx="836" cy="182" r="52" fill="url(#tda-dies)" stroke="rgba(28,25,23,0.35)" stroke-width="1"/>
+            <g fill="#a16207" fill-opacity="0.75">
               <rect x="862" y="212" width="12" height="9"/><rect x="874" y="198" width="12" height="9"/><rect x="850" y="222" width="12" height="9"/><rect x="838" y="216" width="12" height="9"/>
             </g>
-            <text x="912" y="168" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">Edge-Loc</text>
-            <text x="912" y="186" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">边缘局部聚簇</text>
-            <text x="912" y="200" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（搬运/夹持损伤）</text>
+            <text x="912" y="168" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">Edge-Loc</text>
+            <text x="912" y="186" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">边缘局部聚簇</text>
+            <text x="912" y="200" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（搬运/夹持损伤）</text>
           </g>
           <!-- Row 2: Edge-Ring / Loc / Near-full -->
           <g>
-            <circle cx="100" cy="382" r="52" fill="url(#tda-dies)" stroke="rgba(20,38,60,0.35)" stroke-width="1"/>
-            <g fill="#9a6a10" fill-opacity="0.75">
+            <circle cx="100" cy="382" r="52" fill="url(#tda-dies)" stroke="rgba(28,25,23,0.35)" stroke-width="1"/>
+            <g fill="#a16207" fill-opacity="0.75">
               <rect x="82" y="326" width="12" height="9"/><rect x="106" y="326" width="12" height="9"/>
               <rect x="146" y="352" width="9" height="12"/><rect x="146" y="376" width="9" height="12"/>
               <rect x="106" y="428" width="12" height="9"/><rect x="82" y="428" width="12" height="9"/>
               <rect x="44" y="376" width="9" height="12"/><rect x="44" y="352" width="9" height="12"/>
             </g>
-            <text x="176" y="368" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">Edge-Ring</text>
-            <text x="176" y="386" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">整圈边缘环带</text>
-            <text x="176" y="400" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（边缘曝光/环工艺）</text>
+            <text x="176" y="368" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">Edge-Ring</text>
+            <text x="176" y="386" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">整圈边缘环带</text>
+            <text x="176" y="400" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（边缘曝光/环工艺）</text>
           </g>
           <g>
-            <circle cx="468" cy="382" r="52" fill="url(#tda-dies)" stroke="rgba(20,38,60,0.35)" stroke-width="1"/>
-            <g fill="#9a6a10" fill-opacity="0.75">
+            <circle cx="468" cy="382" r="52" fill="url(#tda-dies)" stroke="rgba(28,25,23,0.35)" stroke-width="1"/>
+            <g fill="#a16207" fill-opacity="0.75">
               <rect x="422" y="346" width="12" height="9"/><rect x="434" y="346" width="12" height="9"/>
               <rect x="422" y="355" width="12" height="9"/><rect x="434" y="355" width="12" height="9"/><rect x="446" y="355" width="12" height="9"/>
             </g>
-            <text x="544" y="368" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">Loc</text>
-            <text x="544" y="386" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">任意位置单个聚簇</text>
-            <text x="544" y="400" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（颗粒/缺陷点源）</text>
+            <text x="544" y="368" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">Loc</text>
+            <text x="544" y="386" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">任意位置单个聚簇</text>
+            <text x="544" y="400" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（颗粒/缺陷点源）</text>
           </g>
           <g>
-            <circle cx="836" cy="382" r="52" fill="#9a6a10" fill-opacity="0.35" stroke="#9a6a10" stroke-opacity="0.6" stroke-width="1"/>
+            <circle cx="836" cy="382" r="52" fill="#a16207" fill-opacity="0.35" stroke="#a16207" stroke-opacity="0.6" stroke-width="1"/>
             <circle cx="836" cy="382" r="52" fill="url(#tda-dies)" stroke="none"/>
             <rect x="860" y="356" width="9" height="6" fill="#ffffff"/><rect x="824" y="402" width="9" height="6" fill="#ffffff"/><rect x="796" y="384" width="9" height="6" fill="#ffffff"/>
-            <text x="912" y="368" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">Near-full</text>
-            <text x="912" y="386" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">近乎全坏</text>
-            <text x="912" y="400" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（整片工艺事故）</text>
+            <text x="912" y="368" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">Near-full</text>
+            <text x="912" y="386" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">近乎全坏</text>
+            <text x="912" y="400" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（整片工艺事故）</text>
           </g>
           <!-- Row 3: Random / Scratch / None -->
           <g>
-            <circle cx="100" cy="582" r="52" fill="url(#tda-dies)" stroke="rgba(20,38,60,0.35)" stroke-width="1"/>
-            <g fill="#9a6a10" fill-opacity="0.6">
+            <circle cx="100" cy="582" r="52" fill="url(#tda-dies)" stroke="rgba(28,25,23,0.35)" stroke-width="1"/>
+            <g fill="#a16207" fill-opacity="0.6">
               <rect x="70" y="548" width="12" height="9"/><rect x="118" y="560" width="12" height="9"/><rect x="94" y="590" width="12" height="9"/>
               <rect x="130" y="600" width="12" height="9"/><rect x="64" y="594" width="12" height="9"/><rect x="106" y="540" width="12" height="9"/><rect x="82" y="612" width="12" height="9"/>
             </g>
-            <text x="176" y="568" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">Random</text>
-            <text x="176" y="586" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">随机散布（含划伤）</text>
-            <text x="176" y="600" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（本底缺陷水平）</text>
+            <text x="176" y="568" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">Random</text>
+            <text x="176" y="586" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">随机散布（含划伤）</text>
+            <text x="176" y="600" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（本底缺陷水平）</text>
           </g>
           <g>
-            <circle cx="468" cy="582" r="52" fill="url(#tda-dies)" stroke="rgba(20,38,60,0.35)" stroke-width="1"/>
-            <g fill="#9a6a10" fill-opacity="0.75">
+            <circle cx="468" cy="582" r="52" fill="url(#tda-dies)" stroke="rgba(28,25,23,0.35)" stroke-width="1"/>
+            <g fill="#a16207" fill-opacity="0.75">
               <rect x="432" y="546" width="12" height="9"/><rect x="444" y="557" width="12" height="9"/><rect x="456" y="568" width="12" height="9"/>
               <rect x="468" y="579" width="12" height="9"/><rect x="480" y="590" width="12" height="9"/><rect x="492" y="601" width="12" height="9"/>
             </g>
-            <text x="544" y="568" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">Scratch</text>
-            <text x="544" y="586" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">直线划痕轨迹</text>
-            <text x="544" y="600" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（搬运/探针刮擦）</text>
+            <text x="544" y="568" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">Scratch</text>
+            <text x="544" y="586" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">直线划痕轨迹</text>
+            <text x="544" y="600" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（搬运/探针刮擦）</text>
           </g>
           <g>
-            <circle cx="836" cy="582" r="52" fill="url(#tda-dies)" stroke="rgba(20,38,60,0.35)" stroke-width="1"/>
-            <text x="912" y="568" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">None</text>
-            <text x="912" y="586" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">无失败模式</text>
-            <text x="912" y="600" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（正常晶圆）</text>
+            <circle cx="836" cy="582" r="52" fill="url(#tda-dies)" stroke="rgba(28,25,23,0.35)" stroke-width="1"/>
+            <text x="912" y="568" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif">None</text>
+            <text x="912" y="586" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">无失败模式</text>
+            <text x="912" y="600" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">（正常晶圆）</text>
           </g>
 
           <g font-family="'Geist Mono','PingFang SC',monospace" font-size="8" text-anchor="middle">
-            <rect x="24" y="664" width="352" height="44" rx="4" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.18)" stroke-width="0.8"/>
-            <text x="200" y="682" fill="#14263c" font-weight="600">CNN · WM-811K 基线</text>
-            <text x="200" y="698" fill="#45586c">标注子集代表精度 98–99%（公开最高 98.56%）</text>
-            <rect x="392" y="664" width="352" height="44" rx="4" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.18)" stroke-width="0.8"/>
-            <text x="568" y="682" fill="#14263c" font-weight="600">Autoencoder 增广 · Bao 2024</text>
-            <text x="568" y="698" fill="#45586c">特征分类精度 98.56%（arXiv:2411.11029）</text>
-            <rect x="760" y="664" width="336" height="44" rx="4" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.18)" stroke-width="0.8"/>
-            <text x="928" y="682" fill="#14263c" font-weight="600">GAN 增广 · Park &amp; You 2023</text>
-            <text x="928" y="698" fill="#45586c">DCGAN 合成稀有缺陷图，缓解类不平衡</text>
+            <rect x="24" y="664" width="352" height="44" rx="4" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.18)" stroke-width="0.8"/>
+            <text x="200" y="682" fill="#1c1917" font-weight="600">CNN · WM-811K 基线</text>
+            <text x="200" y="698" fill="#57534e">标注子集代表精度 98–99%（公开最高 98.56%）</text>
+            <rect x="392" y="664" width="352" height="44" rx="4" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.18)" stroke-width="0.8"/>
+            <text x="568" y="682" fill="#1c1917" font-weight="600">Autoencoder 增广 · Bao 2024</text>
+            <text x="568" y="698" fill="#57534e">特征分类精度 98.56%（arXiv:2411.11029）</text>
+            <rect x="760" y="664" width="336" height="44" rx="4" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.18)" stroke-width="0.8"/>
+            <text x="928" y="682" fill="#1c1917" font-weight="600">GAN 增广 · Park &amp; You 2023</text>
+            <text x="928" y="698" fill="#57534e">DCGAN 合成稀有缺陷图，缓解类不平衡</text>
           </g>
         </svg>
       </div>
@@ -695,12 +695,12 @@
           <desc id="tda-loop-desc">预测测试结果、条件决策、抽验复核、数据回流、模型更新五个节点构成的顺时针闭环，中心为自适应测试枢纽。</desc>
           <defs>
             <marker id="tda-loop-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-              <polygon points="0 0, 8 3, 0 6" fill="#45586c"/>
+              <polygon points="0 0, 8 3, 0 6" fill="#57534e"/>
             </marker>
           </defs>
           <rect width="1120" height="470" fill="#ffffff"/>
 
-          <g fill="none" stroke="#45586c" stroke-width="1.2">
+          <g fill="none" stroke="#57534e" stroke-width="1.2">
             <path d="M 618 80 A 170 170 0 0 1 694 135" marker-end="url(#tda-loop-arrow)"/>
             <path d="M 730 246 A 170 170 0 0 1 701 335" marker-end="url(#tda-loop-arrow)"/>
             <path d="M 607 403 A 170 170 0 0 1 513 403" marker-end="url(#tda-loop-arrow)"/>
@@ -708,37 +708,37 @@
             <path d="M 426 135 A 170 170 0 0 1 502 80" marker-end="url(#tda-loop-arrow)"/>
           </g>
 
-          <circle cx="560" cy="240" r="64" fill="rgba(12,110,158,0.12)" stroke="#0c6e9e" stroke-width="1"/>
-          <text x="560" y="234" fill="#14263c" font-size="11" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">自适应测试</text>
-          <text x="560" y="252" fill="#0c6e9e" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle" letter-spacing="0.1em">ADAPTIVE LOOP</text>
+          <circle cx="560" cy="240" r="64" fill="rgba(194,65,12,0.12)" stroke="#c2410c" stroke-width="1"/>
+          <text x="560" y="234" fill="#1c1917" font-size="11" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">自适应测试</text>
+          <text x="560" y="252" fill="#c2410c" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle" letter-spacing="0.1em">ADAPTIVE LOOP</text>
 
           <g>
-            <rect x="472" y="38" width="176" height="64" rx="6" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.20)" stroke-width="1"/>
-            <text x="560" y="64" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">① 预测测试结果</text>
-            <text x="560" y="84" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">在测参数流 → ML 预测</text>
+            <rect x="472" y="38" width="176" height="64" rx="6" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.20)" stroke-width="1"/>
+            <text x="560" y="64" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">① 预测测试结果</text>
+            <text x="560" y="84" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">在测参数流 → ML 预测</text>
           </g>
           <g>
-            <rect x="634" y="156" width="176" height="64" rx="6" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.20)" stroke-width="1"/>
-            <text x="722" y="182" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">② 条件决策</text>
-            <text x="722" y="202" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">跳项 / 改限 / 判废</text>
+            <rect x="634" y="156" width="176" height="64" rx="6" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.20)" stroke-width="1"/>
+            <text x="722" y="182" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">② 条件决策</text>
+            <text x="722" y="202" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">跳项 / 改限 / 判废</text>
           </g>
           <g>
-            <rect x="572" y="346" width="176" height="64" rx="6" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.20)" stroke-width="1"/>
-            <text x="660" y="372" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">③ 抽验复核</text>
-            <text x="660" y="392" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">抽样全测校验预测质量</text>
+            <rect x="572" y="346" width="176" height="64" rx="6" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.20)" stroke-width="1"/>
+            <text x="660" y="372" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">③ 抽验复核</text>
+            <text x="660" y="392" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">抽样全测校验预测质量</text>
           </g>
           <g>
-            <rect x="372" y="346" width="176" height="64" rx="6" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.20)" stroke-width="1"/>
-            <text x="460" y="372" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">④ 数据回流</text>
-            <text x="460" y="392" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">STDF → 特征仓（Fig.01）</text>
+            <rect x="372" y="346" width="176" height="64" rx="6" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.20)" stroke-width="1"/>
+            <text x="460" y="372" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">④ 数据回流</text>
+            <text x="460" y="392" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">STDF → 特征仓（Fig.01）</text>
           </g>
           <g>
-            <rect x="310" y="156" width="176" height="64" rx="6" fill="rgba(20,38,60,0.04)" stroke="rgba(20,38,60,0.20)" stroke-width="1"/>
-            <text x="398" y="182" fill="#14263c" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">⑤ 模型更新</text>
-            <text x="398" y="202" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">再训练 + 漂移监控</text>
+            <rect x="310" y="156" width="176" height="64" rx="6" fill="rgba(28,25,23,0.04)" stroke="rgba(28,25,23,0.20)" stroke-width="1"/>
+            <text x="398" y="182" fill="#1c1917" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">⑤ 模型更新</text>
+            <text x="398" y="202" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle">再训练 + 漂移监控</text>
           </g>
 
-          <text x="24" y="452" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.1em">闭环左侧为产线决策环 · 数据经 Fig.01 管道回流 · 右侧卡片为各环节算法与出处</text>
+          <text x="24" y="452" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.1em">闭环左侧为产线决策环 · 数据经 Fig.01 管道回流 · 右侧卡片为各环节算法与出处</text>
         </svg>
       </div>
 
@@ -788,34 +788,34 @@
           <desc id="tda-3d-desc">左侧为堆叠组合示意（层级数 = base die + core die 数）；右侧柱状显示每 die 逃逸 100 DPPM 时 8、12、16 层堆叠逃逸放大到 800、1200、1600 DPPM。</desc>
           <rect width="1120" height="440" fill="#ffffff"/>
 
-          <text x="24" y="52" fill="#6c7f92" font-size="8" font-weight="500" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">KGSD 分层组合 · 通用示意</text>
-          <g stroke="rgba(20,38,60,0.35)" stroke-width="1" fill="rgba(20,38,60,0.10)">
-            <rect x="60" y="180" width="120" height="14" fill="rgba(12,110,158,0.35)"/><rect x="60" y="162" width="120" height="14"/><rect x="60" y="144" width="120" height="14"/>
-            <rect x="240" y="180" width="120" height="14" fill="rgba(12,110,158,0.35)"/><rect x="240" y="162" width="120" height="14"/><rect x="240" y="144" width="120" height="14"/><rect x="240" y="126" width="120" height="14"/><rect x="240" y="108" width="120" height="14"/>
-            <rect x="420" y="180" width="120" height="14" fill="rgba(12,110,158,0.35)"/><rect x="420" y="162" width="120" height="14"/><rect x="420" y="144" width="120" height="14"/><rect x="420" y="126" width="120" height="14"/><rect x="420" y="108" width="120" height="14"/><rect x="420" y="90" width="120" height="14"/><rect x="420" y="72" width="120" height="14"/><rect x="420" y="54" width="120" height="14"/><rect x="420" y="36" width="120" height="14"/>
+          <text x="24" y="52" fill="#6f665f" font-size="8" font-weight="500" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">KGSD 分层组合 · 通用示意</text>
+          <g stroke="rgba(28,25,23,0.35)" stroke-width="1" fill="rgba(28,25,23,0.10)">
+            <rect x="60" y="180" width="120" height="14" fill="rgba(194,65,12,0.35)"/><rect x="60" y="162" width="120" height="14"/><rect x="60" y="144" width="120" height="14"/>
+            <rect x="240" y="180" width="120" height="14" fill="rgba(194,65,12,0.35)"/><rect x="240" y="162" width="120" height="14"/><rect x="240" y="144" width="120" height="14"/><rect x="240" y="126" width="120" height="14"/><rect x="240" y="108" width="120" height="14"/>
+            <rect x="420" y="180" width="120" height="14" fill="rgba(194,65,12,0.35)"/><rect x="420" y="162" width="120" height="14"/><rect x="420" y="144" width="120" height="14"/><rect x="420" y="126" width="120" height="14"/><rect x="420" y="108" width="120" height="14"/><rect x="420" y="90" width="120" height="14"/><rect x="420" y="72" width="120" height="14"/><rect x="420" y="54" width="120" height="14"/><rect x="420" y="36" width="120" height="14"/>
           </g>
-          <g font-family="'Geist Mono','PingFang SC',monospace" font-size="8" fill="#45586c" text-anchor="middle">
+          <g font-family="'Geist Mono','PingFang SC',monospace" font-size="8" fill="#57534e" text-anchor="middle">
             <text x="120" y="214">3 层堆 = base + 2 core</text>
             <text x="300" y="214">5 层堆 = base + 4 core</text>
             <text x="480" y="214">9 层堆 = base + 8 core</text>
           </g>
-          <g font-family="'Geist Mono','PingFang SC',monospace" font-size="8" fill="#6c7f92">
+          <g font-family="'Geist Mono','PingFang SC',monospace" font-size="8" fill="#6f665f">
             <text x="60" y="248">逐层测试点：KGD（晶圆级）→ 每堆一层复测 → KGSD 终测</text>
             <text x="60" y="266">测试访问：IEEE 1838 wrapper / TAP / TestMedia · 术语：pre-bond / post-bond test（原引"BISS 动态应力"未能溯源，已删除）</text>
             <text x="60" y="284">探针：FormFactor 口径 HBM4/5 数据率 &gt;10 Gbps、单堆栈 100W（2026-05）· 调度：ILP 优化 TAM 宽度与时长（Noia）</text>
           </g>
 
-          <text x="624" y="52" fill="#6c7f92" font-size="8" font-weight="500" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">逃逸乘法 · 每 DIE 逃逸 ε = 100 DPPM</text>
-          <g font-family="'Geist Mono','PingFang SC',monospace" font-size="8" fill="#45586c">
+          <text x="624" y="52" fill="#6f665f" font-size="8" font-weight="500" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.14em">逃逸乘法 · 每 DIE 逃逸 ε = 100 DPPM</text>
+          <g font-family="'Geist Mono','PingFang SC',monospace" font-size="8" fill="#57534e">
             <text x="624" y="102">8 层 → 800 DPPM</text>
-            <rect x="624" y="110" width="200" height="40" fill="rgba(20,38,60,0.08)" stroke="rgba(20,38,60,0.20)" stroke-width="1"/>
+            <rect x="624" y="110" width="200" height="40" fill="rgba(28,25,23,0.08)" stroke="rgba(28,25,23,0.20)" stroke-width="1"/>
             <text x="624" y="182">12 层 → 1200 DPPM</text>
-            <rect x="624" y="190" width="300" height="40" fill="rgba(20,38,60,0.08)" stroke="rgba(20,38,60,0.20)" stroke-width="1"/>
-            <text x="624" y="262" fill="#0c6e9e">16 层 → 1600 DPPM</text>
-            <rect x="624" y="270" width="400" height="40" fill="rgba(12,110,158,0.12)" stroke="#0c6e9e" stroke-width="1"/>
+            <rect x="624" y="190" width="300" height="40" fill="rgba(28,25,23,0.08)" stroke="rgba(28,25,23,0.20)" stroke-width="1"/>
+            <text x="624" y="262" fill="#c2410c">16 层 → 1600 DPPM</text>
+            <rect x="624" y="270" width="400" height="40" fill="rgba(194,65,12,0.12)" stroke="#c2410c" stroke-width="1"/>
           </g>
-          <text x="624" y="348" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.1em">堆叠逃逸 ≈ 1 − (1−ε)ⁿ ≈ n·ε（ε ≪ 1）—— 良率复利的镜像问题</text>
-          <text x="624" y="376" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">对策：逃逸预算逐层分配（每层 ε_budget = ε_total / n）+ KGSD 终测兜底</text>
+          <text x="624" y="348" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" letter-spacing="0.1em">堆叠逃逸 ≈ 1 − (1−ε)ⁿ ≈ n·ε（ε ≪ 1）—— 良率复利的镜像问题</text>
+          <text x="624" y="376" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">对策：逃逸预算逐层分配（每层 ε_budget = ε_total / n）+ KGSD 终测兜底</text>
         </svg>
       </div>
     </section>
@@ -833,28 +833,28 @@
           <desc id="tda-cost-desc">随测试覆盖提高，测试成本上升、逃逸成本下降，总成本呈 U 形并在谷底达到最优拦截点。</desc>
           <rect width="1120" height="420" fill="#ffffff"/>
 
-          <g stroke="rgba(20,38,60,0.08)" stroke-width="0.8">
+          <g stroke="rgba(28,25,23,0.08)" stroke-width="0.8">
             <line x1="96" y1="88" x2="1024" y2="88"/><line x1="96" y1="168" x2="1024" y2="168"/><line x1="96" y1="248" x2="1024" y2="248"/>
           </g>
-          <line x1="96" y1="328" x2="1024" y2="328" stroke="rgba(20,38,60,0.30)" stroke-width="1"/>
-          <line x1="96" y1="72" x2="96" y2="328" stroke="rgba(20,38,60,0.30)" stroke-width="1"/>
-          <text x="60" y="204" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle" transform="rotate(-90 60 204)">成本（相对）</text>
-          <text x="560" y="356" fill="#6c7f92" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle" letter-spacing="0.1em">测试覆盖 →（测试项数量 · 限值收紧 · 增加插位）</text>
+          <line x1="96" y1="328" x2="1024" y2="328" stroke="rgba(28,25,23,0.30)" stroke-width="1"/>
+          <line x1="96" y1="72" x2="96" y2="328" stroke="rgba(28,25,23,0.30)" stroke-width="1"/>
+          <text x="60" y="204" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle" transform="rotate(-90 60 204)">成本（相对）</text>
+          <text x="560" y="356" fill="#6f665f" font-size="8" font-family="'Geist Mono','PingFang SC',monospace" text-anchor="middle" letter-spacing="0.1em">测试覆盖 →（测试项数量 · 限值收紧 · 增加插位）</text>
 
-          <polyline points="96,280 212,266 328,252 444,237 560,223 676,209 792,195 908,180 1024,166" fill="none" stroke="#9a6a10" stroke-width="1.6"/>
-          <polyline points="96,148 212,187 328,222 444,250 560,274 676,292 792,306 908,313 1024,316" fill="none" stroke="#4a708f" stroke-width="1.6"/>
-          <polyline points="96,100 212,125 328,145 444,159 560,169 676,173 792,173 908,165 1024,154" fill="none" stroke="#0c6e9e" stroke-width="2"/>
-          <circle cx="704" cy="173" r="5" fill="#0c6e9e"/>
-          <line x1="704" y1="173" x2="704" y2="328" stroke="#0c6e9e" stroke-width="0.8" stroke-dasharray="3,3"/>
-          <text x="720" y="160" fill="#0c6e9e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">最优拦截点</text>
+          <polyline points="96,280 212,266 328,252 444,237 560,223 676,209 792,195 908,180 1024,166" fill="none" stroke="#a16207" stroke-width="1.6"/>
+          <polyline points="96,148 212,187 328,222 444,250 560,274 676,292 792,306 908,313 1024,316" fill="none" stroke="#4e6e81" stroke-width="1.6"/>
+          <polyline points="96,100 212,125 328,145 444,159 560,169 676,173 792,173 908,165 1024,154" fill="none" stroke="#c2410c" stroke-width="2"/>
+          <circle cx="704" cy="173" r="5" fill="#c2410c"/>
+          <line x1="704" y1="173" x2="704" y2="328" stroke="#c2410c" stroke-width="0.8" stroke-dasharray="3,3"/>
+          <text x="720" y="160" fill="#c2410c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">最优拦截点</text>
 
           <g font-family="'Geist Mono','PingFang SC',monospace" font-size="8">
-            <rect x="640" y="88" width="380" height="76" rx="4" fill="rgba(255,255,255,0.85)" stroke="rgba(20,38,60,0.18)" stroke-width="0.8"/>
-            <line x1="652" y1="106" x2="672" y2="106" stroke="#0c6e9e" stroke-width="2"/><text x="680" y="110" fill="#0c6e9e">总成本 = 测试 + 逃逸 × 现场失效成本</text>
-            <line x1="652" y1="128" x2="672" y2="128" stroke="#9a6a10" stroke-width="1.6"/><text x="680" y="132" fill="#45586c">测试成本（设备时长 · 插位 · 老化）</text>
-            <line x1="652" y1="150" x2="672" y2="150" stroke="#4a708f" stroke-width="1.6"/><text x="680" y="154" fill="#45586c">逃逸成本（现场返修 + 声誉 + 召回）</text>
+            <rect x="640" y="88" width="380" height="76" rx="4" fill="rgba(255,255,255,0.85)" stroke="rgba(28,25,23,0.18)" stroke-width="0.8"/>
+            <line x1="652" y1="106" x2="672" y2="106" stroke="#c2410c" stroke-width="2"/><text x="680" y="110" fill="#c2410c">总成本 = 测试 + 逃逸 × 现场失效成本</text>
+            <line x1="652" y1="128" x2="672" y2="128" stroke="#a16207" stroke-width="1.6"/><text x="680" y="132" fill="#57534e">测试成本（设备时长 · 插位 · 老化）</text>
+            <line x1="652" y1="150" x2="672" y2="150" stroke="#4e6e81" stroke-width="1.6"/><text x="680" y="154" fill="#57534e">逃逸成本（现场返修 + 声誉 + 召回）</text>
           </g>
-          <text x="96" y="392" fill="#45586c" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">示意曲线 · 现场失效需区分「测试逃逸」与「早期寿命失效」两种归因（SIA 测试经济学）；DPPM 是逃逸的通用度量（Advantest）。</text>
+          <text x="96" y="392" fill="#57534e" font-size="8" font-family="'Geist Mono','PingFang SC',monospace">示意曲线 · 现场失效需区分「测试逃逸」与「早期寿命失效」两种归因（SIA 测试经济学）；DPPM 是逃逸的通用度量（Advantest）。</text>
         </svg>
       </div>
 
@@ -950,7 +950,7 @@
       </div>
       <div class="footer">
         <span>先进封装测试数据分析报告 · 伴生《HBM3E_HBM4E_工艺调研》与《HBM 先进封装工艺图解》</span>
-        <span>diagram-design 暗色皮肤 · 2026-09-19</span>
+        <span>diagram-design 暖纸皮肤 · 2026-09-19</span>
       </div>
     </section>
 
