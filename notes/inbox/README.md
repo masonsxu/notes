@@ -1,6 +1,6 @@
 # inbox
 
-本目录当前只有一套有效方案：`global-rules-v2.md`（AI 编码代理全局规则的渐进式披露方案快照）。旧的 `global-rules.md`（v1）已删除，原因见下。
+本目录当前只有一套有效方案：`global-rules-v2/`（AI 编码代理全局规则的渐进式披露方案，已部署文件的原样副本）。旧的 `global-rules.md`（v1）已删除，原因见下。
 
 ## 为什么删除 v1
 
@@ -10,7 +10,7 @@ v1 是单体中文规则文件（PowerShell 语法基线），被 v2 取代的�
 2. **单体结构错误**。v1 把所有规则全量注入每次会话，其中大部分与当前任务无关（写周报时不需要 Go 诊断，改 Go 代码时不需要无信息修饰语范例表）。v2 改为渐进式披露：全局文件只留 45 行硬约束 + 触发表，任务规则下沉到 6 个 skill 按需加载。常驻上下文 130 行 → 45 行。
 3. **PowerShell 基线错误**。v1 明确"命令默认 PowerShell 语法"，但 agent 场景下这是三个已知问题的根源：agent 的 `shell` 配置可能被忽略并回退 PowerShell 5.1；中文 Windows 下 PowerShell 输出按 GBK 解码导致乱码；模型训练数据以 bash 为主，PowerShell 语法（`$env:`、`NUL`、`\` 路径）试错率高。v2 以 POSIX/Git Bash 为基线。
 
-v1 的合理内容已全部并入 v2：工具链锁定（uv / bun / podman compose / go build）、CodeGraph 指引、设计 skill 编排、冲突仲裁。v1 独有的 Windows 特有写法（`go build -o NUL`、PowerShell 检索命令）按 Git Bash 基线改写（`/dev/null`、`uv run python` + POSIX 路径）。
+v1 的合理内容已全部并入 v2：工具链锁定（uv / pnpm / podman compose / go build）、CodeGraph 指引、设计 skill 编排、冲突仲裁。v1 独有的 Windows 特有写法（`go build -o NUL`、PowerShell 检索命令）按 Git Bash 基线改写（`/dev/null`、`uv run python` + POSIX 路径）。
 
 ## 目的
 
@@ -19,7 +19,7 @@ v1 的合理内容已全部并入 v2：工具链锁定（uv / bun / podman compo
 - **跨端一致**：macOS（pi）与 Windows（opencode）共用同一套 AGENTS.md 与 skills，规则单点维护
 - **人机分离**：英文版给模型（权威），中文版给人（对照），互不污染
 
-已部署位置：pi 权威文件在 `~/.pi/agent/AGENTS.md`（+ 同目录 `AGENTS.zh.md`），skills 在 `~/.agents/skills/`（pi 与 opencode 都原生加载该目录）。本目录的 `global-rules-v2.md` 是再部署快照，漂移时以已部署文件为准并重新生成快照。
+已部署位置：pi 权威文件在 `~/.pi/agent/AGENTS.md`（+ 同目录 `AGENTS.zh.md`），自研 skills 在 `~/.agents/skills/`（pi 与 opencode 都原生加载该目录）。本目录的 `global-rules-v2/` 是再部署副本（含上述全局规范 + 6 个自研 skill），漂移时以已部署文件为准并重新复制。
 
 ## Windows（pwsh + Windows Terminal + Git Bash）适配步骤
 
@@ -46,9 +46,9 @@ v1 的合理内容已全部并入 v2：工具链锁定（uv / bun / podman compo
 
 | 内容 | 目标位置 |
 |---|---|
-| `AGENTS.md`（快照 §3） | `%USERPROFILE%\.config\opencode\AGENTS.md` |
+| `AGENTS.md`（`global-rules-v2/AGENTS.md`） | `%USERPROFILE%\.config\opencode\AGENTS.md` |
 | `AGENTS.zh.md`（可选，仅人读） | 同目录（agent 不会加载 `.zh.md`） |
-| 6 个 skill 目录（快照 §5） | `%USERPROFILE%\.agents\skills\<name>\SKILL.md` |
+| 6 个 skill 目录（`global-rules-v2/skills/<name>/`） | `%USERPROFILE%\.agents\skills\<name>\` |
 | `opencode.json` 补一行 | `"instructions": ["~/.config/opencode/AGENTS.md"]`，显式加载规则，防默认发现失效 |
 
 路径写法注意：AGENTS.md 与 SKILL.md 里的 `~`、`/dev/null`、`/c/Users/...` 都是 POSIX 风格，在 Git Bash 下原生成立，**不要**改回 `%USERPROFILE%` / `NUL`（那是 v1 的 PowerShell 写法）。
